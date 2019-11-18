@@ -54,17 +54,17 @@
   };
 </script>
 
-  <meta name="description" content="IO 流 IO 流：用于处理设备上的数据。 设备：硬盘，内存，键盘录入。 IO 有具体的分类： （1）根据处理的数据类型不同：字节流和字符流。（2）根据流向不同：输入流和输出流。字符流的由来：因为文件编码的不同，而有了对字符进行高效操作的字符流对象。原理：其实就是基于字节流读取字节时，去查了指定的码表。">
+  <meta name="description" content="Java文件读写">
 <meta name="keywords" content="File">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java文件读写">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;18&#x2F;Java%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99&#x2F;index.html">
 <meta property="og:site_name" content="Lmos&#39;S  BLOG">
-<meta property="og:description" content="IO 流 IO 流：用于处理设备上的数据。 设备：硬盘，内存，键盘录入。 IO 有具体的分类： （1）根据处理的数据类型不同：字节流和字符流。（2）根据流向不同：输入流和输出流。字符流的由来：因为文件编码的不同，而有了对字符进行高效操作的字符流对象。原理：其实就是基于字节流读取字节时，去查了指定的码表。">
+<meta property="og:description" content="Java文件读写">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;13863123-3b31b9635a45a269.jpg">
 <meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;13863123-e669017cd996500b.jpg">
-<meta property="og:updated_time" content="2019-11-18T11:33:34.312Z">
+<meta property="og:updated_time" content="2019-11-18T11:34:54.620Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;13863123-3b31b9635a45a269.jpg">
 
@@ -241,7 +241,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-18 19:25:19 / 修改时间：19:33:34" itemprop="dateCreated datePublished" datetime="2019-11-18T19:25:19+08:00">2019-11-18</time>
+              <time title="创建时间：2019-11-18 19:25:19 / 修改时间：19:34:54" itemprop="dateCreated datePublished" datetime="2019-11-18T19:25:19+08:00">2019-11-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,21 +266,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <a id="more"></a><p><img src="http://upload-images.jianshu.io/upload_images/13863123-3b31b9635a45a269.jpg" alt> <img src="http://upload-images.jianshu.io/upload_images/13863123-e669017cd996500b.jpg" alt></p><p><strong>IO 流</strong></p><ol>
+        <p>Java文件读写</p>
+<a id="more"></a>
+<p><img src="http://upload-images.jianshu.io/upload_images/13863123-3b31b9635a45a269.jpg" alt=""> <img src="http://upload-images.jianshu.io/upload_images/13863123-e669017cd996500b.jpg" alt=""></p>
+<p><strong>IO 流</strong></p>
+<ol>
 <li>IO 流：用于处理设备上的数据。</li>
-</ol><p>设备：硬盘，内存，键盘录入。</p><ol start="2">
+</ol>
+<p>设备：硬盘，内存，键盘录入。</p>
+<ol start="2">
 <li>IO 有具体的分类：</li>
-</ol><p>（1）根据处理的数据类型不同：字节流和字符流。</p><p>（2）根据流向不同：输入流和输出流。</p><p>字符流的由来：</p><p>因为文件编码的不同，而有了对字符进行高效操作的字符流对象。</p><p>原理：其实就是基于字节流读取字节时，去查了指定的码表。</p><a id="more"></a>
-
-
-
-
-
-
-
-
-
-
+</ol>
+<p>（1）根据处理的数据类型不同：字节流和字符流。</p>
+<p>（2）根据流向不同：输入流和输出流。</p>
+<p>字符流的由来：</p>
+<p>因为文件编码的不同，而有了对字符进行高效操作的字符流对象。</p>
+<p>原理：其实就是基于字节流读取字节时，去查了指定的码表。</p>
 <p>字节流和字符流的区别：</p>
 <p>（1）字节流读取的时候，读到一个字节就返回一个字节。</p>
 <p>字符流使用了字节流读到一个或多个字节（中文对应的字节数是两个，在 UTF-8 码表中是 3 个字节）时，先去查指定的编码表，将查到的字符返回。</p>
@@ -433,6 +434,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/18/%E7%BC%93%E5%AD%98%E5%A4%B4-Cache-Control-%E7%9A%84%E5%90%AB%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8/" rel="prev" title="缓存头 Cache-Control 的含义和使用">
+                  缓存头 Cache-Control 的含义和使用 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -488,20 +492,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
