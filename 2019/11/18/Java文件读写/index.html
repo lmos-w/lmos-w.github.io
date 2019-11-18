@@ -54,30 +54,35 @@
   };
 </script>
 
-  <meta name="description" content="记录爬坑史">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Lmos&#39;S  BLOG">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+  <meta name="description" content="IO 流 IO 流：用于处理设备上的数据。 设备：硬盘，内存，键盘录入。 IO 有具体的分类： （1）根据处理的数据类型不同：字节流和字符流。（2）根据流向不同：输入流和输出流。字符流的由来：因为文件编码的不同，而有了对字符进行高效操作的字符流对象。原理：其实就是基于字节流读取字节时，去查了指定的码表。">
+<meta name="keywords" content="File">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java文件读写">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;18&#x2F;Java%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99&#x2F;index.html">
 <meta property="og:site_name" content="Lmos&#39;S  BLOG">
-<meta property="og:description" content="记录爬坑史">
+<meta property="og:description" content="IO 流 IO 流：用于处理设备上的数据。 设备：硬盘，内存，键盘录入。 IO 有具体的分类： （1）根据处理的数据类型不同：字节流和字符流。（2）根据流向不同：输入流和输出流。字符流的由来：因为文件编码的不同，而有了对字符进行高效操作的字符流对象。原理：其实就是基于字节流读取字节时，去查了指定的码表。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;13863123-3b31b9635a45a269.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;13863123-e669017cd996500b.jpg">
+<meta property="og:updated_time" content="2019-11-18T11:30:01.414Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;13863123-3b31b9635a45a269.jpg">
 
-<link rel="canonical" href="http://yoursite.com/">
+<link rel="canonical" href="http://yoursite.com/2019/11/18/Java%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>Lmos'S  BLOG</title>
+  <title>Java文件读写 | Lmos'S  BLOG</title>
   
 
 
@@ -208,10 +213,10 @@
             
 
   <div class="posts-expand">
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/18/Java%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -225,8 +230,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/18/Java%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99/" class="post-title-link" itemprop="url">Java文件读写</a>
+          Java文件读写
         </h2>
 
         <div class="post-meta">
@@ -262,20 +266,141 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <a id="more"></a><p><img src="http://upload-images.jianshu.io/upload_images/13863123-3b31b9635a45a269.jpg" alt> <img src="http://upload-images.jianshu.io/upload_images/13863123-e669017cd996500b.jpg" alt></p><p><strong>IO 流</strong></p><ol>
+        <a id="more"></a><p><img src="http://upload-images.jianshu.io/upload_images/13863123-3b31b9635a45a269.jpg" alt> <img src="http://upload-images.jianshu.io/upload_images/13863123-e669017cd996500b.jpg" alt></p><p><strong>IO 流</strong></p><ol>
 <li>IO 流：用于处理设备上的数据。</li>
 </ol><p>设备：硬盘，内存，键盘录入。</p><ol start="2">
 <li>IO 有具体的分类：</li>
-</ol><p>（1）根据处理的数据类型不同：字节流和字符流。</p><p>（2）根据流向不同：输入流和输出流。</p><p>字符流的由来：</p><p>因为文件编码的不同，而有了对字符进行高效操作的字符流对象。</p><p>原理：其实就是基于字节流读取字节时，去查了指定的码表。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/18/Java%E6%96%87%E4%BB%B6%E8%AF%BB%E5%86%99/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+</ol><p>（1）根据处理的数据类型不同：字节流和字符流。</p><p>（2）根据流向不同：输入流和输出流。</p><p>字符流的由来：</p><p>因为文件编码的不同，而有了对字符进行高效操作的字符流对象。</p><p>原理：其实就是基于字节流读取字节时，去查了指定的码表。</p><a id="more"></a>
+
+
+
+
+
+
+
+
+
+
+<p>字节流和字符流的区别：</p>
+<p>（1）字节流读取的时候，读到一个字节就返回一个字节。</p>
+<p>字符流使用了字节流读到一个或多个字节（中文对应的字节数是两个，在 UTF-8 码表中是 3 个字节）时，先去查指定的编码表，将查到的字符返回。</p>
+<p><strong>（2）字节流可以处理所有类型数据，如 MP3，图片，avi。而字符流只能处理字符数据。</strong></p>
+<p><strong>结论：只要是处理纯文本数据，就要优先考虑使用字符流，除此之外都要用字节流。</strong></p>
+<p>IO 的体系，所具备的基本功能就有两个：读和写。</p>
+<ol>
+<li><p>字节流：InputStream(读)，OutputStream（写）。</p>
+</li>
+<li><p>字符流：Reader（读），Writer（写）。</p>
+</li>
+</ol>
+<p><strong>一. 字符流:</strong></p>
+<p>Reader  </p>
+<p>|–InputStreamReader  </p>
+<p>　　 |–FileReader: 专门用于处理文件的字符读取流对象。  </p>
+<p>Writer</p>
+<p> |–OutputStreamWriter  </p>
+<p>　　 |–FileWriter: 专门用于处理文件的字符写入流对象</p>
+<p>Reader 中的常见的方法：  </p>
+<ol>
+<li>int read()：  </li>
+</ol>
+<p>　　 读取一个字符。返回的是读到的那个字符。如果读到流的末尾，返回 - 1.  </p>
+<p>*<em>2. int read(char[])：    *</em></p>
+<p>**　　将读到的字符存入指定的数组中，返回的是读到的字符个数，也就是往数组里装的元素的个数。如果读到流的末尾，返回 - 1.  **</p>
+<ol start="3">
+<li>close():    </li>
+</ol>
+<p>　　读取字符其实用的是 window 系统的功能，就希望使用完毕后，进行资源的释放。</p>
+<p>Writer 中的常见的方法：  </p>
+<p>1，write(ch): 将一个字符写入到流中。  </p>
+<p>2，write(char[]): 将一个字符数组写入到流中。</p>
+<p>3，write(String): 将一个字符串写入到流中。  </p>
+<p>4，flush(): 刷新流，将流中的数据刷新到目的地中，流还存在。  </p>
+<p>5，close(): 关闭资源：在关闭前会先调用 flush()，刷新流中的数据去目的地。然流关闭。</p>
+<p>FileWriter:  </p>
+<p>该类没有特有的方法。只有自己的构造函数。  </p>
+<p>该类特点在于，  </p>
+<p>1，用于处理文本文件。  </p>
+<p>2，该类中有默认的编码表，  </p>
+<p>3，该类中有临时缓冲。</p>
+<p>构造函数：在写入流对象初始化时，必须要有一个存储数据的目的地。</p>
+<p>  FileWriter(String filename):   该构造函数做了什么事情呢？  </p>
+<p>1，调用系统资源。  </p>
+<p>2，在指定位置，创建一个文件。  </p>
+<p> 注意：如果该文件已存在，将会被覆盖。  </p>
+<p>FileWriter(String filename,boolean append):  </p>
+<p> 　　该构造函数：当传入的 boolean 类型值为 true 时，会在指定文件末尾处进行数据的续写。</p>
+<p>FileReader：  </p>
+<p>1，用于读取文本文件的流对象。  </p>
+<p>2，用于关联文本文件。</p>
+<p> 构造函数：在读取流对象初始化的时候，必须要指定一个被读取的文件。    </p>
+<p>如果该文件不存在会发生 FileNotFoundException.  </p>
+<p>FileReader(String filename);</p>
+<p>对于读取或者写入流对象的构造函数，以及读写方法，还有刷新关闭功能都会抛出 IOException 或其子类。</p>
+<p>所以都要进行处理，或者 throws 抛出，或者 try、catch 处理。</p>
+<p>*<em>另一个小细节：  *</em></p>
+<p><strong>当指定绝对路径时，定义目录分隔符有两种方式：</strong></p>
+<p><strong>1，反斜线 但是一定要写两个。\  new FileWriter(“c:\demo.txt”);</strong></p>
+<p><strong>2，斜线  /  写一个即可。 new FileWriter(“c:/demo.txt”);</strong></p>
+<p><strong>字符流的缓冲区：</strong></p>
+<p>缓冲区的出现提高了对流的操作效率。</p>
+<p>原理：其实就是将数组进行封装。</p>
+<p>对应的对象：</p>
+<p>BufferedWriter：</p>
+<p>　　特有方法：</p>
+<p><strong>newLine（）：跨平台的换行符。</strong></p>
+<p>BufferedReader：</p>
+<p>　　特有方法：</p>
+<p><strong>readLine（）：一次读一行，到行标记时，将行标记之前的字符数据作为字符串返回。当读到末尾时，返回 null。</strong></p>
+<p>使用缓冲区对象时，要明确，缓冲的存在是为了增强流的功能而存在，所以在简历缓冲区对象时，要现有流对象存在。</p>
+<p>其实缓冲内部就是在使用流对象的方法，只不过加入了数组对数据进行了临时存储，为了提高操作数据的效率。</p>
+<p>代码上的体现:</p>
+<p><strong>写入缓冲区对象：</strong></p>
+<p>// 建立缓冲区对象必须把流对象作为参数传递给缓冲区的构造函数。</p>
+<p>BufferedWriter bw=new BufferedWriter（new FileWriter（“abc.txt”））；</p>
+<p>bw.write(“abce”);// 将数据写入到了缓冲区。</p>
+<p>bw.flush();// 对缓冲区的数据进行刷新。将数据刷到目的地中。</p>
+<p>bw.close();// 关闭缓冲区，其实关闭的是被包装在内部的流对象。</p>
+<p><strong>读取缓冲区对象：</strong></p>
+<p>** 二. 字节流:**</p>
+<p>抽象基类: InputStream，OutputStream。</p>
+<p>字节流可以操作任何数据。</p>
+<p>注意：字符流使用的数组是字符数组，char[] chs ；</p>
+<p>　　　字节流使用的数组是字节数组，byte[] bt ；</p>
+<p>FileOutputStream fos=new FileOutputStream(“a.txt”)；</p>
+<p>fos.write(“abcde”); // 直接将数据写入到了目的地。</p>
+<p>fos.close();// 只关闭资源。</p>
+<p>FileInputSteam fls=new FileInputStream(“a.txt”);</p>
+<p>//fis.available();// 获取关联的文件字节数。如果文件体积不大，可以这样操作。</p>
+<p>byte[]buf=new byte[fis.available()];// 创建一个刚刚好的缓冲区。// 但是这有一个弊端，就是文件过大，大小超出 Jvm 的内容空间时，会内存溢出。</p>
+<p>fis.read(buf);</p>
+<p>System.out.println(new String(buf));</p>
+<p>例子:</p>
+<p>　　需求: copy 一个图片。</p>
+<p>BufferedInputStream bufis=new BufferedInputStream(new FileInputStream(“1.jpg”));</p>
+<p>BufferedOutputStream bufos=new BufferedOutputStream(new FileOutputStream(“2.jpg”));</p>
+<p>int by=0;</p>
+<p>while(by=bufis.read()!=-1){</p>
+<p>　　bufos.write(by);</p>
+<p>　　bufos.newLine();</p>
+<p>}</p>
+<p>bufis.close();</p>
+<p>bufos.close();</p>
+<p><strong>小结:</strong></p>
+<p>目前学习的流对象:</p>
+<p>字符流: FileReader  FileWriter  BuffereedReader  BufferedWriter</p>
+<p>字节流: FileInputStream  FileOutputStream   BufferedInputStream  BufferedOutputStream</p>
+<p>补充：</p>
+<ol>
+<li>字节流的 read（）方法读取的是一个字节。为什么返回的不是 byte 类型，而是 int 类型呢？</li>
+</ol>
+<p>因为 read 方法读到末尾时返回的是 - 1，而在所操作的数据中很容易出现连续多个 1 的情况，而连续读到 8 个 1，就是 - 1，导致读取会提前停止。所以将读到的一个字节提升为一个 int 类型的数值，但是只保留原字节，并在剩余二进制位补 0。</p>
+<p>具体操作是：byte&amp;255 or byte&amp;0xff</p>
+<ol start="2">
+<li>对于 write 方法，可以一次写入一个字节，但接收的是一个 int 类型数值。只写入该 int 类型的数值的最低一个字节（8 位）。</li>
+</ol>
+<p>简单说：<strong>read 方法对读到的数据进行提升，write 对操作的数据进行转换。</strong></p>
+
     </div>
 
     
@@ -283,169 +408,41 @@
     
     <div>
     
-    </div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/18/DataURL-Blob-File-Image-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%8E%E8%BD%AC%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Lmos">
-      <meta itemprop="description" content="记录爬坑史">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lmos'S  BLOG">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/18/DataURL-Blob-File-Image-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%8E%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">DataURL, Blob, File, Image 之间的关系与转换</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-18 14:06:29 / 修改时间：15:30:07" itemprop="dateCreated datePublished" datetime="2019-11-18T14:06:29+08:00">2019-11-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>使用前景：</p>
-<p><strong><em>移动端上传拍照图片太大，使用 canvas 压缩后 base64=&gt;blob 二进制表单文件 =&gt;ajax-POST 上传</em></strong>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/18/DataURL-Blob-File-Image-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%8E%E8%BD%AC%E6%8D%A2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
     <div>
     
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+    
     </div>
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/File/" rel="tag"># File</a>
+          </div>
 
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/hello-world/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="Lmos">
-      <meta itemprop="description" content="记录爬坑史">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lmos'S  BLOG">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/11/15/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-11-15 10:29:59 / 修改时间：16:14:31" itemprop="dateCreated datePublished" datetime="2019-11-15T10:29:59+08:00">2019-11-15</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/15/hello-world/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/18/DataURL-Blob-File-Image-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%8E%E8%BD%AC%E6%8D%A2/" rel="next" title="DataURL, Blob, File, Image 之间的关系与转换">
+                  <i class="fa fa-chevron-left"></i> DataURL, Blob, File, Image 之间的关系与转换
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    
-    
-    
-    <div>
-    
-    </div>
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
       </footer>
+    
   </article>
   
   
   
 
   </div>
-
-  
-
 
 
           </div>
