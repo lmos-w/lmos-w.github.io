@@ -17,25 +17,25 @@
 <li>s-maxage=<seconds><br>代替上面的 max-age，但是只有在代理服务器里面才会生效</li>
 <li>max-stale=<seconds><br>max-stale：浏览器用不到，浏览器并不会主动去设置这个头，只有在发起端设置是有用的，服务端返回的内容中设置没有用。发起请求方，主动带的头，在 max-age 过期之后，如果我们返回的资源中有这个 max-stale 设置，还可以使用过期的缓存，而不需要去服务器请求新的内容。</li>
 </ul>
-<h5 id="重新验证"><a href="#重新验证" class="headerlink" title="重新验证"></a>重新验证</h5><ul>
+<h6 id="重新验证"><a href="#重新验证" class="headerlink" title="重新验证"></a>重新验证</h6><ul>
 <li>must-revalidate<br>设置了 max-age，如果缓存已经过期了，必须去原服务端发送这个请求，重新获取数据，来验证内容是否真的过期了，而不能直接使用本地缓存。</li>
 <li>proxy-revalidate<br>用在指定缓存服务器，在过期的时候必须去原服务器重新请求一遍，而不能直接使用本地缓存。</li>
 </ul>
-<h5 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h5><ul>
+<h6 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h6><ul>
 <li>no-store<br>本地和代理服务器不可以存储这个缓存，永远要去服务器拿新的 body 的内容。</li>
 <li>no-transform<br>不允许代理服务器不要改动返回的内容</li>
 </ul>
-<h5 id="浏览器中用到的"><a href="#浏览器中用到的" class="headerlink" title="浏览器中用到的"></a>浏览器中用到的</h5><h5 id="可缓存性-："><a href="#可缓存性-：" class="headerlink" title="可缓存性 ："></a>可缓存性 ：</h5><ul>
+<h4 id="浏览器中用到的"><a href="#浏览器中用到的" class="headerlink" title="浏览器中用到的"></a>浏览器中用到的</h4><h6 id="可缓存性-1"><a href="#可缓存性-1" class="headerlink" title="可缓存性"></a>可缓存性</h6><ul>
 <li>public</li>
 <li>private</li>
 <li>no-cahe</li>
 </ul>
-<h5 id="到期-1"><a href="#到期-1" class="headerlink" title="到期"></a>到期</h5><ul>
+<h6 id="到期-1"><a href="#到期-1" class="headerlink" title="到期"></a>到期</h6><ul>
 <li>max-age=<seconds></li>
 <li>s-maxage=<seconds></li>
 <li>max-stale=<seconds></li>
 </ul>
-<h5 id="重新验证-1"><a href="#重新验证-1" class="headerlink" title="重新验证"></a>重新验证</h5><ul>
+<h6 id="重新验证-1"><a href="#重新验证-1" class="headerlink" title="重新验证"></a>重新验证</h6><ul>
 <li><p>must-revalidate</p>
 </li>
 <li><p>设置请求文件缓存时间<br><code>&#39;Cache-Control&#39;: &#39;max-age=20&#39;</code></p>
