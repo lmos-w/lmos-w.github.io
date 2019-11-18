@@ -4,8 +4,7 @@
     <title>DataURL, Blob, File, Image 之间的关系与转换</title>
     <url>/2019/11/18/DataURL-Blob-File-Image-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB%E4%B8%8E%E8%BD%AC%E6%8D%A2/</url>
     <content><![CDATA[<p>使用前景：</p>
-<p><strong><em>移动端上传拍照图片太大，使用 canvas 压缩后 base64=&gt;blob 二进制表单文件 =&gt;ajax-POST 上传</em></strong> <img src="https://oscimg.oschina.net/oscnet/45bb5cc130ba93fa7d2365fb81304c75f9a.jpg" alt=""></p>
-<a id="more"></a>
+<p><strong><em>移动端上传拍照图片太大，使用 canvas 压缩后 base64=&gt;blob 二进制表单文件 =&gt;ajax-POST 上传</em></strong> <a id="more"></a><img src="https://oscimg.oschina.net/oscnet/45bb5cc130ba93fa7d2365fb81304c75f9a.jpg" alt=""></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// canvas转dataURL：canvas对象、转换格式、图像品质</span><br><span class="line">function canvasToDataURL(canvas, format, quality) &#123;</span><br><span class="line">    return canvas.toDataURL(format||&apos;image/jpeg&apos;, quality||1.0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// DataURL转canvas</span><br><span class="line">function dataURLToCanvas(dataurl, cb)&#123;</span><br><span class="line">    var canvas = document.createElement(&apos;CANVAS&apos;);</span><br><span class="line">    var ctx = canvas.getContext(&apos;2d&apos;);</span><br><span class="line">    var img = new Image();</span><br><span class="line">    img.onload = function()&#123;</span><br><span class="line">        canvas.width = img.width;</span><br><span class="line">        canvas.height = img.height;</span><br><span class="line">        ctx.drawImage(img, 0, 0);</span><br><span class="line">        cb(canvas);</span><br><span class="line">    &#125;;</span><br><span class="line">    img.src = dataurl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
