@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="1. this之谜许多时候，this关键词对我以及许多刚起步的 JavaScript 程序员来说，都是一个谜。它是一种很强大的特性，但是理解它需要花不少功夫。">
+<meta name="keywords" content="this">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 的this">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;19&#x2F;JavaScript-%E7%9A%84this&#x2F;index.html">
+<meta property="og:site_name" content="Lmos&#39;S  BLOG">
+<meta property="og:description" content="1. this之谜许多时候，this关键词对我以及许多刚起步的 JavaScript 程序员来说，都是一个谜。它是一种很强大的特性，但是理解它需要花不少功夫。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-11-19T15:15:34.688Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/11/19/JavaScript-%E7%9A%84this/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>JavaScript 的this | Lmos'S  BLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lmos'S  BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="Searching..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/19/JavaScript-%E7%9A%84this/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lmos">
+      <meta itemprop="description" content="记录爬坑史">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lmos'S  BLOG">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          JavaScript 的this
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2019-11-19 22:57:27 / Modified: 23:15:34" itemprop="dateCreated datePublished" datetime="2019-11-19T22:57:27+08:00">2019-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="1-this之谜"><a href="#1-this之谜" class="headerlink" title="1. this之谜"></a>1. <code>this</code>之谜</h2><p>许多时候，<code>this</code>关键词对我以及许多刚起步的 JavaScript 程序员来说，都是一个谜。它是一种很强大的特性，但是理解它需要花不少功夫。</p>
+<a id="more"></a>
+<p>对有 Java, PHP 或者其他常见的编程语言背景的人来说，<a href="https://en.wikipedia.org/wiki/This_(computer_programming)" target="_blank" rel="noopener"><code>this</code></a>仅仅被看成是类方法中当前对象的一个实例：不会多也不会少。多数时候，它不能在方法外被使用。正是这样一种简单的使用方法，避免了混淆。</p>
+<p>在 JavaScript 中，<code>this</code>是当前执行函数的上下文。因为 JavaScript 有 4 种不同的函数调用方式：</p>
+<ul>
+<li>函数调用: <code>alert(&#39;Hello World!&#39;)</code></li>
+<li>方法调用: <code>console.log(&#39;Hello World!&#39;)</code></li>
+<li>构造函数调用: <code>new RegExp(&#39;\\d&#39;)</code></li>
+<li>隐式调用: <code>alert.call(undefined, &#39;Hello World!&#39;)</code></li>
+</ul>
+<p>并且每种方法都定义了自己的上下文，<code>this</code>会表现得跟程序员预期的不太一样。同时，<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Strict_mode" target="_blank" rel="noopener">strict 模式</a>也会影响函数执行时的上下文。</p>
+<p>理解<code>this</code>的关键点就是要对函数调用以及它如何影响上下文有个清晰的观点。这篇文章将会着重于对函数调用的解释、函数调用如何影响<code>this</code>以及展示确定上下文时常见的陷阱。</p>
+<p>在开始之前，让我们来熟悉一些术语：</p>
+<ul>
+<li><strong>函数调用</strong> 指执行构成一个函数的代码（简单说就是 call 一个函数）例如 <code>parseInt(&#39;15&#39;)</code>是<code>parseInt</code>函数<strong>调用</strong>.</li>
+<li><strong>函数调用</strong>的<strong>上下文</strong>指<code>this</code>在函数体中的值。</li>
+<li>函数的<strong>作用域</strong>指的是在函数体内可以使用的变量、对象以及函数的集合。</li>
+</ul>
+<h2 id="2-函数调用"><a href="#2-函数调用" class="headerlink" title="2. 函数调用"></a>2. 函数调用</h2><p>当一个表达式为函数接着一个<code>(</code>，一些用逗号分隔的参数以及一个<code>）</code>时，<strong>函数调用</strong>被执行。例如<code>parseInt(&#39;18&#39;)</code>。这个表达式不能是<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Property_accessors" target="_blank" rel="noopener">属性访问</a>，如<code>myObject.myFunction</code>，因为这会变成一个方法调用。举个例子，<code>[1,5].join(&#39;,&#39;)</code><strong>不是</strong>一个函数调用，而是一个方法调用。</p>
+<p>一个简单的函数调用例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function hello(name) &#123;</span><br><span class="line">    return &apos;Hello &apos; + name + &apos;!&apos;;</span><br><span class="line">&#125;</span><br><span class="line">// Function invocation</span><br><span class="line">var message = hello(&apos;World&apos;);</span><br><span class="line">console.log(message); // =&gt; &apos;Hello World!&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>hello(&#39;World&#39;)</code>是函数调用: <code>hello</code>表达式等价于一个函数，跟在它后面的是一对括号以及<code>&#39;World&#39;</code>参数。</p>
+<p>更加高级的例子是 <a href="https://en.wikipedia.org/wiki/Immediately-invoked_function_expression" target="_blank" rel="noopener">IIFE</a> (立即调用的函数表达式):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var message = (function(name) &#123;</span><br><span class="line">   return &apos;Hello &apos; + name + &apos;!&apos;;</span><br><span class="line">&#125;)(&apos;World&apos;);</span><br><span class="line">console.log(message) // =&gt; &apos;Hello World!&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>IIFE 也是一个函数调用: 第一对括号<code>(function(name) {...})</code> 是一个等价于函数的表达式, 紧接着一对括号以及<code>&#39;World&#39;</code>参数: <code>(&#39;World&#39;)</code>。</p>
+<h3 id="2-1-在函数调用中的this"><a href="#2-1-在函数调用中的this" class="headerlink" title="2.1. 在函数调用中的this"></a>2.1. 在函数调用中的<code>this</code></h3><blockquote>
+<p><code>this</code> 在函数调用中是一个<strong>全局对象</strong></p>
+</blockquote>
+<p>全局对象是由执行的环境决定的。在浏览器里它是 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window" target="_blank" rel="noopener"><code>window</code></a>对象。</p>
+<p>在函数调用里，函数执行的上下文是全局对象。让我们一起看看下面函数里的上下文：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function sum(a, b) &#123;</span><br><span class="line">   console.log(this === window); // =&gt; true</span><br><span class="line">   this.myNumber = 20; // add &apos;myNumber&apos; property to global object</span><br><span class="line">   return a + b;</span><br><span class="line">&#125;</span><br><span class="line">// sum() is invoked as a function</span><br><span class="line">// this in sum() is a global object (window)</span><br><span class="line">sum(15, 16);     // =&gt; 31</span><br><span class="line">window.myNumber; // =&gt; 20&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>在<code>sum(15, 16)</code>被调用的时候，JavaScript 自动设置<code>this</code>指向全局对象，也就是浏览器里的<code>window</code>。</p>
+<p>当<code>this</code>在所有函数作用域以外 (最上层的作用域：全局执行的上下文) 调用时，它也指向全局对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs coffeescript&quot;&gt;console.log(this === window); // =&gt; true</span><br><span class="line">this.myString = &apos;Hello World!&apos;;</span><br><span class="line">console.log(window.myString); // =&gt; &apos;Hello World!&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs xml&quot;&gt;&lt;!-- In an html file --&gt;</span><br><span class="line">&lt;script type=&quot;text/javascript&quot;&gt; console.log(this === window); // =&gt; true &lt;/script&gt;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-函数调用中的this-strict-模式"><a href="#2-2-函数调用中的this-strict-模式" class="headerlink" title="2.2. 函数调用中的this, strict 模式"></a>2.2. 函数调用中的<code>this</code>, strict 模式</h3><blockquote>
+<p>strict 模式下，函数调用中的<code>this</code>是<strong><code>undefined</code></strong></p>
+</blockquote>
+<p>strict 模式在 <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-10.1.1" target="_blank" rel="noopener">ECMAScript 5.1</a> 中被引入，它是一个受限制的 JavaScript 变种，提供了更好的安全性以及错误检查。为了使用它，把<code>&#39;use strict&#39;</code>放在函数体的开始。这个模式会影响执行的上下文，把<code>this</code>变成<code>undefined</code>。函数执行的上下文跟上面的例子 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#21thisinfunctioninvocation" target="_blank" rel="noopener">2.1</a> 相反，不再是全局对象</p>
+<p>在 strict 模式下执行函数的例子:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function multiply(a, b) &#123;</span><br><span class="line">    &apos;use strict&apos;; // enable the strict mode</span><br><span class="line">    console.log(this === undefined); // =&gt; true</span><br><span class="line">    return a * b;</span><br><span class="line">&#125;</span><br><span class="line">// multiply() function invocation with strict mode enabled</span><br><span class="line">// this in multiply() is undefined</span><br><span class="line">multiply(2, 5); // =&gt; 10&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>当<code>multiply(2, 5)</code>作为函数被调用时，<code>this</code>是<code>undefined</code>。</p>
+<p>strict 模式不仅在当前作用域起作用，也会对内部的作用域起作用 (对所有在内部定义的函数有效)：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function execute() &#123;</span><br><span class="line">    &apos;use strict&apos;; // activate the strict mode</span><br><span class="line">    function concat(str1, str2) &#123;</span><br><span class="line">        // the strict mode is enabled too</span><br><span class="line">        console.log(this === undefined); // =&gt; true</span><br><span class="line">        return str1 + str2;</span><br><span class="line">    &#125;</span><br><span class="line">    // concat() is invoked as a function in strict mode</span><br><span class="line">    // this in concat() is undefined</span><br><span class="line">    concat(&apos;Hello&apos;, &apos; World!&apos;); // =&gt; &quot;Hello World!&quot;</span><br><span class="line">&#125;</span><br><span class="line">execute();&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>&#39;use strict&#39;</code> 插入在<code>execute</code>函数体的一开始, 使它在<code>execute</code>函数的作用域内起作用。 因为<code>concat</code>定义在<code>execute</code>的作用域内, 它也会继承 strict 模式， 这导致调用<code>concat(&#39;Hello&#39;, &#39; World!&#39;)</code>时， <code>this</code>是<code>undefined</code>。</p>
+<p>单个的 JavaScript 文件可能既包含 strict 模式又包含非 strict 模式。所以，在单个的脚本内，同样的调用方法可能有不同的上下文行为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function nonStrictSum(a, b) &#123;</span><br><span class="line">    // non-strict mode</span><br><span class="line">    console.log(this === window); // =&gt; true</span><br><span class="line">    return a + b;</span><br><span class="line">&#125;</span><br><span class="line">function strictSum(a, b) &#123;</span><br><span class="line">    &apos;use strict&apos;;</span><br><span class="line">    // strict mode is enabled</span><br><span class="line">    console.log(this === undefined); // =&gt; true</span><br><span class="line">    return a + b;</span><br><span class="line">&#125;</span><br><span class="line">// nonStrictSum() is invoked as a function in non-strict mode</span><br><span class="line">// this in nonStrictSum() is the window object</span><br><span class="line">nonStrictSum(5, 6); // =&gt; 11</span><br><span class="line">// strictSum() is invoked as a function in strict mode</span><br><span class="line">// this in strictSum() is undefined</span><br><span class="line">strictSum(8, 12); // =&gt; 20&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-陷阱-内部函数中的this"><a href="#2-3-陷阱-内部函数中的this" class="headerlink" title="2.3. 陷阱: 内部函数中的this"></a>2.3. 陷阱: 内部函数中的<code>this</code></h3><p>一个函数调用中的常见错误就是以为<code>this</code>在内部函数中跟在外部函数中一样。 正确来说，内部函数的上下文依赖于调用方法，而不是外部函数的上下文。 为了能使<code>this</code>跟预期的一样，用隐式调用来修改内部函数的上下文 (用<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="noopener"><code>.call()</code></a>或者<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="noopener"><code>.apply()</code></a>, 如 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#5indirectinvocation" target="_blank" rel="noopener">5.</a> 所示) 或者创建一个绑定函数 (用<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind" target="_blank" rel="noopener"><code>.bind()</code></a>, 如 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#6boundfunction" target="_blank" rel="noopener">6.</a> 所示）。</p>
+<p>下面的例子计算了 2 个数字的和：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var numbers = &#123;</span><br><span class="line">   numberA: 5,</span><br><span class="line">   numberB: 10,</span><br><span class="line">   sum: function() &#123;</span><br><span class="line">     console.log(this === numbers); // =&gt; true</span><br><span class="line">     function calculate() &#123;</span><br><span class="line">       // this is window or undefined in strict mode</span><br><span class="line">       console.log(this === numbers); // =&gt; false</span><br><span class="line">       return this.numberA + this.numberB;</span><br><span class="line">     &#125;</span><br><span class="line">     return calculate();</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br><span class="line">numbers.sum(); // =&gt; NaN or throws TypeError in strict mode&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>numbers.sum()</code>是一个对象上的方法调用 (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/3methodonanobjectinvocation" target="_blank" rel="noopener">3.</a>)，所以<code>sum</code>中的上下文是<code>numbers</code>对象。<code>calculate</code>函数定义在<code>sum</code>内部，所以你会指望<code>calculate()</code>中的<code>this</code>也是<code>numbers</code>对象。然而，<code>calculate()</code>是一个函数调用（而<strong>不是</strong>方法调用），它的<code>this</code>是全局对象<code>window</code>(例子 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#21thisinfunctioninvocation" target="_blank" rel="noopener">2.1.</a>) 或者 strict 模式下的<code>undefined</code>(例子 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#22thisinfunctioninvocationstrictmode" target="_blank" rel="noopener">2.2.</a>)。即使外部函数<code>sum</code>的上下文是<code>numbers</code>对象，它在这里也没有影响。<code>numbers.sum()</code>的调用结果是<code>NaN</code>或者 strict 模式下的<code>TypeError: Cannot read property &#39;numberA&#39; of undefined</code>错误。因为<code>calculate</code>没有被正确调用，结果绝不是预期的<code>5 + 10 = 15</code>。</p>
+<p>为了解决这个问题，<code>calculate</code>应该跟<code>sum</code>有一样的上下文，以便于使用<code>numberA</code>和<code>numberB</code>。解决方法之一是使用<code>.call()</code>方法 (见章节 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#5indirectinvocation" target="_blank" rel="noopener">5.</a>):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var numbers = &#123;</span><br><span class="line">   numberA: 5,</span><br><span class="line">   numberB: 10,</span><br><span class="line">   sum: function() &#123;</span><br><span class="line">     console.log(this === numbers); // =&gt; true</span><br><span class="line">     function calculate() &#123;</span><br><span class="line">       console.log(this === numbers); // =&gt; true</span><br><span class="line">       return this.numberA + this.numberB;</span><br><span class="line">     &#125;</span><br><span class="line">     // use .call() method to modify the context</span><br><span class="line">     return calculate.call(this);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;;</span><br><span class="line">numbers.sum(); // =&gt; 15&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>calculate.call(this)</code>像往常一样执行<code>calculate</code>，但是上下文由第一个参数指定。现在<code>this.numberA + this.numberB</code>相当于<code>numbers.numberA + numbers.numberB</code>，函数会返回预期的结果<code>5 + 10 = 15</code>。</p>
+<h2 id="3-方法调用"><a href="#3-方法调用" class="headerlink" title="3. 方法调用"></a>3. 方法调用</h2><p>一个<strong>方法</strong>是作为一个对象的属性存储的函数。例如:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var myObject = &#123;</span><br><span class="line">    // helloFunction is a method</span><br><span class="line">    helloFunction: function() &#123;</span><br><span class="line">        return &apos;Hello World!&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">var message = myObject.helloFunction();&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>helloFunction</code>是<code>myObject</code>的一个方法。为了使用这个方法, 使用属性访问：<code>myObject.helloFunction</code>。</p>
+<p>当一个表达式以属性访问的形式执行时，执行的是<strong>方法调用</strong>，它相当于以个函数接着<code>(</code>，一组用逗号分隔的参数以及<code>)</code>。 利用前面的例子，<code>myObject.helloFunction()</code>是对象<code>myObject</code>上的一个<code>helloFunction</code>的方法调用。<code>[1, 2].join(&#39;,&#39;)</code> 或<code>/\s/.test(&#39;beautiful world&#39;)</code>也被认为是方法调用。</p>
+<p>区分<strong>函数调用</strong> (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#2functioninvocation" target="_blank" rel="noopener">2.</a>) 跟<strong>方法调用</strong>是很重要的，因为他们完全不同。他们最主要的区别在于方法调用要求函数以属性访问的形式调用 (如<code>&lt;expression&gt;.functionProperty()</code>或者<code>&lt;expression&gt;[&#39;functionProperty&#39;]()</code>)，而函数调用并没有这样的要求 (如<code>&lt;expression&gt;()</code>)。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;[&apos;Hello&apos;, &apos;World&apos;].join(&apos;, &apos;); // method invocation</span><br><span class="line">(&#123; ten: function() &#123; return 10; &#125; &#125;).ten(); // method invocation</span><br><span class="line">var obj = &#123;&#125;;</span><br><span class="line">obj.myFunction = function() &#123;</span><br><span class="line">  return new Date().toString();</span><br><span class="line">&#125;;</span><br><span class="line">obj.myFunction(); // method invocation</span><br><span class="line"></span><br><span class="line">var otherFunction = obj.myFunction;</span><br><span class="line">otherFunction();     // function invocation</span><br><span class="line">parseFloat(&apos;16.60&apos;); // function invocation</span><br><span class="line">isNaN(0);            // function invocation&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="3-1-方法调用中的this"><a href="#3-1-方法调用中的this" class="headerlink" title="3.1. 方法调用中的this"></a>3.1. 方法调用中的<code>this</code></h3><blockquote>
+<p>在方法调用中，<code>this</code>是<strong>拥有这个方法的对象</strong></p>
+</blockquote>
+<p>当调用一个对象上的方法时，<code>this</code>变成这个对象自身。 让我们一起来创建一个对象，它带有一个可以增大数字的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var calc = &#123;</span><br><span class="line">  num: 0,</span><br><span class="line">  increment: function() &#123;</span><br><span class="line">    console.log(this === calc); // =&gt; true</span><br><span class="line">    this.num += 1;</span><br><span class="line">    return this.num;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line">// method invocation. this is calc</span><br><span class="line">calc.increment(); // =&gt; 1</span><br><span class="line">calc.increment(); // =&gt; 2&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>调用<code>calc.increment()</code>会把<code>increment</code>函数的上下文变成<code>calc</code>对象。所以，用<code>this.num</code>来增加 num 这个属性跟预期一样工作。</p>
+<p>javaScript 对象会从它的<code>prototype</code>继承方法。当这个继承的方法在新的对象上被调用时，上下文仍然是该对象本身：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var myDog = Object.create(&#123;</span><br><span class="line">  sayName: function() &#123;</span><br><span class="line">     console.log(this === myDog); // =&gt; true</span><br><span class="line">     return this.name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line">myDog.name = &apos;Milo&apos;;</span><br><span class="line">// method invocation. this is myDog</span><br><span class="line">myDog.sayName(); // =&gt; &apos;Milo&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create" target="_blank" rel="noopener"><code>Object.create()</code></a>创建了一个新的对象<code>myDog</code>，并且设置了它的 prototype。<code>myDog</code>继承了<code>sayName</code>方法。当执行<code>myDog.sayName()</code>时，<code>myDog</code>是调用的上下文。</p>
+<p>在 ECMAScript 6 的 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noopener"><code>class</code></a>语法中，方法调用的上下文也是这个实例本身：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;class Planet &#123;</span><br><span class="line">  constructor(name) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">  &#125;</span><br><span class="line">  getName() &#123;</span><br><span class="line">    console.log(this === earth); // =&gt; true</span><br><span class="line">    return this.name;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">var earth = new Planet(&apos;Earth&apos;);</span><br><span class="line">// method invocation. the context is earth</span><br><span class="line">earth.getName(); // =&gt; &apos;Earth&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-陷阱-从-object-中分离方法"><a href="#3-2-陷阱-从-object-中分离方法" class="headerlink" title="3.2. 陷阱: 从 object 中分离方法"></a>3.2. 陷阱: 从 object 中分离方法</h3><p>一个对象中的方法可以赋值给另一个变量。当用这个变量调用方法时，你可能以为<code>this</code>指向定义这个方法的对象。</p>
+<p>正确来说如果这个方法在没有对象的时候被调用，它会变成函数调用：<code>this</code>变成全局对象<code>window</code>或者 strict 模式下的<code>undefined</code>(见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#21thisinfunctioninvocation" target="_blank" rel="noopener">2.1</a> 和 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#22thisinfunctioninvocationstrictmode" target="_blank" rel="noopener">2.2</a>)。 用绑定函数 (用<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind" target="_blank" rel="noopener"><code>.bind()</code></a>, 见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#6boundfunction" target="_blank" rel="noopener">6.</a>) 可以修正上下文，使它变成拥有这个方法的对象。</p>
+<p>下面的例子创建了<code>Animal</code>构造函数并创造了它的一个实例 - <code>myCat</code>。 <code>setTimout()</code>会在 1 秒钟之后输出<code>myCat</code>对象的信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Animal(type, legs) &#123;</span><br><span class="line">    this.type = type;</span><br><span class="line">    this.legs = legs;</span><br><span class="line">    this.logInfo = function() &#123;</span><br><span class="line">        console.log(this === myCat); // =&gt; false</span><br><span class="line">        console.log(&apos;The &apos; + this.type + &apos; has &apos; + this.legs + &apos; legs&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">var myCat = new Animal(&apos;Cat&apos;, 4);</span><br><span class="line">// logs &quot;The undefined has undefined legs&quot;</span><br><span class="line">// or throws a TypeError in strict mode</span><br><span class="line">setTimeout(myCat.logInfo, 1000);&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>你可能会以为<code>setTimout</code>会调用<code>myCat.logInfo()</code>，输出关于<code>myCat</code>对象的信息。实际上，这个方法在作为参数传递给<code>setTimout(myCat.logInfo)</code>时已经从原对象上分离了，1 秒钟之后发生的是一个函数调用。当<code>logInfo</code>作为函数被调用时，<code>this</code>是全局对象，或者 strict 模式下的<code>undefined</code>（反正<strong>不是</strong><code>myCat</code>对象），所以不会正确地输出信息。</p>
+<p>函数可以通过<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind" target="_blank" rel="noopener"><code>.bind()</code></a>方法跟一个对象绑定 (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#6boundfunction" target="_blank" rel="noopener">6.</a>)。如果这个分离的方法与<code>myCat</code>绑定，那么上下文的问题就解决了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Animal(type, legs) &#123;</span><br><span class="line">    this.type = type;</span><br><span class="line">    this.legs = legs;</span><br><span class="line">    this.logInfo = function() &#123;</span><br><span class="line">        console.log(this === myCat); // =&gt; true</span><br><span class="line">        console.log(&apos;The &apos; + this.type + &apos; has &apos; + this.legs + &apos; legs&apos;);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line">var myCat = new Animal(&apos;Cat&apos;, 4);</span><br><span class="line">// logs &quot;The Cat has 4 legs&quot;</span><br><span class="line">setTimeout(myCat.logInfo.bind(myCat), 1000);&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>myCat.logInfo.bind(myCat)</code>返回一个跟<code>logInfo</code>执行效果一样的函数，但是它的<code>this</code>即使在函数调用情况下也是<code>myCat</code>。</p>
+<h2 id="4-构造函数调用"><a href="#4-构造函数调用" class="headerlink" title="4. 构造函数调用"></a>4. 构造函数调用</h2><p>当 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/new" target="_blank" rel="noopener"><code>new</code></a>关键词紧接着函数对象,<code>(</code>, 一组逗号分隔的参数以及<code>)</code>时被调用，执行的是<strong>构造函数调用</strong>如<code>new RegExp(&#39;\\d&#39;)</code>。</p>
+<p>这个例子声明了一个<code>Country</code>函数，并且将它作为一个构造函数调用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Country(name, traveled) &#123;</span><br><span class="line">    this.name = name ? name : &apos;United Kingdom&apos;;</span><br><span class="line">    this.traveled = Boolean(traveled); // transform to a boolean</span><br><span class="line">&#125;</span><br><span class="line">Country.prototype.travel = function() &#123;</span><br><span class="line">    this.traveled = true;</span><br><span class="line">&#125;;</span><br><span class="line">// Constructor invocation</span><br><span class="line">var france = new Country(&apos;France&apos;, false);</span><br><span class="line">// Constructor invocation</span><br><span class="line">var unitedKingdom = new Country;</span><br><span class="line"></span><br><span class="line">france.travel(); // Travel to France&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>new Country(&#39;France&#39;, false)</code>是<code>Country</code>函数的构造函数调用。它的执行结果是一个<code>name</code>属性为<code>&#39;France&#39;</code>的新的对象。 如果这个构造函数调用时不需要参数，那么括号可以省略：<code>new Country</code>。</p>
+<p>从 ECMAScript 6 开始，JavaScript 允许用 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noopener"><code>class</code></a>关键词来定义构造函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;class City &#123;</span><br><span class="line">  constructor(name, traveled) &#123;</span><br><span class="line">    this.name = name;</span><br><span class="line">    this.traveled = false;</span><br><span class="line">  &#125;</span><br><span class="line">  travel() &#123;</span><br><span class="line">    this.traveled = true;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// Constructor invocation</span><br><span class="line">var paris = new City(&apos;Paris&apos;, false);</span><br><span class="line">paris.travel();&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>new City(&#39;Paris&#39;)</code>是构造函数调用。这个对象的初始化由这个类中一个特殊的方法 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor" target="_blank" rel="noopener"><code>constructor</code></a>来处理。其中，<code>this</code>指向新创建的对象。</p>
+<p>构造函数创建了一个新的空的对象，它从构造函数的原型继承了属性。构造函数的作用就是去初始化这个对象。 可能你已经知道了，在这种类型的调用中，上下文指向新创建的实例。这是我们下一章的主题。</p>
+<p>当属性访问<code>myObject.myFunction</code>前面有一个<code>new</code>关键词时，JavaScript 会执行<strong>构造函数调用</strong>而<strong>不是</strong>原来的<strong>方法调用</strong>。例如<code>new myObject.myFunction()</code>：它相当于先用属性访问把方法提取出来<code>extractedFunction = myObject.myFunction</code>，然后利用把它作为构造函数创建一个新的对象： <code>new extractedFunction()</code>。</p>
+<h3 id="4-1-构造函数中的this"><a href="#4-1-构造函数中的this" class="headerlink" title="4.1. 构造函数中的this"></a>4.1. 构造函数中的<code>this</code></h3><blockquote>
+<p>在构造函数调用中<code>this</code>指向<strong>新创建的对象</strong></p>
+</blockquote>
+<p>构造函数调用的上下文是新创建的对象。它利用构造函数的参数初始化新的对象，设定属性的初始值，添加时间处理函数等等。</p>
+<p>让我们来看看下面例子里的上下文：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Foo () &#123;</span><br><span class="line">    console.log(this instanceof Foo); // =&gt; true</span><br><span class="line">    this.property = &apos;Default Value&apos;;</span><br><span class="line">&#125;</span><br><span class="line">// Constructor invocation</span><br><span class="line">var fooInstance = new Foo();</span><br><span class="line">fooInstance.property; // =&gt; &apos;Default Value&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>new Foo()</code>正在调用一个构造函数，它的上下文是<code>fooInstance</code>。其中，<code>Foo</code>被初始化了：<code>this.property</code>被赋予了一个默认值。</p>
+<p>同样的情况在用 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes" target="_blank" rel="noopener"><code>class</code></a>语法（从 ES6 起）时也会发生，唯一的区别是初始化在<code>constructor</code>方法中进行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;class Bar &#123;</span><br><span class="line">    constructor() &#123;</span><br><span class="line">        console.log(this instanceof Bar); // =&gt; true</span><br><span class="line">        this.property = &apos;Default Value&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// Constructor invocation</span><br><span class="line">var barInstance = new Bar();</span><br><span class="line">barInstance.property; // =&gt; &apos;Default Value&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>当<code>new Bar()</code>执行时，JavaScript 创建了一个空的对象，把它作为<code>constructor</code>方法的上下文。现在，你可以用<code>this</code>关键词给它添加属性：<code>this.property = &#39;Default Value&#39;</code>。</p>
+<h3 id="4-2-陷阱-忘了new"><a href="#4-2-陷阱-忘了new" class="headerlink" title="4.2. 陷阱: 忘了new"></a>4.2. 陷阱: 忘了<code>new</code></h3><p>有些 JavaScirpt 函数不是只在作为构造函数调用的时候才创建新的对象，作为函数调用时也会，例如<code>RegExp</code>：</p>
+<pre class="hljs javascript">var reg1 = new RegExp('\\w+');
+var reg2 = RegExp('\\w+');
+
+reg1 instanceof RegExp;      // => true
+reg2 instanceof RegExp;      // => true
+reg1.source === reg2.source; // => true</pre>
+
+<p>当执行<code>new RegExp(&#39;\\w+&#39;)</code>和<code>RegExp(&#39;\\w+&#39;)</code>时，JavaScrit 会创建相同的正则表达式对象。</p>
+<p>因为有些构造函数在<code>new</code>关键词缺失的情况下，可能跳过对象初始化，用函数调用创建对象会存在问题（不包括<a href="http://javascript.info/tutorial/factory-constructor-pattern" target="_blank" rel="noopener">工厂模式</a>）。 下面的例子就说明了这个问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Vehicle(type, wheelsCount) &#123;</span><br><span class="line">    this.type = type;</span><br><span class="line">    this.wheelsCount = wheelsCount;</span><br><span class="line">    return this;</span><br><span class="line">&#125;</span><br><span class="line">// Function invocation</span><br><span class="line">var car = Vehicle(&apos;Car&apos;, 4);</span><br><span class="line">car.type;       // =&gt; &apos;Car&apos;</span><br><span class="line">car.wheelsCount // =&gt; 4</span><br><span class="line">car === window  // =&gt; true&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>Vehicle</code>是一个在上下文上设置了<code>type</code>跟<code>wheelsCount</code>属性的函数。当执行<code>Vehicle(&#39;Car&#39;, 4)</code>时，返回了一个<code>car</code>对象，它的属性是正确的：<code>car.type</code>是<code>&#39;Car&#39;</code>， <code>car.wheelsCount</code>是<code>4</code>。你可能以为它正确地创建并初始化了对象。 然而，在函数调用中，<code>this</code>是<code>window</code>对象 (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#21thisinfunctioninvocation" target="_blank" rel="noopener">2.1.</a>)，<code>Vehicle(&#39;Car&#39;, 4)</code>实际上是在给<code>window</code>对象设置属性 – 这是错的。它并没有创建一个新的对象。</p>
+<p>当你希望调用构造函数时，确保你使用了<code>new</code>操作符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Vehicle(type, wheelsCount) &#123;</span><br><span class="line">    if (!(this instanceof Vehicle)) &#123;</span><br><span class="line">        throw Error(&apos;Error: Incorrect invocation&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">    this.type = type;</span><br><span class="line">    this.wheelsCount = wheelsCount;</span><br><span class="line">    return this;</span><br><span class="line">&#125;</span><br><span class="line">// Constructor invocation</span><br><span class="line">var car = new Vehicle(&apos;Car&apos;, 4);</span><br><span class="line">car.type               // =&gt; &apos;Car&apos;</span><br><span class="line">car.wheelsCount        // =&gt; 4</span><br><span class="line">car instanceof Vehicle // =&gt; true</span><br><span class="line"></span><br><span class="line">// Function invocation. Generates an error.</span><br><span class="line">var brokenCat = Vehicle(&apos;Broken Car&apos;, 3);&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>new Vehicle(&#39;Car&#39;, 4)</code>工作正常：因为<code>new</code>关键词出现在构造函数调用前，一个新的对象被创建并初始化。 在构造函数里我们添加了一个验证<code>this instanceof Vehicle</code>来确保执行的上下文是正确的对象类型。如果<code>this</code>不是<code>Vehicle</code>，那么就会报错。这样，如果执行<code>Vehicle(&#39;Broken Car&#39;, 3)</code>(没有<code>new</code>)，我们会得到一个异常：<code>Error: Incorrect invocation</code>。</p>
+<h2 id="5-隐式调用"><a href="#5-隐式调用" class="headerlink" title="5. 隐式调用"></a>5. 隐式调用</h2><p>当函数被<code>.call()</code>或者<code>.apply()</code>调用时，执行的是<strong>隐式调用</strong>。</p>
+<p>函数在 JavaScript 中是第一类对象，这意味着函数也是对象。它的类型是 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" target="_blank" rel="noopener"><code>Function</code></a>。根据这个函数对象所拥有的<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function#Methods" target="_blank" rel="noopener">方法列表</a>，<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call" target="_blank" rel="noopener"><code>.call()</code></a>和<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply" target="_blank" rel="noopener"><code>.apply()</code></a>可以跟一个可变的上下文一起调用函数。</p>
+<p>方法<code>.call(thisArg[, arg1[, arg2[, ...]]])</code>将接受的第一个参数<code>thisArg</code>作为调用时的上下文，<code>arg1, arg2, ...</code>这些则作为参数传入被调用的函数。方法<code>.apply(thisArg, [args])</code>将接受的第一个参数<code>thisArg</code>作为调用时的上下文，并且接受另一个<a href="http://www.2ality.com/2013/05/quirk-array-like-objects.html" target="_blank" rel="noopener">类似数组的对象</a><code>[args]</code>作为被调用函数的参数传入。</p>
+<p>下面是一个隐式调用的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function increment(number) &#123;</span><br><span class="line">    return ++number;</span><br><span class="line">&#125;</span><br><span class="line">increment.call(undefined, 10);    // =&gt; 11</span><br><span class="line">increment.apply(undefined, [10]); // =&gt; 11&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>increment.call()</code>和<code>increment.apply()</code>都用参数<code>10</code>调用了这个自增函数。</p>
+<p>这两者的主要区别是<code>.call()</code>接受一组参数，例如<code>myFunction.call(thisValue, &#39;value1&#39;, &#39;value2&#39;)</code>。然而<code>.apply()</code>接受的一组参数必须是一个类似数组的对象，例如<code>myFunction.apply(thisValue, [&#39;value1&#39;, &#39;value2&#39;])</code>。</p>
+<h3 id="5-1-隐式调用中的this"><a href="#5-1-隐式调用中的this" class="headerlink" title="5.1. 隐式调用中的this"></a>5.1. 隐式调用中的<code>this</code></h3><blockquote>
+<p>在隐式调用<code>.call()</code>或<code>.apply()</code>中，<code>this</code>是<strong>第一个参数</strong></p>
+</blockquote>
+<p>很明显，在隐式调用中，<code>this</code>是传入<code>.call()</code>或<code>.apply()</code>中的第一个参数。下面的这个例子就说明了这一点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var rabbit = &#123; name: &apos;White Rabbit&apos; &#125;;</span><br><span class="line">function concatName(string) &#123;</span><br><span class="line">    console.log(this === rabbit); // =&gt; true</span><br><span class="line">    return string + this.name;</span><br><span class="line">&#125;</span><br><span class="line">// Indirect invocations</span><br><span class="line">concatName.call(rabbit, &apos;Hello &apos;);  // =&gt; &apos;Hello White Rabbit&apos;</span><br><span class="line">concatName.apply(rabbit, [&apos;Bye &apos;]); // =&gt; &apos;Bye White Rabbit&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>当一个函数应该在特定的上下文中执行时，隐式调用就非常有用。例如为了解决方法调用时，<code>this</code>总是<code>window</code>或 strict 模式下的<code>undefined</code>的上下文问题 (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#23pitfallthisinaninnerfunction" target="_blank" rel="noopener">2.3.</a>)。隐式调用可以用于模拟在一个对象上调用某个方法（见之前的代码样例）。</p>
+<p>另一个实际的例子是在 ES5 中，在创建的类的结构层次中中，调用父类的构造函数：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Runner(name) &#123;</span><br><span class="line">    console.log(this instanceof Rabbit); // =&gt; true</span><br><span class="line">    this.name = name;</span><br><span class="line">&#125;</span><br><span class="line">function Rabbit(name, countLegs) &#123;</span><br><span class="line">    console.log(this instanceof Rabbit); // =&gt; true</span><br><span class="line">    // Indirect invocation. Call parent constructor.</span><br><span class="line">    Runner.call(this, name);</span><br><span class="line">    this.countLegs = countLegs;</span><br><span class="line">&#125;</span><br><span class="line">var myRabbit = new Rabbit(&apos;White Rabbit&apos;, 4);</span><br><span class="line">myRabbit; // &#123; name: &apos;White Rabbit&apos;, countLegs: 4 &#125;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>Rabbit</code>中的<code>Runner.call(this, name)</code>隐式调用了父类的函数来初始化这个对象。</p>
+<h2 id="6-绑定函数"><a href="#6-绑定函数" class="headerlink" title="6. 绑定函数"></a>6. 绑定函数</h2><p><strong>绑定函数</strong>是一个与对象绑定的函数。通常它是通过在原函数上使用 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind" target="_blank" rel="noopener"><code>.bind()</code></a>来创建的。原函数和绑定的函数共享代码跟作用域，但是在执行时有不同的上下文。</p>
+<p>方法<code>.bind(thisArg[, arg1[, arg2[, ...]]])</code>接受第一个参数<code>thisArg</code>作为绑定函数执行时的上下文，并且它接受一组可选的参数 <code>arg1, arg2, ...</code>作为被调用函数的参数。它返回一个绑定了<code>thisArg</code>的新函数。</p>
+<p>下面的代码创建了一个绑定函数并在之后调用它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function multiply(number) &#123;</span><br><span class="line">    &apos;use strict&apos;;</span><br><span class="line">    return this * number;</span><br><span class="line">&#125;</span><br><span class="line">// create a bound function with context</span><br><span class="line">var double = multiply.bind(2);</span><br><span class="line">// invoke the bound function</span><br><span class="line">double(3);  // =&gt; 6</span><br><span class="line">double(10); // =&gt; 20&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>multiply.bind(2)</code>返回了一个新的函数对象<code>double</code>，<code>double</code>绑定了数字<code>2</code>。<code>multiply</code>跟<code>double</code>有相同的代码跟作用域。</p>
+<p>跟<code>.apply()</code>以及<code>.call()</code>方法 (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#5indirectinvocation" target="_blank" rel="noopener">5.</a>) 马上调用函数不同，<code>.bind()</code>函数返回一个新的方法，它应该在之后被调用，只是<code>this</code>已经被提前设置好了。</p>
+<h3 id="6-1-绑定函数中的this"><a href="#6-1-绑定函数中的this" class="headerlink" title="6.1. 绑定函数中的this"></a>6.1. 绑定函数中的<code>this</code></h3><blockquote>
+<p>在调用绑定函数时，<code>this</code>是<code>.bind()</code>的<strong>第一个参数</strong>。</p>
+</blockquote>
+<p><code>.bind()</code>的作用是创建一个新的函数，它在被调用时的上下文是传入<code>.bind()</code>的第一个参数。它是一种非常强大的技巧，使你可以创建一个定义了<code>this</code>值的函数。</p>
+<p>让我们来看看如何在一个绑定函数中设置<code>this</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs php&quot;&gt;var numbers = &#123;</span><br><span class="line">    array: [3, 5, 10],</span><br><span class="line">    getNumbers: function() &#123;</span><br><span class="line">        return this.array;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">// Create a bound function</span><br><span class="line">var boundGetNumbers = numbers.getNumbers.bind(numbers);</span><br><span class="line">boundGetNumbers(); // =&gt; [3, 5, 10]</span><br><span class="line">// Extract method from object</span><br><span class="line">var simpleGetNumbers = numbers.getNumbers;</span><br><span class="line">simpleGetNumbers(); // =&gt; undefined or throws an error in strict mode&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>numbers.getNumbers.bind(numbers)</code>返回了一个绑定了<code>number</code>对象的<code>boundGetNumbers</code>函数。<code>boundGetNumbers()</code>调用时的<code>this</code>是<code>number</code>对象，并能够返回正确的数组对象。<code>numbers.getNumbers</code>函数能在不绑定的情况下赋值给变量<code>simpleGetNumbers</code>。在之后的函数调用中，<code>simpleGetNumbers()</code>的<code>this</code>是<code>window</code>或者 strict 模式下的<code>undefined</code>，不是<code>number</code>对象 (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#32pitfallseparatingmethodfromitsobject" target="_blank" rel="noopener">3.2. 陷阱</a>)。在这个情况下，<code>simpleGetNumbers()</code>不会正确返回数组。</p>
+<p><code>.bind()</code>永久性地建立了一个上下文的链接，并且会一直保持它。一个绑定函数不能通过<code>.call()</code>或者<code>.apply()</code>来改变它的上下文，甚至是再次绑定也不会有什么作用。 只有用绑定函数的构造函数调用方法能够改变上下文，但并不推荐这个方法（因为构造函数调用用的是_常规函数_而不是绑定函数）。 下面的例子声明了一个绑定函数，接着试图改变它预先定义好的上下文：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function getThis() &#123;</span><br><span class="line">    &apos;use strict&apos;;</span><br><span class="line">    return this;</span><br><span class="line">&#125;</span><br><span class="line">var one = getThis.bind(1);</span><br><span class="line">// Bound function invocation</span><br><span class="line">one(); // =&gt; 1</span><br><span class="line">// Use bound function with .apply() and .call()</span><br><span class="line">one.call(2);  // =&gt; 1</span><br><span class="line">one.apply(2); // =&gt; 1</span><br><span class="line">// Bind again</span><br><span class="line">one.bind(2)(); // =&gt; 1</span><br><span class="line">// Call the bound function as a constructor</span><br><span class="line">new one(); // =&gt; Object&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>只有<code>new one()</code>改变了绑定函数的上下文，其他方式的调用中<code>this</code>总是等于<code>1</code>。</p>
+<h2 id="7-箭头函数"><a href="#7-箭头函数" class="headerlink" title="7. 箭头函数"></a>7. 箭头函数</h2><p><strong>箭头函数</strong>被设计来以更简短的形式定义函数。并且能从<a href="https://en.wikipedia.org/wiki/Scope_(computer_science)#Lexical_scoping" target="_blank" rel="noopener">词法</a>上绑定上下文。它能以下面的方式被使用：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var hello = (name) =&gt; &#123;</span><br><span class="line">    return &apos;Hello &apos; + name;</span><br><span class="line">&#125;;</span><br><span class="line">hello(&apos;World&apos;); // =&gt; &apos;Hello World&apos;</span><br><span class="line">// Keep only even numbers</span><br><span class="line">[1, 2, 5, 6].filter(item =&gt; item % 2 === 0); // =&gt; [2, 6]&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>箭头函数带来了更轻量的语法，避免了冗长的<code>function</code>关键词。你甚至可以在函数只有一个语句的时候省略<code>return</code>。</p>
+<p>因为箭头函数是<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name" target="_blank" rel="noopener">匿名的</a>，这意味着它的<code>name</code>属性是个空字符串<code>&#39;&#39;</code>。这样一来，它就没有一个词法上的函数名（函数名在递归跟事件解绑时会比较有用）。同时，跟常规函数相反，它也不提供 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments" target="_blank" rel="noopener"><code>arguments</code></a>对象。但是，这在 ES6 中通过 <a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/rest_parameters" target="_blank" rel="noopener">rest parameters</a> 修复了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;var sumArguments = (...args) =&gt; &#123;</span><br><span class="line">   console.log(typeof arguments); // =&gt; &apos;undefined&apos;</span><br><span class="line">   return args.reduce((result, item) =&gt; result + item);</span><br><span class="line">&#125;;</span><br><span class="line">sumArguments.name      // =&gt; &apos;&apos;</span><br><span class="line">sumArguments(5, 5, 6); // =&gt; 16&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="7-1-箭头函数中的this"><a href="#7-1-箭头函数中的this" class="headerlink" title="7.1. 箭头函数中的this"></a>7.1. 箭头函数中的<code>this</code></h3><blockquote>
+<p><code>this</code>是箭头函数定义时<strong>封装好的上下文</strong></p>
+</blockquote>
+<p>箭头函数并不会创建它自己的上下文，它从它定义处的外部函数获得<code>this</code>上下文。下面的例子说明了这个上下文透明的特性：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;class Point &#123;</span><br><span class="line">    constructor(x, y) &#123;</span><br><span class="line">        this.x = x;</span><br><span class="line">        this.y = y;</span><br><span class="line">    &#125;</span><br><span class="line">    log() &#123;</span><br><span class="line">        console.log(this === myPoint); // =&gt; true</span><br><span class="line">        setTimeout(()=&gt; &#123;</span><br><span class="line">            console.log(this === myPoint);      // =&gt; true</span><br><span class="line">            console.log(this.x + &apos;:&apos; + this.y); // =&gt; &apos;95:165&apos;</span><br><span class="line">        &#125;, 1000);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">var myPoint = new Point(95, 165);</span><br><span class="line">myPoint.log();&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>setTimeout</code>在调用箭头函数时跟<code>log()</code>使用了相同的上下文 (<code>myPoint</code>对象)。正如所见，箭头函数从它定义处 “继承” 了函数的上下文。 如果在这个例子里尝试用常规函数，它会建立自己的上下文(<code>window</code>或 strict 模式下的<code>undefined</code>)。所以，为了让同样的代码能在函数表达式中正确运行，需要手动绑定上下文：<code>setTimeout(function() {...}.bind(this))</code>。这样一来就显得很啰嗦，不如用箭头函数来得简短。</p>
+<p>如果箭头函数定义在最上层的作用域（在所有函数之外），那么上下文就总是全局对象（浏览器中的<code>window</code>对象）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs coffeescript&quot;&gt;var getContext = () =&gt; &#123;</span><br><span class="line">   console.log(this === window); // =&gt; true</span><br><span class="line">   return this;</span><br><span class="line">&#125;;</span><br><span class="line">console.log(getContext() === window); // =&gt; true&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>箭头函数会<strong>一劳永逸</strong>地绑定词法作用域。即使使用修改上下文的方法，<code>this</code>也不能被改变：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs cs&quot;&gt;var numbers = [1, 2];</span><br><span class="line">(function() &#123;</span><br><span class="line">    var get = () =&gt; &#123;</span><br><span class="line">        console.log(this === numbers); // =&gt; true</span><br><span class="line">        return this;</span><br><span class="line">    &#125;;</span><br><span class="line">    console.log(this === numbers); // =&gt; true</span><br><span class="line">    get(); // =&gt; [1, 2]</span><br><span class="line">    // Use arrow function with .apply() and .call()</span><br><span class="line">    get.call([0]);  // =&gt; [1, 2]</span><br><span class="line">    get.apply([0]); // =&gt; [1, 2]</span><br><span class="line">    // Bind</span><br><span class="line">    get.bind([0])(); // =&gt; [1, 2]</span><br><span class="line">&#125;).call(numbers);&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>一个函数表达式通过<code>.call(numbers)</code>被隐式调用了，这使得这个调用的<code>this</code>变成了<code>numbers</code>。这样一来，箭头函数<code>get</code>的<code>this</code>也变成了<code>numbers</code>，因为它是从词法上获得的上下文。</p>
+<p>无论<code>get</code>是怎么被调用的，它一直保持了一开始的上下文<code>numbers</code>。用其他上下文的隐式调用 (通过<code>.call()</code>或<code>.apply()</code>) 或者重新绑定 (通过<code>.bind()</code>) 都不会起作用</p>
+<p>箭头函数不能用作构造函数。如果像构造函数一样调用<code>new get()</code>， JavaScript 会抛出异常：<code>TypeError: get is not a constructor</code>。</p>
+<h3 id="7-2-陷阱-用箭头函数定义方法"><a href="#7-2-陷阱-用箭头函数定义方法" class="headerlink" title="7.2. 陷阱: 用箭头函数定义方法"></a>7.2. 陷阱: 用箭头函数定义方法</h3><p>你可能想用箭头函数在一个对象上定义方法。这很合情合理：箭头函数的定义相比于<a href="https://developer.mozilla.org/en/docs/web/JavaScript/Reference/Operators/function" target="_blank" rel="noopener">函数表达式</a>短得多：例如<code>(param) =&gt; {...}</code>而不是<code>function(param) {..}</code>。</p>
+<p>这个例子用箭头函数在<code>Period</code>类上定义了<code>format()</code>方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Period (hours, minutes) &#123;</span><br><span class="line">    this.hours = hours;</span><br><span class="line">    this.minutes = minutes;</span><br><span class="line">&#125;</span><br><span class="line">Period.prototype.format = () =&gt; &#123;</span><br><span class="line">    console.log(this === window); // =&gt; true</span><br><span class="line">    return this.hours + &apos; hours and &apos; + this.minutes + &apos; minutes&apos;;</span><br><span class="line">&#125;;</span><br><span class="line">var walkPeriod = new Period(2, 30);</span><br><span class="line">walkPeriod.format(); // =&gt; &apos;undefined hours and undefined minutes&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p>由于<code>format</code>是一个箭头函数，并且它定义在全局上下文（最顶层的作用域）中，它的<code>this</code>指向<code>window</code>对象。即使<code>format</code>作为方法在一个对象上被调用如<code>walkPeriod.format()</code>，<code>window</code>仍然是这次调用的上下文。之所以会这样是因为箭头函数有静态的上下文，并不会随着调用方式的改变而改变。</p>
+<p>函数表达式可以解决这个问题，因为一个常规的函数会随着调用方法而改变其上下文:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre class=&quot;hljs javascript&quot;&gt;function Period (hours, minutes) &#123;</span><br><span class="line">    this.hours = hours;</span><br><span class="line">    this.minutes = minutes;</span><br><span class="line">&#125;</span><br><span class="line">Period.prototype.format = function() &#123;</span><br><span class="line">    console.log(this === walkPeriod); // =&gt; true</span><br><span class="line">    return this.hours + &apos; hours and &apos; + this.minutes + &apos; minutes&apos;;</span><br><span class="line">&#125;;</span><br><span class="line">var walkPeriod = new Period(2, 30);</span><br><span class="line">walkPeriod.format(); // =&gt; &apos;2 hours and 30 minutes&apos;&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<p><code>walkPeriod.format()</code>是一个对象上的方法调用 (见 <a href="https://rainsoft.io/gentle-explanation-of-this-in-javascript/#31thisinmethodinvocation" target="_blank" rel="noopener">3.1.</a>)，它的上下文是<code>walkPeriod</code>对象。<code>this.hours</code>等于<code>2</code>，<code>this.minutes</code>等于<code>30</code>，所以这个方法返回了正确的结果：<code>&#39;2 hours and 30 minutes&#39;</code>。</p>
+<h2 id="8-结论"><a href="#8-结论" class="headerlink" title="8. 结论"></a>8. 结论</h2><p>因为函数调用对<code>this</code>有最大的影响，从现在起，<strong>不要</strong>再问你自己：</p>
+<blockquote>
+<p><code>this</code>是从哪里来的？</p>
+</blockquote>
+<p>而<strong>要</strong>问自己：</p>
+<blockquote>
+<p>函数是怎么<code>被调用</code>的？</p>
+</blockquote>
+<p>对于箭头函数，问问你自己：</p>
+<blockquote>
+<p>在这个箭头函数被<code>定义</code>的地方，<code>this</code>是什么？</p>
+</blockquote>
+<p>这是处理<code>this</code>时的正确想法，它们可以让你免于头痛。</p>
+<p>[!转载]：<a href="https://www.w3cplus.com/javascript/gentle-explanation-of-this-in-javascript.html" target="_blank" rel="noopener">https://www.w3cplus.com/javascript/gentle-explanation-of-this-in-javascript.html</a></p>
+
+    </div>
+
+    
+    
+    
+    <div>
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+    
+    </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/this/" rel="tag"># this</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/19/VUE%E7%BB%84%E4%BB%B6%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92/" rel="next" title="VUE组件数据传递">
+                  <i class="fa fa-chevron-left"></i> VUE组件数据传递
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/11/19/this%E7%9A%84%E5%80%BC%E5%88%B0%E5%BA%95%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F/" rel="prev" title="this的值到底是什么？">
+                  this的值到底是什么？ <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-this之谜"><span class="nav-text">1. this之谜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-函数调用"><span class="nav-text">2. 函数调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-在函数调用中的this"><span class="nav-text">2.1. 在函数调用中的this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-函数调用中的this-strict-模式"><span class="nav-text">2.2. 函数调用中的this, strict 模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-陷阱-内部函数中的this"><span class="nav-text">2.3. 陷阱: 内部函数中的this</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-方法调用"><span class="nav-text">3. 方法调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-方法调用中的this"><span class="nav-text">3.1. 方法调用中的this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-陷阱-从-object-中分离方法"><span class="nav-text">3.2. 陷阱: 从 object 中分离方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-构造函数调用"><span class="nav-text">4. 构造函数调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-构造函数中的this"><span class="nav-text">4.1. 构造函数中的this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-陷阱-忘了new"><span class="nav-text">4.2. 陷阱: 忘了new</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-隐式调用"><span class="nav-text">5. 隐式调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-隐式调用中的this"><span class="nav-text">5.1. 隐式调用中的this</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-绑定函数"><span class="nav-text">6. 绑定函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-绑定函数中的this"><span class="nav-text">6.1. 绑定函数中的this</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-箭头函数"><span class="nav-text">7. 箭头函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-箭头函数中的this"><span class="nav-text">7.1. 箭头函数中的this</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-陷阱-用箭头函数定义方法"><span class="nav-text">7.2. 陷阱: 用箭头函数定义方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-结论"><span class="nav-text">8. 结论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Lmos"
+      src="/images/avatar.jpg">
+	</a>
+  <p class="site-author-name" itemprop="name">Lmos</p>
+  <div class="site-description" itemprop="description">记录爬坑史</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lmos-w" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lmos-w" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/wang-chao-yi-75/activities" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;wang-chao-yi-75&#x2F;activities" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>知乎</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lmos</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.5.0
+  </div>-->
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.7' zIndex='-2' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+</html>
