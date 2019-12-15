@@ -286,8 +286,8 @@
 </ul>
 </li>
 </ul>
-<p><img src="/.cn//1.png" alt></p>
-<p><img src="/.cn//2.png" alt></p>
+<p><img src="/.cn/Java内存分配/1.png" alt></p>
+<p><img src="/.cn/Java内存分配/2.png" alt></p>
 <p>三、方法区：</p>
 <p>一个对象的运行过程：</p>
 <ol>
@@ -297,7 +297,7 @@
 <li><strong>当运行到 p.call(“乔布斯”) 时，通过栈中的 p 找到堆中存在的方法区的内存地址，从而指引到方法区中的 Phone.class 中的方法。从而将 call 方法加载到栈内存中，注意：当执行完毕后，call 方法就从栈内存中消失！剩余的如上。</strong></li>
 <li><strong>最后，main 方法消失！</strong></li>
 </ol>
-<p><img src="/.cn//3.png" alt></p>
+<p><img src="/.cn/Java内存分配/3.png" alt></p>
 <p><strong>两个对象的运行过程：</strong></p>
 <ol>
 <li><p><strong>程序从 main() 方法进入，运行到 Phone p 时，栈内存中开内存空间；</strong></p>
@@ -309,7 +309,7 @@
 <li><p><strong>当程序运行到 Phone p2 时；到 new Phone() 时，在堆内存中开辟了内存空间 0x0002，赋值给 Phone p2；</strong></p>
 </li>
 <li><p><strong>剩下跟一个对象的内存相同。</strong></p>
-<p><img src="/.cn//4.png" alt></p>
+<p><img src="/.cn/Java内存分配/4.png" alt></p>
 </li>
 </ol>
 <p><strong>三个对象的运行过程：</strong></p>
@@ -318,7 +318,7 @@
 <li><strong>但是当运行到 Phone p3 时，在栈内存中分配了一个空间，然后将 p1 的内存赋值给了 p3，即此时 Phone p3 的内存是指向 0x0001 的；</strong></li>
 <li><strong>继续给变量赋值，会将原来已经赋值的变量给替换掉。</strong></li>
 </ol>
-<p><img src="/.cn//5.png" alt></p>
+<p><img src="/.cn/Java内存分配/5.png" alt></p>
 
     </div>
 
