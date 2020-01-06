@@ -1,6 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>继承and抽象</title>
+    <url>/2020/01/06/%E7%BB%A7%E6%89%BFand%E6%8A%BD%E8%B1%A1/</url>
+    <content><![CDATA[<a id="more"></a><h4 id="在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式："><a href="#在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式：" class="headerlink" title="在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式："></a>在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式：</h4><ul>
+<li><p>直接通过子类对象访问成员变量：<br>  等号左边是谁，就优先用谁，没有则向上找。</p>
+</li>
+<li><p>间接通过成员方法访问成员变量：<br>  该方法属于谁，就优先用谁，没有则向上找。</p>
+</li>
+</ul><hr><h4 id="区分this和super"><a href="#区分this和super" class="headerlink" title="区分this和super"></a>区分this和super</h4><ul>
+<li><p>局部变量：         直接写成员变量名</p>
+</li>
+<li><p>本类的成员变量：    this.成员变量名</p>
+</li>
+<li><p>父类的成员变量：    super.成员变量名</p>
+</li>
+</ul><a id="more"></a>
+
+
+
+<hr>
+<h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><ul>
+<li><p>在父子类的继承关系当中，创建子类对象，访问成员方法的规则：<br>  创建的对象是谁，就优先用谁，如果没有则向上找。</p>
+</li>
+<li><p>注意事项：<br>  无论是成员方法还是成员变量，如果没有都是向上找父类，绝对不会向下找子类的。</p>
+</li>
+<li><p>重写（Override）<br>概念：在继承关系当中，方法的名称一样，参数列表也一样。</p>
+</li>
+<li><p>重写（Override）：方法的名称一样，参数列表【也一样】。覆盖、覆写。</p>
+</li>
+<li><p>重载（Overload）：方法的名称一样，参数列表【不一样】。</p>
+</li>
+<li><p>方法的覆盖重写特点：创建的是子类对象，则优先用子类方法。</p>
+</li>
+</ul>
+<hr>
+<h4 id="方法覆盖重写的注意事项："><a href="#方法覆盖重写的注意事项：" class="headerlink" title="方法覆盖重写的注意事项："></a>方法覆盖重写的注意事项：</h4><ul>
+<li>必须保证父子类之间方法的名称相同，参数列表也相同。<ul>
+<li>@Override：写在方法前面，用来检测是不是有效的正确覆盖重写。<br>这个注解就算不写，只要满足要求，也是正确的方法覆盖重写。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>子类方法的返回值必须【小于等于】父类方法的返回值范围。<ul>
+<li>小扩展提示：java.lang.Object类是所有类的公共最高父类（祖宗类），java.lang.String就是Object的子类。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>子类方法的权限必须【大于等于】父类方法的权限修饰符。<ul>
+<li>小扩展提示：public &gt; protected &gt; (default) &gt; private</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>备注：(default)不是关键字default，而是什么都不写，留空。</li>
+</ul>
+<hr>
+<h4 id="继承关系中，父子类构造方法的访问特点："><a href="#继承关系中，父子类构造方法的访问特点：" class="headerlink" title="继承关系中，父子类构造方法的访问特点："></a>继承关系中，父子类构造方法的访问特点：</h4><ul>
+<li><p>子类构造方法当中有一个默认隐含的“super()”调用，所以一定是先调用的父类构造，后执行的子类构造。</p>
+</li>
+<li><p>子类构造可以通过super关键字来调用父类重载构造。</p>
+</li>
+<li><p>super的父类构造调用，必须是子类构造方法的第一个语句。不能一个子类构造调用多次super构造。</p>
+</li>
+<li><p><strong>总结</strong>：<br>子类必须调用父类构造方法，不写则赠送super()；写了则用写的指定的super调用，super只能有一个，还必须是第一个。</p>
+</li>
+</ul>
+<hr>
+<h4 id="super关键字的用法有三种："><a href="#super关键字的用法有三种：" class="headerlink" title="super关键字的用法有三种："></a>super关键字的用法有三种：</h4><ul>
+<li><p>在子类的成员方法中，访问父类的成员变量。</p>
+</li>
+<li><p>在子类的成员方法中，访问父类的成员方法。</p>
+</li>
+<li><p>在子类的构造方法中，访问父类的构造方法。</p>
+</li>
+</ul>
+<hr>
+<h4 id="super关键字用来访问父类内容，而this关键字用来访问本类内容。用法也有三种："><a href="#super关键字用来访问父类内容，而this关键字用来访问本类内容。用法也有三种：" class="headerlink" title="super关键字用来访问父类内容，而this关键字用来访问本类内容。用法也有三种："></a>super关键字用来访问父类内容，而this关键字用来访问本类内容。用法也有三种：</h4><ul>
+<li><p>在本类的成员方法中，访问本类的成员变量。</p>
+</li>
+<li><p>在本类的成员方法中，访问本类的另一个成员方法。</p>
+</li>
+<li><p>在本类的构造方法中，访问本类的另一个构造方法。</p>
+</li>
+<li><p><strong>在第三种用法当中要注意：</strong></p>
+<ul>
+<li><p>A. this(…)调用也必须是构造方法的第一个语句，唯一一个。</p>
+</li>
+<li><p>B. super和this两种构造调用，不能同时使用。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="抽象方法和抽象类"><a href="#抽象方法和抽象类" class="headerlink" title="抽象方法和抽象类"></a>抽象方法和抽象类</h4><ul>
+<li><p>抽象方法：就是加上abstract关键字，然后去掉大括号，直接分号结束。</p>
+</li>
+<li><p>抽象类：抽象方法所在的类，必须是抽象类才行。在class之前写上abstract即可。</p>
+</li>
+</ul>
+<h6 id="如何使用抽象类和抽象方法："><a href="#如何使用抽象类和抽象方法：" class="headerlink" title="如何使用抽象类和抽象方法："></a>如何使用抽象类和抽象方法：</h6><ul>
+<li><p>不能直接创建new抽象类对象。</p>
+</li>
+<li><p>必须用一个子类来继承抽象父类。</p>
+</li>
+<li><p>子类必须覆盖重写抽象父类当中所有的抽象方法。</p>
+<ul>
+<li>覆盖重写（实现）：子类去掉抽象方法的abstract关键字，然后补上方法体大括号。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>创建子类对象进行使用。</li>
+</ul>
+<hr>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>extends</tag>
+        <tag>abstract</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java内存分配</title>
     <url>/2019/12/15/Java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D/</url>
     <content><![CDATA[<p>Java 程序运行时，需要在内存中分配空间。为了提高运算效率，就对空间进行了不同区域的划分，因为每一片区域都有特定的处理数据方式和内存管理方式。</p>
