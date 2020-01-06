@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+<meta name="baidu-site-verification" content="lCV6DgG5F6" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="就在Java学习接口和多态时的一些笔记！">
+<meta name="keywords" content="interface,多态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口and多态">
+<meta property="og:url" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;06&#x2F;%E6%8E%A5%E5%8F%A3and%E5%A4%9A%E6%80%81&#x2F;index.html">
+<meta property="og:site_name" content="Lmos&#39;S  BLOG">
+<meta property="og:description" content="就在Java学习接口和多态时的一些笔记！">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-01-06T14:42:04.794Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lmos-w.github.io/2020/01/06/%E6%8E%A5%E5%8F%A3and%E5%A4%9A%E6%80%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>接口and多态 | Lmos'S  BLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lmos'S  BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="Searching..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lmos-w.github.io/2020/01/06/%E6%8E%A5%E5%8F%A3and%E5%A4%9A%E6%80%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lmos">
+      <meta itemprop="description" content="记录爬坑史">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lmos'S  BLOG">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          接口and多态
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-01-06 22:41:24 / Modified: 22:42:04" itemprop="dateCreated datePublished" datetime="2020-01-06T22:41:24+08:00">2020-01-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>就在Java学习接口和多态时的一些笔记！</p>
+<a id="more"></a>
+<h4 id="什么是接口？"><a href="#什么是接口？" class="headerlink" title="什么是接口？"></a>什么是接口？</h4><ul>
+<li><p>接口就是多个类的公共规范。</p>
+</li>
+<li><p>接口是一种引用数据类型，最重要的内容就是其中的：抽象方法。</p>
+</li>
+</ul>
+<hr>
+<h5 id="如何定义一个接口的格式："><a href="#如何定义一个接口的格式：" class="headerlink" title="如何定义一个接口的格式："></a>如何定义一个接口的格式：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public interface 接口名称 &#123;</span><br><span class="line">    // 接口内容</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>备注：</strong>换成了关键字interface之后，编译生成的字节码文件仍然是：.java –&gt; .class。</p>
+<hr>
+<h4 id="如果是Java-7，那么接口中可以包含的内容有："><a href="#如果是Java-7，那么接口中可以包含的内容有：" class="headerlink" title="如果是Java 7，那么接口中可以包含的内容有："></a>如果是Java 7，那么接口中可以包含的内容有：</h4><ul>
+<li>常量</li>
+<li>抽象方法</li>
+</ul>
+<h4 id="如果是Java-8，还可以额外包含有："><a href="#如果是Java-8，还可以额外包含有：" class="headerlink" title="如果是Java 8，还可以额外包含有："></a>如果是Java 8，还可以额外包含有：</h4><ul>
+<li>默认方法</li>
+<li>静态方法</li>
+</ul>
+<h4 id="如果是Java-9，还可以额外包含有："><a href="#如果是Java-9，还可以额外包含有：" class="headerlink" title="如果是Java 9，还可以额外包含有："></a>如果是Java 9，还可以额外包含有：</h4><ul>
+<li>私有方法</li>
+</ul>
+<hr>
+<h4 id="接口使用步骤："><a href="#接口使用步骤：" class="headerlink" title="接口使用步骤："></a>接口使用步骤：</h4><ul>
+<li><p>1、接口不能直接使用，必须有一个“实现类”来“实现”该接口。</p>
+<ul>
+<li><strong>[格式]：</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class 实现类名称 implements 接口名称 &#123;</span><br><span class="line">    // ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>2、接口的实现类必须覆盖重写（实现）接口中所有的抽象方法。</p>
+<ul>
+<li><strong>[实现]：</strong>去掉abstract关键字，加上方法体大括号。</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>3、创建实现类的对象，进行使用。</li>
+</ul>
+<h5 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h5><p>如果实现类并没有覆盖重写接口中所有的抽象方法，那么这个实现类自己就必须是抽象类。</p>
+<hr>
+<ul>
+<li><p>接口的默认方法，可以通过接口实现类对象，直接调用。</p>
+</li>
+<li><p>接口的默认方法，也可以被接口实现类进行覆盖重写。</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><strong>[注意事项]：</strong>不能通过接口实现类的对象来调用接口当中的静态方法。</p>
+</li>
+<li><p><strong>[正确用法]：</strong>通过接口名称，直接调用其中的静态方法。</p>
+</li>
+<li><p><strong>[格式]：</strong>接口名称.静态方法名(参数);</p>
+</li>
+</ul>
+<hr>
+<h4 id="在任何版本的Java中，接口都能定义抽象方法。"><a href="#在任何版本的Java中，接口都能定义抽象方法。" class="headerlink" title="在任何版本的Java中，接口都能定义抽象方法。"></a>在任何版本的Java中，接口都能定义抽象方法。</h4><p><strong>[格式]：</strong><br>public abstract 返回值类型 方法名称(参数列表);</p>
+<p><strong>[注意事项]：</strong></p>
+<ul>
+<li><p>接口当中的抽象方法，修饰符必须是<strong>[两个固定]</strong>的关键字：public abstract</p>
+</li>
+<li><p>这两个关键字修饰符，可以选择性地省略。<strong>(不推荐)</strong></p>
+</li>
+<li><p>方法的三要素，可以随意定义。</p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>接口当中也可以定义“成员变量”，但是必须使用public static final三个关键字进行修饰。<br>从效果上看，这其实就是接口的【常量】。</p>
+</blockquote>
+<ul>
+<li><p><strong>[格式]</strong>：<br>public static final 数据类型 常量名称 = 数据值;</p>
+</li>
+<li><p><strong>[备注]</strong>：<br>一旦使用final关键字进行修饰，说明不可改变。</p>
+</li>
+</ul>
+<p><strong>注意事项</strong>：</p>
+<ul>
+<li><p>接口当中的常量，可以省略public static final，注意：不写也照样是这样。</p>
+</li>
+<li><p>接口当中的常量，必须进行赋值；不能不赋值。</p>
+</li>
+<li><p>接口中常量的名称，使用完全大写的字母，用下划线进行分隔。<strong>（推荐命名规则）</strong></p>
+</li>
+</ul>
+<hr>
+<h4 id="从Java-8开始，接口里允许定义默认方法。"><a href="#从Java-8开始，接口里允许定义默认方法。" class="headerlink" title="从Java 8开始，接口里允许定义默认方法。"></a>从Java 8开始，接口里允许定义默认方法。</h4><ul>
+<li><strong>[格式]：</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public default 返回值类型 方法名称(参数列表) &#123;</span><br><span class="line">    方法体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><strong>[备注]</strong>：接口当中的默认方法，可以解决接口升级的问题。</li>
+</ul>
+<hr>
+<h5 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h5><p>我们需要抽取一个共有方法，用来解决两个默认方法之间重复代码的问题。<br>但是这个共有方法不应该让实现类使用，应该是私有化的。</p>
+<h5 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h5><p>从Java 9开始，接口当中允许定义私有方法。</p>
+<ul>
+<li><p>普通私有方法，解决多个默认方法之间重复代码问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private 返回值类型 方法名称(参数列表) &#123;</span><br><span class="line">    方法体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>静态私有方法，解决多个静态方法之间重复代码问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">private static 返回值类型 方法名称(参数列表) &#123;</span><br><span class="line">    方法体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<p>从Java 8开始，接口当中允许定义<strong>静态方法</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public static 返回值类型 方法名称(参数列表) &#123;</span><br><span class="line">    方法体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>[提示]：</strong>就是将abstract或者default换成static即可，带上方法体。</p>
+<hr>
+<p><strong>使用接口的时候，需要注意：</strong></p>
+<ul>
+<li><p>1.接口是没有静态代码块或者构造方法的。</p>
+</li>
+<li><p>2.一个类的直接父类是唯一的，但是一个类可以同时实现多个接口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public class MyInterfaceImpl implements MyInterfaceA, MyInterfaceB &#123;</span><br><span class="line">    // 覆盖重写所有抽象方法</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>3.如果实现类所实现的多个接口当中，存在重复的抽象方法，那么只需要覆盖重写一次即可。</p>
+</li>
+<li><p>4.如果实现类没有覆盖重写所有接口当中的所有抽象方法，那么实现类就必须是一个抽象类。</p>
+</li>
+<li><p>5.如果实现类锁实现的多个接口当中，存在重复的默认方法，那么实现类一定要对冲突的默认方法进行覆盖重写。</p>
+</li>
+<li><p>6.一个类如果直接父类当中的方法，和接口当中的默认方法产生了冲突，优先用父类当中的方法。</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>1.类与类之间是单继承的。直接父类只有一个。</p>
+</li>
+<li><p>2.类与接口之间是多实现的。一个类可以实现多个接口。</p>
+</li>
+<li><p>3.接口与接口之间是多继承的。</p>
+</li>
+</ul>
+<p><strong>[注意事项]：</strong></p>
+<ul>
+<li><p>1.多个父接口当中的抽象方法如果重复，没关系。</p>
+</li>
+<li><p>2.多个父接口当中的默认方法如果重复，那么子接口必须进行默认方法的覆盖重写，【而且带着default关键字】。</p>
+</li>
+</ul>
+<hr>
+<h4 id="代码当中体现多态性，其实就是一句话：父类引用指向子类对象。"><a href="#代码当中体现多态性，其实就是一句话：父类引用指向子类对象。" class="headerlink" title="代码当中体现多态性，其实就是一句话：父类引用指向子类对象。"></a>代码当中体现多态性，其实就是一句话：父类引用指向子类对象。</h4><p><strong>[格式：]</strong></p>
+<ul>
+<li><p>父类名称 对象名 = new 子类名称();</p>
+</li>
+<li><p>接口名称 对象名 = new 实现类名称();</p>
+</li>
+</ul>
+<hr>
+<h4 id="访问成员变量的两种方式："><a href="#访问成员变量的两种方式：" class="headerlink" title="访问成员变量的两种方式："></a>访问成员变量的两种方式：</h4><ul>
+<li><p>1.直接通过对象名称访问成员变量：看等号左边是谁，优先用谁，没有则向上找。</p>
+</li>
+<li><p>2.间接通过成员方法访问成员变量：看该方法属于谁，优先用谁，没有则向上找。</p>
+</li>
+</ul>
+<hr>
+<p><strong>在多态的代码当中，成员方法的访问规则是：</strong></p>
+<pre><code>看new的是谁，就优先用谁，没有则向上找。</code></pre><p><strong>口诀：</strong>编译看左边，运行看右边。</p>
+<p><strong>对比一下：</strong></p>
+<ul>
+<li><p>成员变量：编译看左边，运行还看左边。</p>
+</li>
+<li><p>成员方法：编译看左边，运行看右边。</p>
+</li>
+</ul>
+<hr>
+<p>向上转型一定是安全的，没有问题的，正确的。</p>
+<p>但是也有一个<strong>弊端：</strong><br>对象一旦向上转型为父类，那么就无法调用子类原本特有的内容。</p>
+<p><strong>解决方案：</strong>用对象的向下转型【还原】。</p>
+<hr>
+<h4 id="如何才能知道一个父类引用的对象，本来是什么子类？"><a href="#如何才能知道一个父类引用的对象，本来是什么子类？" class="headerlink" title="如何才能知道一个父类引用的对象，本来是什么子类？"></a>如何才能知道一个父类引用的对象，本来是什么子类？</h4><p><strong>格式：</strong><br>对象 instanceof 类名称</p>
+<p>这将会得到一个boolean值结果，也就是判断前面的对象能不能当做后面类型的实例。</p>
+<hr>
+
+    </div>
+
+    
+    
+    
+    <div>
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+    
+    </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/interface/" rel="tag"># interface</a>
+              <a href="/tags/%E5%A4%9A%E6%80%81/" rel="tag"># 多态</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/01/06/%E7%BB%A7%E6%89%BFand%E6%8A%BD%E8%B1%A1/" rel="next" title="继承and抽象">
+                  <i class="fa fa-chevron-left"></i> 继承and抽象
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是接口？"><span class="nav-text">什么是接口？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#如何定义一个接口的格式："><span class="nav-text">如何定义一个接口的格式：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果是Java-7，那么接口中可以包含的内容有："><span class="nav-text">如果是Java 7，那么接口中可以包含的内容有：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果是Java-8，还可以额外包含有："><span class="nav-text">如果是Java 8，还可以额外包含有：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果是Java-9，还可以额外包含有："><span class="nav-text">如果是Java 9，还可以额外包含有：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#接口使用步骤："><span class="nav-text">接口使用步骤：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注意事项："><span class="nav-text">注意事项：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#在任何版本的Java中，接口都能定义抽象方法。"><span class="nav-text">在任何版本的Java中，接口都能定义抽象方法。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#从Java-8开始，接口里允许定义默认方法。"><span class="nav-text">从Java 8开始，接口里允许定义默认方法。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#问题描述："><span class="nav-text">问题描述：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#解决方案："><span class="nav-text">解决方案：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码当中体现多态性，其实就是一句话：父类引用指向子类对象。"><span class="nav-text">代码当中体现多态性，其实就是一句话：父类引用指向子类对象。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问成员变量的两种方式："><span class="nav-text">访问成员变量的两种方式：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何才能知道一个父类引用的对象，本来是什么子类？"><span class="nav-text">如何才能知道一个父类引用的对象，本来是什么子类？</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Lmos"
+      src="/images/avatar.jpg">
+	</a>
+  <p class="site-author-name" itemprop="name">Lmos</p>
+  <div class="site-description" itemprop="description">记录爬坑史</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lmos-w" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lmos-w" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/wang-chao-yi-75/activities" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;wang-chao-yi-75&#x2F;activities" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>知乎</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lmos</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.5.0
+  </div>-->
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.7' zIndex='-2' count='99' src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</html>
