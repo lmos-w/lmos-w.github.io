@@ -3,22 +3,23 @@
   <entry>
     <title>继承and抽象</title>
     <url>/2020/01/06/%E7%BB%A7%E6%89%BFand%E6%8A%BD%E8%B1%A1/</url>
-    <content><![CDATA[<a id="more"></a><h4 id="在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式："><a href="#在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式：" class="headerlink" title="在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式："></a>在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式：</h4><ul>
+    <content><![CDATA[<p>就在Java学习继承和抽象时的一些笔记！</p>
+<a id="more"></a>
+<h4 id="在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式："><a href="#在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式：" class="headerlink" title="在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式："></a>在父子类的继承关系当中，如果成员变量重名，则创建子类对象时，访问有两种方式：</h4><ul>
 <li><p>直接通过子类对象访问成员变量：<br>  等号左边是谁，就优先用谁，没有则向上找。</p>
 </li>
 <li><p>间接通过成员方法访问成员变量：<br>  该方法属于谁，就优先用谁，没有则向上找。</p>
 </li>
-</ul><hr><h4 id="区分this和super"><a href="#区分this和super" class="headerlink" title="区分this和super"></a>区分this和super</h4><ul>
+</ul>
+<hr>
+<h4 id="区分this和super"><a href="#区分this和super" class="headerlink" title="区分this和super"></a>区分this和super</h4><ul>
 <li><p>局部变量：         直接写成员变量名</p>
 </li>
 <li><p>本类的成员变量：    this.成员变量名</p>
 </li>
 <li><p>父类的成员变量：    super.成员变量名</p>
 </li>
-</ul><a id="more"></a>
-
-
-
+</ul>
 <hr>
 <h4 id="继承关系"><a href="#继承关系" class="headerlink" title="继承关系"></a>继承关系</h4><ul>
 <li><p>在父子类的继承关系当中，创建子类对象，访问成员方法的规则：<br>  创建的对象是谁，就优先用谁，如果没有则向上找。</p>
