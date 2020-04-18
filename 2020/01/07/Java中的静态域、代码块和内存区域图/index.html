@@ -59,16 +59,16 @@
 <meta name="keywords" content="内存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中静态域、代码块和内存区域图">
-<meta property="og:url" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%20%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE&#x2F;index.html">
 <meta property="og:site_name" content="Lmos&#39;S  BLOG">
 <meta property="og:description" content="Java 面向对象 (二) 静态域、代码块和内存区域图">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%20%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE&#x2F;Java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D.png)">
-<meta property="og:updated_time" content="2020-04-18T07:50:09.653Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE&#x2F;1.png">
+<meta property="og:updated_time" content="2020-04-18T10:26:50.604Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%20%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE&#x2F;Java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D.png)">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE&#x2F;1.png">
 
-<link rel="canonical" href="https://lmos-w.github.io/2020/01/07/Java%20%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE/">
+<link rel="canonical" href="https://lmos-w.github.io/2020/01/07/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE/">
 
 
 <script id="page-configurations">
@@ -217,7 +217,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="https://lmos-w.github.io/2020/01/07/Java%20%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE/">
+    <link itemprop="mainEntityOfPage" href="https://lmos-w.github.io/2020/01/07/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -247,7 +247,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-04-18 15:50:09" itemprop="dateModified" datetime="2020-04-18T15:50:09+08:00">2020-04-18</time>
+                <time title="Modified: 2020-04-18 18:26:50" itemprop="dateModified" datetime="2020-04-18T18:26:50+08:00">2020-04-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -359,7 +359,7 @@
 <h2 id="Java-内存区域分配"><a href="#Java-内存区域分配" class="headerlink" title="Java 内存区域分配"></a>Java 内存区域分配</h2><ul>
 <li>此分配图基于 Java8 之前版本</li>
 </ul>
-<p><img src="/2020/01/07/Java%20%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE/Java%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D.png)" alt></p>
+<p><img src="/2020/01/07/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE/1.png" alt></p>
 
     </div>
 
@@ -385,16 +385,16 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2020/01/07/Java%E4%B8%AD%E7%BB%A7%E6%89%BF%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="Java中继承和实现接口的区别">
-                  <i class="fa fa-chevron-left"></i> Java中继承和实现接口的区别
+                <a href="/2020/01/07/%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%80%81_%20%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%A4%9A%E6%80%81_%20%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84_/" rel="next" title="什么是多态、为什么用多态、有什么好处">
+                  <i class="fa fa-chevron-left"></i> 什么是多态、为什么用多态、有什么好处
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2020/02/15/Java%20%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%85%A8%E9%9D%A2%E6%B5%85%E6%9E%90/" rel="prev" title="(转载)学习Java内存分配全面解析">
-                  (转载)学习Java内存分配全面解析 <i class="fa fa-chevron-right"></i>
+                <a href="/2020/01/07/Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/" rel="prev" title="局部变量和成员变量">
+                  局部变量和成员变量 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>

@@ -59,19 +59,19 @@
 <meta name="keywords" content="variables">
 <meta property="og:type" content="article">
 <meta property="og:title" content="局部变量和成员变量">
-<meta property="og:url" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F&#x2F;index.html">
 <meta property="og:site_name" content="Lmos&#39;S  BLOG">
 <meta property="og:description" content="局部变量和成员变量的区别：">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https:&#x2F;&#x2F;images2015.cnblogs.com&#x2F;blog&#x2F;1094220&#x2F;201703&#x2F;1094220-20170320200705674-355864459.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB&#x2F;1.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB&#x2F;2.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB&#x2F;3.png">
-<meta property="og:updated_time" content="2020-04-18T08:24:35.021Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F&#x2F;0.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F&#x2F;1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F&#x2F;2.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F&#x2F;3.png">
+<meta property="og:updated_time" content="2020-04-18T10:23:42.817Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;images2015.cnblogs.com&#x2F;blog&#x2F;1094220&#x2F;201703&#x2F;1094220-20170320200705674-355864459.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;01&#x2F;07&#x2F;Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F&#x2F;0.png">
 
-<link rel="canonical" href="https://lmos-w.github.io/2020/01/07/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/">
+<link rel="canonical" href="https://lmos-w.github.io/2020/01/07/Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/">
 
 
 <script id="page-configurations">
@@ -220,7 +220,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
-    <link itemprop="mainEntityOfPage" href="https://lmos-w.github.io/2020/01/07/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/">
+    <link itemprop="mainEntityOfPage" href="https://lmos-w.github.io/2020/01/07/Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -250,7 +250,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-04-18 16:24:35" itemprop="dateModified" datetime="2020-04-18T16:24:35+08:00">2020-04-18</time>
+                <time title="Modified: 2020-04-18 18:23:42" itemprop="dateModified" datetime="2020-04-18T18:23:42+08:00">2020-04-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -308,7 +308,7 @@
 <hr>
 <h3 id="成员变量和局部变量"><a href="#成员变量和局部变量" class="headerlink" title="成员变量和局部变量"></a>成员变量和局部变量</h3><p><strong>1、成员变量和局部变量简述</strong></p>
 <p>在 Java 语言里，根据定义变量位置的不同，可以将变量分成两大类：成员变量 (<strong>存在于堆内存中，和类一起创建</strong>) 和局部变量 (<strong>存在于栈内存中，当方法执行完成，让出内存，让其他方法来使用内存</strong>)。二者的运行机制存在较大差异。</p>
-<p><img src="https://images2015.cnblogs.com/blog/1094220/201703/1094220-20170320200705674-355864459.png" alt></p>
+<p><img src="/2020/01/07/Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/0.png" alt></p>
 <p><strong>1.1 成员变量</strong></p>
 <p>类变量从该类的准备阶段起开始存在，直到系统完全销毁这个类，类变量的作用域与这个类的生存范围相同；</p>
 <p>而实例变量则从该类的实例被创建起开始存在，直到系统完全销毁这个实例，实例变量的作用域与对应实例的生存范围相同。</p>
@@ -330,13 +330,13 @@
 
 
 <p>当程序执行 Person p1 = new Person(); 时，如果这行代码是第一次使用 Person 类，则系统通常会在第一次使用 Person 类时加载这个类，并初始化这个类，在类的准备 阶段，系统将会为该类的类变量分配内存空间，并指定默认初始值。当 person 类初始化完成后，系统内存中的存储示意图如下图所示。</p>
-<p><img src="/2020/01/07/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/1.png" alt></p>
+<p><img src="/2020/01/07/Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/1.png" alt></p>
 <p> 可以看出，当 person 类初始化完成后，系统将在堆内存中为 Person 分配一块内存空间，实际上是创建了一个类对象，在这块内存区里包含了保存 num 类变量的内存，并设置 num 的默认初始值为 0。</p>
 <p>系统接着创建了一个 Person 对象，并把这个 Person 对象赋给 p1 变量，Person 对象包含了名为 name 的实例变量，实例变量是在创建实例时分配内存空间并指定初始值的。当创建了第一个 person 对象后，系统内存中的存储示意图如下图所示。</p>
-<p><img src="/2020/01/07/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/2.png" alt></p>
+<p><img src="/2020/01/07/Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/2.png" alt></p>
 <p>从上图可以看出 num 不属于对象，它属于类，所以创建第一个对象时并不需要为 num 分配内存空间，系统只是为 name 分配了内存空间，并指定初始值为 null。</p>
 <p>创建第二个对象 p2 时，由于在创建第一个对象时已经对类进行了初始化，所以在创建 p2 时对类进行初始化，对象的创建过程与第一个对象的创建过程没有什么区别。</p>
-<p><img src="/2020/01/07/%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F%E5%92%8C%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E7%9A%84%E5%8C%BA%E5%88%AB/3.png" alt></p>
+<p><img src="/2020/01/07/Java%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%92%8C%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F/3.png" alt></p>
 <p>第二个对象创建完成后，成员变量如上图所示在内存中存储。</p>
 <p>** 当程序需要访问类变量时，尽量使用类来作为主调，不要使用对象作为主调，这个可以避免产生歧义。</p>
 <p>3、局部变量的初始化和内存中的运行机制</p>
@@ -377,8 +377,8 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2020/01/07/%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%80%81_%20%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%A4%9A%E6%80%81_%20%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84_/" rel="next" title="什么是多态、为什么用多态、有什么好处">
-                  <i class="fa fa-chevron-left"></i> 什么是多态、为什么用多态、有什么好处
+                <a href="/2020/01/07/Java%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E5%9F%9F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E5%92%8C%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F%E5%9B%BE/" rel="next" title="Java中静态域、代码块和内存区域图">
+                  <i class="fa fa-chevron-left"></i> Java中静态域、代码块和内存区域图
                 </a>
             </div>
 
