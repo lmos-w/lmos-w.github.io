@@ -1,6 +1,654 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>simpread-(3 条消息)Java 中，为什么 byte 类型的取值范围为 - 128_127__Java_探路的淮 --Ontheway 的博客 - CSDN 博客</title>
+    <url>/2020/05/10/simpread-(3%20%E6%9D%A1%E6%B6%88%E6%81%AF)Java%20%E4%B8%AD%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%20byte%20%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8F%96%E5%80%BC%E8%8C%83%E5%9B%B4%E4%B8%BA%20-%20128_127__Java_%E6%8E%A2%E8%B7%AF%E7%9A%84%E6%B7%AE%20--Ontheway%20%E7%9A%84%E5%8D%9A%E5%AE%A2%20-%20CSDN%20%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<blockquote>
+<p>本文由 <a href="http://ksria.com/simpread/" target="_blank" rel="noopener">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/qq_23418393/article/details/57421688" target="_blank" rel="noopener">https://blog.csdn.net/qq_23418393/article/details/57421688</a></p>
+</blockquote><p><strong>在学习 Java 基础语法的时候，初学者的我们可能都会有这么一个疑问为什么 byte 类型的取值范围为什么是 [-128,127] 而不是[-127,127]。01111111 表示最大的数值：127，因为第一位是符号位，所以 11111111 应该是最小的数值：-127，不是这样才对？</strong></p><a id="more"></a>
+
+<hr>
+<h4 id="在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码"><a href="#在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码" class="headerlink" title="在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码"></a><strong>在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码</strong></h4><p><strong>机器数：</strong></p>
+<p>一个数在计算机中的二进制表示形式, 叫做这个数的机器数。机器数是带符号的，在计算机用一个数的最高位存放符号, 正数为 0, 负数为 1。</p>
+<p>比如：十进制中的数 +3 ，计算机字长为 8 位，转换成二进制就是 00000011。如果是 -3 ，就是 10000011 。那么，这里的 00000011 和 10000011 就是机器数。</p>
+<p><strong>真值：</strong><br>因为第一位是符号位，所以机器数的形式值就不等于真正的数值。例如上面的有符号数 10000011，其最高位 1 代表负，其真正数值是 -3 而不是形式值 131（10000011 转换成十进制等于 131）。所以，为区别起见，将带符号位的机器数对应的真正数值称为机器数的真值。</p>
+<p>例：0000 0001 的真值 = +000 0001 = +1，1000 0001 的真值 = –000 0001 = –1</p>
+<p><strong>原码：</strong><br>原码就是符号位加上真值的绝对值, 即用第一位表示符号, 其余位表示值. 比如如果是 8 位二进制:</p>
+<p>[+1] 原 = 0000 0001<br>[-1] 原 = 1000 0001<br>第一位是符号位. 因为第一位是符号位, 所以 8 位二进制数的取值范围就是:[1111 1111 , 0111 1111]<br>即 [-127 , 127]。原码是人脑最容易理解和计算的表示方式.</p>
+<p><strong>反码：</strong><br>反码的表示方法是: 正数的反码是其本身，负数的反码是在其原码的基础上, 符号位不变，其余各个位取反。</p>
+<p>[+1] = [00000001] 原 = [00000001] 反<br>[-1] = [10000001] 原 = [11111110] 反</p>
+<p>可见如果一个反码表示的是负数, 人脑无法直观的看出来它的数值. 通常要将其转换成原码再计算.</p>
+<p><strong>补码：</strong><br>补码的表示方法是:</p>
+<p>正数的补码就是其本身</p>
+<p>负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后 + 1. (即在反码的基础上 + 1)</p>
+<p>[+1] = [00000001] 原 = [00000001] 反 = [00000001] 补<br>[-1] = [10000001] 原 = [11111110] 反 = [11111111] 补</p>
+<p>对于负数, 补码表示方式也是人脑无法直观看出其数值的. 通常也需要转换成原码在计算其数值.</p>
+<p><strong>正数：</strong><br>正数的反码和补码都与原码相同<br><strong>负数：</strong><br>负数的反码、补码与原码不同，负数的反码：原码中除去符号位，其他的数值位取反，0 变 1，1 变 0。负数的补码：反码 + 1</p>
+<p>例如：</p>
+<p><img src="https://img-blog.csdn.net/20170226173751711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjM0MTgzOTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
+<p><strong>解释：为什么 byte 类型的取值范围为 - 128~127？</strong></p>
+<p>现在我们知道了计算机可以有三种编码方式表示一个数. 对于正数因为三种编码方式的结果都相同:</p>
+<p>　　[+1] = [00000001] 原 = [00000001] 反 = [00000001] 补</p>
+<p>　　所以不需要过多解释. 但是对于负数:</p>
+<p>　　[-1] = [10000001] 原 = [11111110] 反 = [11111111] 补</p>
+<p>　　可见原码, 反码和补码是完全不同的. 既然原码才是被人脑直接识别并用于计算表示方式, 为何还会有反码和补码呢?</p>
+<p>　　首先, 因为人脑可以知道第一位是符号位, 在计算的时候我们会根据符号位, 选择对真值区域的加减. (真值的概念在本文最开头). 但是对于计算机, 加减乘数已经是最基础的运算, 要设计的尽量简单. 计算机辨别” 符号位” 显然会让计算机的基础电路设计变得十分复杂! 于是人们想出了将符号位也参与运算的方法. 我们知道, 根据运算法则减去一个正数等于加上一个负数, 即: 1-1 = 1 + (-1) = 0 , 所以机器可以只有加法而没有减法, 这样计算机运算的设计就更简单了.</p>
+<p>　　于是人们开始探索 将符号位参与运算, 并且只保留加法的方法. 首先来看原码:</p>
+<p>　　计算十进制的表达式: 1-1=0</p>
+<p>　　1 - 1 = 1 + (-1) = [00000001] 原 + [10000001] 原 = [10000010] 原 = -2</p>
+<p>　　如果用原码表示, 让符号位也参与计算, 显然对于减法来说, 结果是不正确的. 这也就是为何计算机内部不使用原码表示一个数.</p>
+<p>　　为了解决原码做减法的问题, 出现了反码:</p>
+<p>　　计算十进制的表达式: 1-1=0</p>
+<p>　　1 - 1 = 1 + (-1) = [0000 0001] 原 + [1000 0001] 原 = [0000 0001] 反 + [1111 1110] 反 = [1111 1111] 反 = [1000 0000] 原 = -0</p>
+<p>　　发现用反码计算减法, 结果的真值部分是正确的. 而唯一的问题其实就出现在”0”这个特殊的数值上. 虽然人们理解上 + 0 和 - 0 是一样的, 但是 0 带符号是没有任何意义的. 而且会有 [0000 0000] 原和 [1000 0000] 原两个编码表示 0.</p>
+<p>　　于是补码的出现, 解决了 0 的符号以及两个编码的问题:</p>
+<p>　　1-1 = 1 + (-1) = [0000 0001] 原 + [1000 0001] 原 =[0000 0001] 反 + [1111 1110] 反 = [0000 0001] 补 + [1111 1111] 补 = [0000 0000] 补 =[0000 0000] 原</p>
+<p>这样 0 用 [0000 0000] 表示, 而以前出现问题的 - 0 则不存在了. 而且可以用 [1000 0000] 表示 - 128:</p>
+<p>　　(-1) + (-127) = [1000 0001] 原 + [1111 1111] 原 = [1111 1111] 补 + [1000 0001] 补 = [1000 0000] 补</p>
+<p>　　-1-127 的结果应该是 - 128, 在用补码运算的结果中, [1000 0000]补 就是 - 128. 但是注意因为实际上是使用以前的 - 0 的补码来表示 - 128, 所以 - 128 并没有原码和反码表示.(对 - 128 的补码表示 [1000 0000] 补算出来的原码是 [0000 0000] 原, 这是不正确的)，使用补码, 不仅仅修复了 0 的符号以及存在两个编码的问题, 而且还能够多表示一个最低数. 这就是为什么 8 位二进制, 使用原码或反码表示的范围为[-127, +127], 而使用补码表示的范围为[-128, 127]。</p>
+<p>因为机器使用补码, 所以对于编程中常用到的 32 位 int 类型, 可以表示范围是: [-231, 231-1] 因为第一位表示的是符号位. 而使用补码表示时又可以多保存一个最小值。</p>
+<p>参考博客：<br><a href="http://www.cnblogs.com/zhengfengyun/p/5090601.html" target="_blank" rel="noopener">GOFighting</a><br><a href="http://blog.csdn.net/maosijunzi/article/details/8677600" target="_blank" rel="noopener">byte 类型数据范围分析</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>HashSet、TreeSet和LinkedHashSet的使用区别</title>
+    <url>/2020/05/10/HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>日常中我们经常跟集合打交道，但是如何选择对应的数据结构常常搞不清楚，今天我们就简单看一下 HashSet、TreeSet 和 LinkedHashSet 的使用区别.</p>
+<a id="more"></a>
+<h3 id="HashSet、TreeSet和LinkedHashSet的使用区别"><a href="#HashSet、TreeSet和LinkedHashSet的使用区别" class="headerlink" title="HashSet、TreeSet和LinkedHashSet的使用区别"></a>HashSet、TreeSet和LinkedHashSet的使用区别</h3><p>我们都知道，集合是不包含重复元素的，这是我们选择使用集合的一个重要的原因. 集合有三个我们常用到的实现类：HashSet, TreeSet and LinkedHashSet. 如何根据场景去选择使用哪一种集合是让人头疼的问题. 简而言之, 如何你需要的是一个快速的集合，建议你使用 HashSet，如果你需要的是一个排序集合，请选择 TreeSet，如果你需要一套能够存储插入顺序的集合, 请使用 LinkedHashSet。<br><strong>1. Set 接口</strong><br>Set 接口继承 Collection 接口. 在集合中不允许出现重复的元素，你可以简单的添加，重复的元素会自动的被移除。</p>
+<p><img src="/2020/05/10/HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB/1.jpg" alt></p>
+<p><strong>2. HashSet vs. TreeSet vs. LinkedHashSet</strong><br>HashSet 使用哈希表实现的，元素是无序的。添加、删除操作时间复杂度都是 O(1)。TreeSet 内部结构是一个树结构 (红黑树)，元素是有序的，添加、删除操作时间复杂度为 O(log(n))，并且提供了 first(), last(), headSet(), tailSet() 等方法来处理有序集合。<br>LinkedHashSet 是介于 HashSet 和 TreeSet 之间，内部是一个双向链表结构，所以它的插入是有序的，时间复杂度是 O(1)。<br><strong>3. TreeSet 示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TreeSet&lt;Integer&gt; tree = new TreeSet&lt;Integer&gt;();</span><br><span class="line">tree.add(12);</span><br><span class="line">tree.add(63);</span><br><span class="line">tree.add(34);</span><br><span class="line">tree.add(45);</span><br><span class="line"></span><br><span class="line">Iterator&lt;Integer&gt; iterator = tree.iterator();</span><br><span class="line">System.out.print(&quot;Tree set data: &quot;);</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出是有序的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Tree set data: 12 34 45 63</span><br></pre></td></tr></table></figure>
+
+<p>现在让我们定义一个 Dog 类, 如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Dog &#123;</span><br><span class="line">    int size;</span><br><span class="line"></span><br><span class="line">    public Dog(int s) &#123;</span><br><span class="line">        size = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return size + &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>往 TreeSet 中添加几只 dogs：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.TreeSet;</span><br><span class="line"></span><br><span class="line">public class TestTreeSet &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TreeSet&lt;Dog&gt; dset = new TreeSet&lt;Dog&gt;();</span><br><span class="line">        dset.add(new Dog(2));</span><br><span class="line">        dset.add(new Dog(1));</span><br><span class="line">        dset.add(new Dog(3));</span><br><span class="line"></span><br><span class="line">        Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line"></span><br><span class="line">        while (iterator.hasNext()) &#123;</span><br><span class="line">            System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译通过，但是运行时出错了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ClassCastException: collection.Dog cannot be cast to java.lang.Comparable</span><br><span class="line">    at java.util.TreeMap.put(Unknown Source)</span><br><span class="line">    at java.util.TreeSet.add(Unknown Source)</span><br><span class="line">    at collection.TestTreeSet.main(TestTreeSet.java:22)</span><br></pre></td></tr></table></figure>
+
+<p>这是因为 TreeSet 是有序的，而 Dog 类不是有序的，我们需要将 Dog 类实现 Comparable 接口。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Dog implements Comparable&lt;Dog&gt;&#123;</span><br><span class="line">    int size;</span><br><span class="line"></span><br><span class="line">    public Dog(int s) &#123;</span><br><span class="line">        size = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return size + &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Dog o) &#123;</span><br><span class="line">            return size - o.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<blockquote>
+<p>所以我们在使用 TreeSet 时候，里面装的元素一定是有序的，否则就不应该选择 TreeSet。</p>
+</blockquote>
+<p><strong>4. HashSet 示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 2 3</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<p><strong>5. LinkedHashSet 示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HashSet&lt;Dog&gt; dset = new HashSet&lt;Dog&gt;();</span><br><span class="line">dset.add(new Dog(2));</span><br><span class="line">dset.add(new Dog(1));</span><br><span class="line">dset.add(new Dog(3));</span><br><span class="line">dset.add(new Dog(5));</span><br><span class="line">dset.add(new Dog(4));</span><br><span class="line">Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">   System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按插入的顺序进行输出：</p>
+<p><strong>6. 性能测试</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">5 3 2 1 4</span><br></pre></td></tr></table></figure>
+
+<p>从下面的输出结果可以看出，HashSet 是最快的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LinkedHashSet&lt;Dog&gt; dset = new LinkedHashSet&lt;Dog&gt;();</span><br><span class="line">dset.add(new Dog(2));</span><br><span class="line">dset.add(new Dog(1));</span><br><span class="line">dset.add(new Dog(3));</span><br><span class="line">dset.add(new Dog(5));</span><br><span class="line">dset.add(new Dog(4));</span><br><span class="line">Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然测试不够准确, 但能反映得出，TreeSet 要慢得多, 因为它是有序的。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1683525-e54701eb0c6e20ba.png" alt></p>
+<p>hashset-treeset-linkedhashset</p>
+<p>“小礼物走一走，来简书关注我”</p>
+<p>还没有人赞赏，支持一下</p>
+<p><a href="https://www.jianshu.com/u/aea57293503d" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/users/upload_avatars/1683525/5626a0a9-52f5-43f5-87b1-a178669f5d01.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/100/h/100/format/webp" alt></a></p>
+<p><a href="https://www.jianshu.com/u/aea57293503d" target="_blank" rel="noopener" title="WHOKNOWME">WHOKNOWME</a><a href="http://www.jianshu.com/p/d1d89ed69098" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/user_badge/11f8cfa8-ec9f-4f82-be92-d6a39f61b5c1" alt></a> 简书保洁员 Jekyll：<a href="https://iknow4.github.io" target="_blank" rel="noopener">https://iknow4.github.io</a></p>
+<p>总资产 5,210 (约 461.99 元) 共写了 1.6W 字获得 148 个赞共 108 个粉丝</p>
+<h3 id="被以下专题收入，发现更多相似内容"><a href="#被以下专题收入，发现更多相似内容" class="headerlink" title="被以下专题收入，发现更多相似内容"></a>被以下专题收入，发现更多相似内容</h3><h3 id="推荐阅读更多精彩内容"><a href="#推荐阅读更多精彩内容" class="headerlink" title="推荐阅读更多精彩内容"></a>推荐阅读<a href="https://www.jianshu.com/" target="_blank" rel="noopener">更多精彩内容</a></h3><ul>
+<li><p>百战程序员_ Java1573 题 QQ 群：561832648489034603 掌握 80% 年薪 20 万掌握 50% 年薪…</p>
+</li>
+<li><p>上一篇文章介绍了 Set 集合的通用知识。Set 集合中包含了三个比较重要的实现类: HashSet、TreeSet 和 En…</p>
+<p><a href="https://www.jianshu.com/p/9081017a2d67" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/3985563-b750b57756ebd0de.png?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
+</li>
+<li><p>Java 集合框架 Java 平台提供了一个全新的集合框架。“集合框架” 主要由一组用来操作对象的接口组成。不同接口描述…</p>
+<p><a href="https://www.jianshu.com/p/bf9802ef5ff1" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/7051927-e9e2da7374f0b873.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
+</li>
+<li><p>3.3 集合 一方面， 面向对象语言对事物的体现都是以对象的形式，为了方便对多个对象的操作，就要对对象进行存储。另…</p>
+<p><a href="https://www.jianshu.com/u/d0b8c2f6f4ba" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/users/upload_avatars/5892452/66f2e09b-7f13-4272-af6a-8f7d0132c03c.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/48/h/48/format/webp" alt>闫子扬</a>阅读 1</p>
+</li>
+<li><p>package java.util 包中的 Collection 相关接口和类如下图： 仅讨论 Java.util 包中的常…</p>
+<p><a href="https://www.jianshu.com/p/7cf84a39415f" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/1932449-a7943a9ec0f20f0b.png?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
+</li>
+</ul>
+]]></content>
+  </entry>
+  <entry>
+    <title>为何重写equals方法就得重写hashCode方法[转]</title>
+    <url>/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<h3 id="为何重写equals方法就得重写hashCode方法"><a href="#为何重写equals方法就得重写hashCode方法" class="headerlink" title="为何重写equals方法就得重写hashCode方法"></a>为何重写equals方法就得重写hashCode方法</h3><a id="more"></a>
+<p>我们知道，Java 设计的顶级父类 Object 类中，有两个方法很特殊，它们分别是 equals 方法与 hashCode 方法。当我们在使用的时候我们总是被提醒，<strong>一旦重写了 equals 方法，就一定要重写 hashCode 方法</strong>。为什么？很多同学会想这个问题，聊明白这个也就是这篇文章的目的。</p>
+<p>在正式探究原因之前，我们先进行前期的铺垫 – 弄明白这两个方法之间千丝万缕的联系，我们先来看看 Object 这个类的作者是怎么说的，打开 Object 类我们能看到如下注释。</p>
+<p><img src="/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/2.jpg" alt>Object 类中 equals 方法</p>
+<p>注释中的大致意思是：当我们将 equals 方法重写后有必要将 hashCode 方法也重写，这样做才能保证不违背 hashCode 方法中 “<strong>相同对象必须有相同哈希值</strong>” 的约定。</p>
+<p>此处 Object 类的作者只是提醒了我们重写是必要的，重写是为了维护 hashCode 方法设计的定义，<strong>但是为什么要维护 hashCode 方法设计的定义呢</strong>？我们带着疑问继续去看 hashCode 方法的定义。</p>
+<p><img src="/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/4.jpg" alt>Object 类中 hashCode 方法</p>
+<p>hashCode 方法本质就是一个哈希函数，这个不是我根据字面意思瞎猜的，而是 Object 类的作者说明的。Object 类的作者在注释的最后一段的括号中写道：<strong>将对象的地址值映射为 integer 类型的哈希值。</strong>（对哈希函数定义的一篇文章：<a href="https://zhuanlan.zhihu.com/p/49435564" target="_blank" rel="noopener">通俗地理解哈希函数</a>）。牢牢把握哈希函数的定义有利于帮助我们理解接下来的内容。</p>
+<p>我们看到，hashCode 方法注释中列了个列表，列表中有三条注释，当前需要理解的大致意思如下：</p>
+<ol>
+<li>一个对象多次调用它的 hashCode 方法，应当返回相同的 integer（哈希值）。</li>
+<li>两个对象如果通过 equals 方法判定为相等，那么就应当返回相同 integer。</li>
+<li>两个地址值不相等的对象调用 hashCode 方法不要求返回不相等的 integer，但是要求拥有两个不相等 integer 的对象必须是不同对象。</li>
+</ol>
+<p>上面列的三条完完全全属于哈希函数的定义与属性范畴。所以我们将上方的三条注释内容代入到哈希函数的定义中帮忙理解。如果还不能理解也可以看下图：</p>
+<p><img src="/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/5.jpg" alt>对象与哈希值对应关系</p>
+<p>我们看到，图中存在两种独立的情况：</p>
+<ol>
+<li>相同的对象必然导致相同的哈希值。</li>
+<li>不同的哈希值必然是由不同对象导致的。</li>
+</ol>
+<p>也就是作者在 hashCode 方法注释上写明了的定义，实际上作者也就是在实现一个哈希函数，并且把哈希函数的定义写到注释里。</p>
+<p>其实我们看到这里，就能明白一件事情了：equals 方法与 hashCode 方法<strong>根本就是配套使用的</strong>。对于任何一个对象，不论是使用继承自 Object 的 equals 方法还是重写 equals 方法。hashCode 方法实际上必须要完成的一件事情就是，<strong>为该 equals 方法认定为相同的对象返回相同的哈希值</strong>。</p>
+<p>Object 类中的 equals 方法区分两个对象的做法是比较地址值，即使用 “==”。而我们如若根据业务需求改写了 equals 方法的实现，那么也应当同时改写 hashCode 方法的实现。否则 hashCode 方法依然返回的是依据 Object 类中的依据地址值得到的 integer 哈希值。</p>
+<p>这么说起来可能不是很好理解，我们代入到具体的例子 –String 类中好了。</p>
+<p>String 类中，equals 方法经过重写，具体实现源码如下：</p>
+<p><img src="/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/6.jpg" alt>String 类 equals 方法的重写实现</p>
+<p>通过源码我们能看到，String 对象在调用 equals 方法比较另一个对象时，除了认定相同地址值的两个对象相等以外，还认定对应着的每个字符都相等的两个 String 对象也相等，即使这两个 String 对象的地址值不同（即属于两个对象）。</p>
+<p>此时我们能想到的是，String 类中对 equals 方法进行重写扩充了，但是如果此时我们不将 hashCode 方法也进行重写，那么 String 类调用的就是来自顶级父类 Obejct 类中的 hashCode 方法。即，对于两个字符串对象，使用他们各自的地址值映射为哈希值。也就是会出现如下情形：</p>
+<p><img src="/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/7.jpg" alt> 创建两个地址值不同，字面量相同的字符串对象</p>
+<p>也就是说，<strong>被 String 类中的 equals 方法认定为相等的两个对象拥有两个不同的哈希值</strong>（因为他们的地址值不同）。问题分析到这一步，原来的问题 “为什么重写 equals 方法就得重写 hashCode 方法” 已经结束了，它的答案是“<strong>因为必须保证重写后的 equals 方法认定相同的两个对象拥有相同的哈希值</strong>”。同时我们顺便得出了一个结论：“<strong>hashCode 方法的重写原则就是保证 equals 方法认定为相同的两个对象拥有相同的哈希值</strong>”。</p>
+<p>看到这里，我的内心甚至没有一点波澜 – 两个字面量相同的 String 对象哈希值不同怎么啦！Object 类作者给我的叮嘱我不遵守又怎么啦！说到现在为止，上方提到的任何东西都没有对我的实际代码没有造成任何影响。实际上是这样吗？<strong>两个被认定为相同的对象拥有不同的哈希值没有造成不便或者 bug 吗</strong>？这就是我们接下来要进一步挖掘的问题：<strong>为什么要保证它们的哈希值相等呢？“hashCode 方法返回的哈希值在语言中扮演了一个什么角色？</strong>”。</p>
+<p>其实，文章前半部在分析 Java 作者注释的时候我省去了一些东西没有说明，就是作者几次三番地提到了 HashMap、HashTable。所以接下来我们带着疑问接着看 HashMap 类中存放数据的 put 方法，它实际调用 putVal 方法，以下是它的片段截取：</p>
+<p><img src="/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/8.jpg" alt></p>
+<p>put 一个键值对的时候按照流程大致进行了如下操作：</p>
+<ol>
+<li>通过传入键（Key）的哈希值来查找底层数组位于该位置的元素 p，如果 p 不为 null，则相当于我们传入的 Key 在 HashMap 的底层数组中存在。也就是说我们需要使用新的键值对来覆盖旧的键值对（0 号红框处）。</li>
+<li>仅仅是通过哈希值相等来证明两个对象是相同对象是行不通的，因此我们再做进一步的证明，即上图 1、2 号红框中，为了证明两个对象是同一对象，我们要求 (二者哈希值相等) 且(二者地址值相等或调用 equals 认定相等)。</li>
+<li>如果底层数组中存在传入的 Key，那么使用新传入的覆盖掉查到的（3 号红框处）。</li>
+</ol>
+<p>注意！这一整套流程出现问题了。结合上文，假设此处我们此处我们使用了 String 类型的值来作为 Key 值，且此 String 类重写了 equals 方法而未重写 hashCode 方法。</p>
+<p>那么还是那个地址值不同而字面量相同的两个 String 对象 s1 与 s2，由于未进行针对性地重写 hashCode 方法，那么 hashCode 还是通过地址值分别得到 s1 与 s2 的哈希值，他们显然是不同的。</p>
+<p>0 号红色框中的 hash 是传入 Key 的哈希值，它与 HashMap 底层数组 tab 的长度进行同位与运算得到的数组位置为最终目标节点在数组中的位置。也就是说即使我们输入了两个字面量完全相同的 s1 与 s2，由于他们的地址值不同，得到的哈希值也不同，结果导致的是这个查出来的 p 节点始终为 null（0 号红色框处），也就是会执行操作 – 创建一个新的节点。</p>
+<p>对应到我们 put 操作就相当于执行了 hashMap.put(“k”,”v1”)，hashMap.put(“k”:”v2”)，而不是使用 v2 替换 v1 的值，这样我们的 HashMap 就乱套了。</p>
+<p>虽然此处我们仅仅是进行了十分简陋且十分片面的证明，但是问题挖到了这里依然说明了相同对象拥有不同哈希值会造成不便。几乎可以肯定地说，<strong>hashCode 方法不仅仅是与 equals 配套使用的，它甚至是与 Java 集合配套使用的</strong>。同样地，类似的代码我们也能在 HashTable 中找到，就更不用提 HashSet 一类的集合了。</p>
+<p>集合本身在我们日常的编码中就必不可少，所以我们以后为了代码不出问题还是乖乖地重写 hashCode 方法吧。不过好在一般我们为了集合的效率以及安全性，都会使用不可变的 String，它已经将 hashCode 方法重写了，并且重写的是一个散列极为优秀的 hashCode 方法，此处限于篇幅不展开聊。（END）</p>
+<p>写下你的评论…  </p>
+<p>为啥重写 equals？</p>
+<p>继承自 Object 的 equals 方法不能满足业务需求的情形，就比如我在文中说的，String 除了对比地址值之外，还将每个对应字符相等的两个 String 对象也认定为 “equals”。</p>
+<p>什么样的业务需求会是这样的情况？？</p>
+<p>“String 类中对 equals 方法进行重写扩充了，但是如果此时我们不将 hashCode 方法也进行重写，那么 String 类调用的就是来自顶级父类 Obejct 类中的 hashCode 方法。”</p>
+<p>String 调用 Hashcode 方法的 case，你是指下文 java API 的 hash 有关的集合吧，因为它们默认调用了 Hashcode 方法？</p>
+<p>这里单独拿出 String 类来说是为了下文直观地说明如果不重写会给实际代码造成什么后果，毕竟集合的使用是日常代码离不开的，并且我们大多数时候都选择 String 作 key。</p>
+<p>那可以理解为 非要重写 hashcode 的根本原因 就是这些 hash 结构 是默认调用 hashcode</p>
+<p>来计算 key 的？</p>
+<p>原文地址 <a href="https://zhuanlan.zhihu.com/p/50206657" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50206657</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>hashcode</tag>
+        <tag>equals</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Collection集合总结(掌握)</title>
+    <url>/2020/03/15/Collection%E9%9B%86%E5%90%88%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h3 id="Collection集合总结-掌握"><a href="#Collection集合总结-掌握" class="headerlink" title="Collection集合总结(掌握)"></a>Collection集合总结(掌握)</h3><a id="more"></a> 
+<pre><code>Collection  
+    |--List    有序, 可重复  
+        |--ArrayList  
+            底层数据结构是数组，查询快，增删慢。  
+            线程不安全，效率高  
+        |--Vector  
+            底层数据结构是数组，查询快，增删慢。  
+            线程安全，效率低  
+        |--LinkedList  
+            底层数据结构是链表，查询慢，增删快。  
+            线程不安全，效率高  
+    |--Set    无序, 唯一  
+        |--HashSet  
+            底层数据结构是哈希表。  
+            如何保证元素唯一性的呢?  
+                依赖两个方法：hashCode() 和 equals()  
+            |--LinkedHashSet  
+                底层数据结构是链表和哈希表  
+                由链表保证元素有序  
+                由哈希表保证元素唯一  
+        |--TreeSet  
+            底层数据结构是红黑树。  
+            如何保证元素排序的呢?  
+                自然排序  
+                比较器排序  
+            如何保证元素唯一性的呢?  
+                根据比较的返回值是否是 0 来决定  </code></pre><p>针对 Collection 集合我们到底使用谁呢?(掌握)<br>    唯一吗?<br>        是：Set<br>            排序吗?<br>                是：TreeSet<br>                否：HashSet<br>        如果你知道是 Set，但是不知道是哪个 Set，就用 HashSet。  </p>
+<pre><code>    否：List  
+        要安全吗?  
+            是：Vector  
+            否：ArrayList 或者 LinkedList  
+                查询多：ArrayList  
+                增删多：LinkedList  
+    如果你知道是 List，但是不知道是哪个 List，就用 ArrayList。  
+
+如果你知道是 Collection 集合，但是不知道使用谁，就用 ArrayList。  
+
+如果你知道用集合，就用 ArrayList。  </code></pre><p>在集合中常见的数据结构 (掌握)<br>    ArrayXxx: 底层数据结构是数组，查询快，增删慢<br>    LinkedXxx: 底层数据结构是链表，查询慢，增删快<br>    HashXxx: 底层数据结构是哈希表。依赖两个方法：hashCode() 和 equals()<br>    TreeXxx: 底层数据结构是二叉树。两种方式排序：自然排序和比较器排序</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Collection</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java集合中List,Set以及Map等集合体系详解[转]</title>
+    <url>/2020/03/13/Java%E9%9B%86%E5%90%88%E4%B8%ADList,Set%E4%BB%A5%E5%8F%8AMap%E7%AD%89%E9%9B%86%E5%90%88%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h3 id="Java集合中List-Set以及Map等集合体系详解-转"><a href="#Java集合中List-Set以及Map等集合体系详解-转" class="headerlink" title="Java集合中List,Set以及Map等集合体系详解[转]"></a>Java集合中List,Set以及Map等集合体系详解[转]</h3><a id="more"></a>
+<h2 id="转载地址-Java-集合中-List-Set-以及-Map-等集合体系详解-史上最全"><a href="#转载地址-Java-集合中-List-Set-以及-Map-等集合体系详解-史上最全" class="headerlink" title="转载地址:Java 集合中 List,Set 以及 Map 等集合体系详解 (史上最全)"></a>转载地址:<a href="https://blog.csdn.net/zhangqunshuai/article/details/80660974" target="_blank" rel="noopener">Java 集合中 List,Set 以及 Map 等集合体系详解 (史上最全)</a></h2><h2 id="概述"><a href="#概述" class="headerlink" title="概述:"></a>概述:</h2><ul>
+<li>List , Set, Map 都是接口，前两个继承至 Collection 接口，Map 为独立接口</li>
+<li>Set 下有 HashSet，LinkedHashSet，TreeSet</li>
+<li>List 下有 ArrayList，Vector，LinkedList</li>
+<li>Map 下有 Hashtable，LinkedHashMap，HashMap，TreeMap</li>
+<li>Collection 接口下还有个 Queue 接口，有 PriorityQueue 类</li>
+</ul>
+<p><img src="/2020/03/13/Java%E9%9B%86%E5%90%88%E4%B8%ADList,Set%E4%BB%A5%E5%8F%8AMap%E7%AD%89%E9%9B%86%E5%90%88%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/1.jpg" alt></p>
+<h2 id="注意"><a href="#注意" class="headerlink" title="注意:"></a>注意:</h2><ul>
+<li><p>Queue 接口与 List、Set 同一级别，都是继承了 Collection 接口。<br>看图你会发现, LinkedList 既可以实现 Queue 接口, 也可以实现 List 接口. 只不过呢, LinkedList 实现了 Queue 接口。Queue 接口窄化了对 LinkedList 的方法的访问权限（即在方法中的参数类型如果是 Queue 时，就完全只能访问 Queue 接口所定义的方法 了，而不能直接访问 LinkedList 的非 Queue 的方法），以使得只有恰当的方法才可以使用。</p>
+</li>
+<li><p>SortedSet 是个接口，它里面的（只有 TreeSet 这一个实现可用）中的元素一定是有序的。</p>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><h3 id="Connection-接口"><a href="#Connection-接口" class="headerlink" title="Connection 接口:"></a>Connection 接口:</h3><p>— <strong>List 有序, 可重复</strong></p>
+<ul>
+<li>ArrayList<br><strong>优点:</strong> 底层数据结构是数组，查询快，增删慢。<br><strong>缺点:</strong> 线程不安全，效率高</li>
+<li>Vector<br><strong>优点:</strong> 底层数据结构是数组，查询快，增删慢。<br><strong>缺点:</strong> 线程安全，效率低</li>
+<li>LinkedList<br><strong>优点:</strong> 底层数据结构是链表，查询慢，增删快。<br><strong>缺点:</strong> 线程不安全，效率高</li>
+</ul>
+<p>—<strong>Set 无序, 唯一</strong></p>
+<ul>
+<li><p>HashSet<br>底层数据结构是哈希表。(无序, 唯一)<br>如何来保证元素唯一性?  </p>
+<ol>
+<li>依赖两个方法：hashCode() 和 equals()</li>
+</ol>
+</li>
+<li><p>LinkedHashSet<br>底层数据结构是链表和哈希表。(FIFO 插入有序, 唯一)  </p>
+<ol>
+<li>由链表保证元素有序  </li>
+<li>由哈希表保证元素唯一</li>
+</ol>
+</li>
+<li><p>TreeSet<br>底层数据结构是红黑树。(唯一，有序)  </p>
+<ol>
+<li>如何保证元素排序的呢?<br>自然排序<br>比较器排序  </li>
+<li>如何保证元素唯一性的呢?<br>根据比较的返回值是否是 0 来决定</li>
+</ol>
+</li>
+</ul>
+<p><strong>针对 Collection 集合我们到底使用谁呢?(掌握)</strong></p>
+<blockquote>
+<p>唯一吗?</p>
+<blockquote>
+<p>是：Set</p>
+<blockquote>
+<p>排序吗?</p>
+<blockquote>
+<p>是：TreeSet 或 LinkedHashSet<br>否：HashSet<br>如果你知道是 Set，但是不知道是哪个 Set，就用 HashSet。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>否：List</p>
+<blockquote>
+<p>要安全吗?</p>
+<blockquote>
+<p>是：Vector<br>否：ArrayList 或者 LinkedList</p>
+<blockquote>
+<p>查询多：ArrayList<br>增删多：LinkedList<br>如果你知道是 List，但是不知道是哪个 List，就用 ArrayList。</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>如果你知道是 Collection 集合，但是不知道使用谁，就用 ArrayList。<br>如果你知道用集合，就用 ArrayList。</p>
+</blockquote>
+<p>说完了 Collection, 来简单说一下 Map.</p>
+<h3 id="Map-接口"><a href="#Map-接口" class="headerlink" title="Map 接口:"></a>Map 接口:</h3><p>上图:<br><img src="/2020/03/13/Java%E9%9B%86%E5%90%88%E4%B8%ADList,Set%E4%BB%A5%E5%8F%8AMap%E7%AD%89%E9%9B%86%E5%90%88%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/2.png" alt></p>
+<p>Map 接口有三个比较重要的实现类，分别是 HashMap、TreeMap 和 HashTable。</p>
+<ul>
+<li>TreeMap 是有序的，HashMap 和 HashTable 是无序的。</li>
+<li>Hashtable 的方法是同步的，HashMap 的方法不是同步的。这是两者最主要的区别。</li>
+</ul>
+<p>这就意味着:</p>
+<ul>
+<li>Hashtable 是线程安全的，HashMap 不是线程安全的。</li>
+<li>HashMap 效率较高，Hashtable 效率较低。<br>如果对同步性或与遗留代码的兼容性没有任何要求，建议使用 HashMap。 查看 Hashtable 的源代码就可以发现，除构造函数外，Hashtable 的所有 public 方法声明中都有 synchronized 关键字，而 HashMap 的源码中则没有。</li>
+<li>Hashtable 不允许 null 值，HashMap 允许 null 值（key 和 value 都允许）</li>
+<li>父类不同：Hashtable 的父类是 Dictionary，HashMap 的父类是 AbstractMap</li>
+</ul>
+<h2 id="重点问题重点分析"><a href="#重点问题重点分析" class="headerlink" title="重点问题重点分析:"></a>重点问题重点分析:</h2><h3 id="一-TreeSet-LinkedHashSet-and-HashSet-的区别"><a href="#一-TreeSet-LinkedHashSet-and-HashSet-的区别" class="headerlink" title="(一).TreeSet, LinkedHashSet and HashSet 的区别"></a>(一).TreeSet, LinkedHashSet and HashSet 的区别</h3><blockquote>
+<p><strong>1. 介绍</strong></p>
+</blockquote>
+<blockquote>
+<ul>
+<li>TreeSet, LinkedHashSet and HashSet 在 java 中都是实现 Set 的数据结构</li>
+</ul>
+</blockquote>
+<ul>
+<li>TreeSet 的主要功能用于排序</li>
+<li>LinkedHashSet 的主要功能用于保证 FIFO 即有序的集合 (先进先出)</li>
+<li>HashSet 只是通用的存储数据的集合</li>
+</ul>
+<blockquote>
+<p><strong>2. 相同点</strong></p>
+</blockquote>
+<blockquote>
+<ul>
+<li>Duplicates elements: 因为三者都实现 Set interface，所以三者都不包含 duplicate elements</li>
+<li>Thread safety: 三者都不是线程安全的，如果要使用线程安全可以 Collections.synchronizedSet()</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>3. 不同点</strong></p>
+</blockquote>
+<blockquote>
+<ul>
+<li>Performance and Speed: HashSet 插入数据最快，其次 LinkHashSet，最慢的是 TreeSet 因为内部实现排序</li>
+</ul>
+</blockquote>
+<ul>
+<li>Ordering: HashSet 不保证有序，LinkHashSet 保证 FIFO 即按插入顺序排序，<strong>TreeSet 安装内部实现排序，也可以自定义排序规则</strong></li>
+<li>null:HashSet 和 LinkHashSet 允许存在 null 数据，但是 TreeSet 中插入 null 数据时会报 NullPointerException</li>
+</ul>
+<blockquote>
+<p><strong>4. 代码比较</strong></p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public static void main(String args[]) &#123;</span><br><span class="line">        HashSet&lt;String&gt; hashSet = new HashSet&lt;&gt;();</span><br><span class="line">        LinkedHashSet&lt;String&gt; linkedHashSet = new LinkedHashSet&lt;&gt;();</span><br><span class="line">        TreeSet&lt;String&gt; treeSet = new TreeSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        for (String data : Arrays.asList(&quot;B&quot;, &quot;E&quot;, &quot;D&quot;, &quot;C&quot;, &quot;A&quot;)) &#123;</span><br><span class="line">            hashSet.add(data);</span><br><span class="line">            linkedHashSet.add(data);</span><br><span class="line">            treeSet.add(data);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //不保证有序</span><br><span class="line">        System.out.println(&quot;Ordering in HashSet :&quot; + hashSet);</span><br><span class="line"></span><br><span class="line">        //FIFO保证安装插入顺序排序</span><br><span class="line">        System.out.println(&quot;Order of element in LinkedHashSet :&quot; + linkedHashSet);</span><br><span class="line"></span><br><span class="line">        //内部实现排序</span><br><span class="line">        System.out.println(&quot;Order of objects in TreeSet :&quot; + treeSet);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>运行结果:<br>Ordering in HashSet :[A, B, C, D, E] (无顺序)<br>Order of element in LinkedHashSet :[B, E, D, C, A] (FIFO 插入有序)<br>Order of objects in TreeSet :[A, B, C, D, E] (排序)</p>
+</blockquote>
+<h3 id="二-TreeSet-的两种排序方式比较"><a href="#二-TreeSet-的两种排序方式比较" class="headerlink" title="(二).TreeSet 的两种排序方式比较"></a>(二).TreeSet 的两种排序方式比较</h3><h5 id="1-排序的引入-以基本数据类型的排序为例"><a href="#1-排序的引入-以基本数据类型的排序为例" class="headerlink" title="1. 排序的引入 (以基本数据类型的排序为例)"></a>1. 排序的引入 (以基本数据类型的排序为例)</h5><p>由于 TreeSet 可以实现对元素按照某种规则进行排序，例如下面的例子</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyClass &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        // 创建集合对象</span><br><span class="line">        // 自然顺序进行排序</span><br><span class="line">        TreeSet&lt;Integer&gt; ts = new TreeSet&lt;Integer&gt;();</span><br><span class="line"></span><br><span class="line">        // 创建元素并添加</span><br><span class="line">        // 20,18,23,22,17,24,19,18,24</span><br><span class="line">        ts.add(20);</span><br><span class="line">        ts.add(18);</span><br><span class="line">        ts.add(23);</span><br><span class="line">        ts.add(22);</span><br><span class="line">        ts.add(17);</span><br><span class="line">        ts.add(24);</span><br><span class="line">        ts.add(19);</span><br><span class="line">        ts.add(18);</span><br><span class="line">        ts.add(24);</span><br><span class="line"></span><br><span class="line">        // 遍历</span><br><span class="line">        for (Integer i : ts) &#123;</span><br><span class="line">            System.out.println(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>运行结果:<br>17<br>18<br>19<br>20<br>22<br>23<br>24</p>
+</blockquote>
+<h5 id="2-如果是引用数据类型呢-比如自定义对象-又该如何排序呢"><a href="#2-如果是引用数据类型呢-比如自定义对象-又该如何排序呢" class="headerlink" title="2. 如果是引用数据类型呢, 比如自定义对象, 又该如何排序呢?"></a>2. 如果是引用数据类型呢, 比如自定义对象, 又该如何排序呢?</h5><p>测试类:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyClass &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TreeSet&lt;Student&gt; ts=new TreeSet&lt;Student&gt;();</span><br><span class="line">        //创建元素对象</span><br><span class="line">        Student s1=new Student(&quot;zhangsan&quot;,20);</span><br><span class="line">        Student s2=new Student(&quot;lis&quot;,22);</span><br><span class="line">        Student s3=new Student(&quot;wangwu&quot;,24);</span><br><span class="line">        Student s4=new Student(&quot;chenliu&quot;,26);</span><br><span class="line">        Student s5=new Student(&quot;zhangsan&quot;,22);</span><br><span class="line">        Student s6=new Student(&quot;qianqi&quot;,24);</span><br><span class="line"></span><br><span class="line">        //将元素对象添加到集合对象中</span><br><span class="line">        ts.add(s1);</span><br><span class="line">        ts.add(s2);</span><br><span class="line">        ts.add(s3);</span><br><span class="line">        ts.add(s4);</span><br><span class="line">        ts.add(s5);</span><br><span class="line">        ts.add(s6);</span><br><span class="line"></span><br><span class="line">        //遍历</span><br><span class="line">        for(Student s:ts)&#123;</span><br><span class="line">            System.out.println(s.getName()+&quot;-----------&quot;+s.getAge());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Student.java:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Student &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private int age;</span><br><span class="line"></span><br><span class="line">    public Student() &#123;</span><br><span class="line">        super();</span><br><span class="line">        // TODO Auto-generated constructor stub</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Student(String name, int age) &#123;</span><br><span class="line">        super();</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果报错:</p>
+<p><img src="/2020/03/13/Java%E9%9B%86%E5%90%88%E4%B8%ADList,Set%E4%BB%A5%E5%8F%8AMap%E7%AD%89%E9%9B%86%E5%90%88%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/3.png" alt><br>原因分析：<br>由于不知道该安照那一中排序方式排序，所以会报错。<br>解决方法：  </p>
+<ol>
+<li>自然排序  </li>
+<li>比较器排序</li>
+</ol>
+<h6 id="1-自然排序"><a href="#1-自然排序" class="headerlink" title="(1). 自然排序"></a>(1). 自然排序</h6><p>自然排序要进行一下操作：<br>1.Student 类中实现 Comparable 接口<br>2. 重写 Comparable 接口中的 Compareto 方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">compareTo(T o)  比较此对象与指定对象的顺序。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Student implements Comparable&lt;Student&gt;&#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private int age;</span><br><span class="line"></span><br><span class="line">    public Student() &#123;</span><br><span class="line">        super();</span><br><span class="line">        // TODO Auto-generated constructor stub</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Student(String name, int age) &#123;</span><br><span class="line">        super();</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Student s) &#123;</span><br><span class="line">        //return -1; //-1表示放在红黑树的左边,即逆序输出</span><br><span class="line">        //return 1;  //1表示放在红黑树的右边，即顺序输出</span><br><span class="line">        //return o;  //表示元素相同，仅存放第一个元素</span><br><span class="line">        //主要条件 姓名的长度,如果姓名长度小的就放在左子树，否则放在右子树</span><br><span class="line">        int num=this.name.length()-s.name.length();</span><br><span class="line">        //姓名的长度相同，不代表内容相同,如果按字典顺序此 String 对象位于参数字符串之前，则比较结果为一个负整数。</span><br><span class="line">        //如果按字典顺序此 String 对象位于参数字符串之后，则比较结果为一个正整数。</span><br><span class="line">        //如果这两个字符串相等，则结果为 0</span><br><span class="line">        int num1=num==0?this.name.compareTo(s.name):num;</span><br><span class="line">        //姓名的长度和内容相同，不代表年龄相同，所以还要判断年龄</span><br><span class="line">        int num2=num1==0?this.age-s.age:num1;</span><br><span class="line">        return num2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果:</p>
+<blockquote>
+<p>lis———–22<br>qianqi———–24<br>wangwu———–24<br>chenliu———–26<br>zhangsan———–20<br>zhangsan———–22</p>
+</blockquote>
+<h6 id="2-比较器排序"><a href="#2-比较器排序" class="headerlink" title="(2). 比较器排序"></a>(2). 比较器排序</h6><p>比较器排序步骤：  </p>
+<ol>
+<li>单独创建一个比较类，这里以 MyComparator 为例，并且要让其继承 Comparator 接口  </li>
+<li>重写 Comparator 接口中的 Compare 方法</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">compare(T o1,T o2)      比较用来排序的两个参数。</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>在主类中使用下面的 构造方法</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TreeSet(Comparator&lt;? superE&gt; comparator)</span><br><span class="line">          构造一个新的空 TreeSet，它根据指定比较器进行排序。</span><br></pre></td></tr></table></figure>
+
+<p>测试类:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyClass &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        //创建集合对象</span><br><span class="line">        //TreeSet(Comparator&lt;? super E&gt; comparator) 构造一个新的空 TreeSet，它根据指定比较器进行排序。</span><br><span class="line">        TreeSet&lt;Student&gt; ts=new TreeSet&lt;Student&gt;(new MyComparator());</span><br><span class="line"></span><br><span class="line">        //创建元素对象</span><br><span class="line">        Student s1=new Student(&quot;zhangsan&quot;,20);</span><br><span class="line">        Student s2=new Student(&quot;lis&quot;,22);</span><br><span class="line">        Student s3=new Student(&quot;wangwu&quot;,24);</span><br><span class="line">        Student s4=new Student(&quot;chenliu&quot;,26);</span><br><span class="line">        Student s5=new Student(&quot;zhangsan&quot;,22);</span><br><span class="line">        Student s6=new Student(&quot;qianqi&quot;,24);</span><br><span class="line"></span><br><span class="line">        //将元素对象添加到集合对象中</span><br><span class="line">        ts.add(s1);</span><br><span class="line">        ts.add(s2);</span><br><span class="line">        ts.add(s3);</span><br><span class="line">        ts.add(s4);</span><br><span class="line">        ts.add(s5);</span><br><span class="line">        ts.add(s6);</span><br><span class="line"></span><br><span class="line">        //遍历</span><br><span class="line">        for(Student s:ts)&#123;</span><br><span class="line">            System.out.println(s.getName()+&quot;-----------&quot;+s.getAge());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Student.java:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Student &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private int age;</span><br><span class="line"></span><br><span class="line">    public Student() &#123;</span><br><span class="line">        super();</span><br><span class="line">        // TODO Auto-generated constructor stub</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Student(String name, int age) &#123;</span><br><span class="line">        super();</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getAge() &#123;</span><br><span class="line">        return age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setAge(int age) &#123;</span><br><span class="line">        this.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>MyComparator 类：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyComparator implements Comparator&lt;Student&gt; &#123;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compare(Student s1,Student s2) &#123;</span><br><span class="line">        // 姓名长度</span><br><span class="line">        int num = s1.getName().length() - s2.getName().length();</span><br><span class="line">        // 姓名内容</span><br><span class="line">        int num2 = num == 0 ? s1.getName().compareTo(s2.getName()) : num;</span><br><span class="line">        // 年龄</span><br><span class="line">        int num3 = num2 == 0 ? s1.getAge() - s2.getAge() : num2;</span><br><span class="line">        return num3;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果:</p>
+<blockquote>
+<p>lis———–22<br>qianqi———–24<br>wangwu———–24<br>chenliu———–26<br>zhangsan———–20<br>zhangsan———–22</p>
+</blockquote>
+<h4 id="三-性能测试"><a href="#三-性能测试" class="headerlink" title="(三). 性能测试"></a>(三). 性能测试</h4><p>对象类:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Dog implements Comparable&lt;Dog&gt; &#123;</span><br><span class="line">    int size;</span><br><span class="line">    public Dog(int s) &#123;</span><br><span class="line">        size = s;</span><br><span class="line">    &#125;</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return size + &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Dog o) &#123;</span><br><span class="line">       //数值大小比较</span><br><span class="line">        return size - o.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主类:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class MyClass &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Random r = new Random();</span><br><span class="line">        HashSet&lt;Dog&gt; hashSet = new HashSet&lt;Dog&gt;();</span><br><span class="line">        TreeSet&lt;Dog&gt; treeSet = new TreeSet&lt;Dog&gt;();</span><br><span class="line">        LinkedHashSet&lt;Dog&gt; linkedSet = new LinkedHashSet&lt;Dog&gt;();</span><br><span class="line"></span><br><span class="line">        // start time</span><br><span class="line">        long startTime = System.nanoTime();</span><br><span class="line">        for (int i = 0; i &lt; 1000; i++) &#123;</span><br><span class="line">            int x = r.nextInt(1000 - 10) + 10;</span><br><span class="line">            hashSet.add(new Dog(x));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // end time</span><br><span class="line">        long endTime = System.nanoTime();</span><br><span class="line">        long duration = endTime - startTime;</span><br><span class="line">        System.out.println(&quot;HashSet: &quot; + duration);</span><br><span class="line"></span><br><span class="line">        // start time</span><br><span class="line">        startTime = System.nanoTime();</span><br><span class="line">        for (int i = 0; i &lt; 1000; i++) &#123;</span><br><span class="line">            int x = r.nextInt(1000 - 10) + 10;</span><br><span class="line">            treeSet.add(new Dog(x));</span><br><span class="line">        &#125;</span><br><span class="line">        // end time</span><br><span class="line">        endTime = System.nanoTime();</span><br><span class="line">        duration = endTime - startTime;</span><br><span class="line">        System.out.println(&quot;TreeSet: &quot; + duration);</span><br><span class="line"></span><br><span class="line">        // start time</span><br><span class="line">        startTime = System.nanoTime();</span><br><span class="line">        for (int i = 0; i &lt; 1000; i++) &#123;</span><br><span class="line">            int x = r.nextInt(1000 - 10) + 10;</span><br><span class="line">            linkedSet.add(new Dog(x));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        // end time</span><br><span class="line">        endTime = System.nanoTime();</span><br><span class="line">        duration = endTime - startTime;</span><br><span class="line">        System.out.println(&quot;LinkedHashSet: &quot; + duration);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行结果:</p>
+<blockquote>
+<p>HashSet: 1544313<br>TreeSet: 2066049<br>LinkedHashSet: 629826<br>虽然测试不够准确, 但能反映得出，TreeSet 要慢得多, 因为它是有序的。</p>
+</blockquote>
+<p><img src="/2020/03/13/Java%E9%9B%86%E5%90%88%E4%B8%ADList,Set%E4%BB%A5%E5%8F%8AMap%E7%AD%89%E9%9B%86%E5%90%88%E4%BD%93%E7%B3%BB%E8%AF%A6%E8%A7%A3/4.png" alt></p>
+<p>参考文章:<br><a href="https://www.jianshu.com/p/14bd5d9654fe" target="_blank" rel="noopener">HashSet、TreeSet 和 LinkedHashSet 的使用区别</a><br><a href="https://blog.csdn.net/czwx_24/article/details/51308706" target="_blank" rel="noopener">Collection 集合总结</a><br><a href="https://www.cnblogs.com/sidekick/p/8010522.html" target="_blank" rel="noopener">HashMap、TreeMap 和 HashTable 的区别</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+        <category>Collections</category>
+      </categories>
+      <tags>
+        <tag>List、Set、Map</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git开发过程中各个分支的作用简单分析</title>
+    <url>/2020/03/09/git%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%90%84%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E4%BD%9C%E7%94%A8%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h3 id="git开发过程中各个分支的作用简单分析"><a href="#git开发过程中各个分支的作用简单分析" class="headerlink" title="git开发过程中各个分支的作用简单分析"></a>git开发过程中各个分支的作用简单分析</h3><a id="more"></a>
+<p>Git 和 SVN 是我们代码开发中，最常用的两款代码管理软件。在这里我来写写我在工作中如何使用 Git 来管理我们的代码开发。<br>  首先，我们是一个多人开发的团队，因此在开发过程中，少不了要进行多人协作的时候。不同的功能分支就成了家常便饭的事情了。咱先来看一副图：</p>
+<p><img src="/2020/03/09/git%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%90%84%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E4%BD%9C%E7%94%A8%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/1.png" alt></p>
+<p>这幅图里画的是我日常工作中，代码管理中 Git 分支的存在形式。从最上层的一行中可以看到，一般会存在一些这样的分支：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt;&gt;Master: 主分支；主要是稳定的版本分支，正式发布的版本都从Master拉。</span><br><span class="line">&gt;&gt;Develop: 开发分支；更新和变动最频繁的分支，正常情况下开发都是在Develop分支上进行的。</span><br><span class="line">&gt;&gt;Release：预发行分支；一般来说，代表一个版本的功能全部开发完成后递交测试，测试出Bug后进行修复的分支。</span><br><span class="line">&gt;&gt;Features: 功能分支； 其实Features不是一个分支，而是一个分支文件夹。里面包含了每个程序员开发的功能点。Feature开发完成后合入Develop分支。</span><br><span class="line">&gt;&gt;HotFix: 最希望不会被创建的分支；这个分支的存在是在已经正式上线的版本中，发现了重大Bug进行修复的分支。</span><br></pre></td></tr></table></figure>
+
+<p>介绍完了几个分支的主要功能，我们能谈谈一个具体的 App 软件版本开发中的流程。<br>1、软件版本的起点：A<br>  需求总是在不断更新的。<br>  上一次产品经理需求 0.1 的软件版本刚刚完成后，这不又来了新的版本需求 0.2，这次一共两个功能点。幸好我们有 Git，让并行开发成为可能。拉取 Develop 分支准备开干！</p>
+<p>2、开发的起点：B<br>  两名工程师，两个不同的需求，大师甲和大师乙各自领取一个功能点开干；从 Develop 拉取属于自己的分支，有单独的分支就不会被干扰：）</p>
+<p>3、开发的终点：H<br>  一周不到，两位大师就已经完成了属于自己的功能；从图上看，都有两次代码的提交。大师们各自开发的功能初步看似乎没有啥问题，但是我们的 App 版本是一个多功能的集合，是否合在一起也会没有问题？这时候大师们把属于自己的分支合入 Develop，并删掉自己的工作 Branche。编译，运行，Success!</p>
+<p>4、预发行的起点：Release 0.2 节点 (I)<br>  大师们的能力果然与众不同，合入后没有一点问题，达到提交测试部的标准。新建 Release 0.2 分支，代表一个里程碑式的事件。</p>
+<p>5、Release 分支 Bug 宿命<br>  世上没有哪个大师的代码是没有 Bug 的，大师甲和大师乙也不例外。这不，测试部刚拿到预发行的版本就曝出了 2 个 Bug。<br>  不过没有关系，能够复现的 Bug 对于我们来说就不是 Bug。从 Release 0.2 拉取 Bug 修复分支。修好了，继续合进 Release 0.2。谁叫 Release 就是这样的宿命呢。</p>
+<p>6、版本发行的终点: M<br>  但愿人长久，Bug 不再有。<br>  经过大师们艰苦卓绝的 bug 修复，终于通过了测试部的测试，也得到了产品经理们的认可，准备提交 App Store 审核。<br>  Release 合入 Master 分支，打上 Tag 0.2，这就是这次的 MileStone 了。<br>  当然也得记得 Release 合入 Develop，之前这么多的 bug 也得在 Develop 上修复修复不是。做好了这些，Release 就可以删啦。</p>
+<p>7、救火队员一般的 HotFix: N<br>  好事多磨！AppStore 刚发出去的 App, 就有用户反馈 Crash! 大师甲和大师乙临危受命!<br>  从 Master 拉取 HotFix 分支来搞定它。原来是数组越界！分分钟搞定。完成后合入 Master，版本更新为 Tag 0.3，代表我们修复了重大问题。编译，运行，没问题，提交 App Store 等审核。<br>  噢，one more thing, HotFix 也要合入 Develop，又多了一个功能点（bug 修复）不是。</p>
+<p>8、新的轮回开始：P<br>  1-&gt; 7 就是一个版本的开发过程中，我们的 Git Flow 流。到了最后，P 和 O 节点拥有了相同的内容，就像在一开始的 A 和 B 那样。<br>  这时候，我看见产品经理又拿着版本需求 1.0 向我走来……</p>
+<p>原文地址 <a href="https://www.jianshu.com/p/c2aefcf6b2b7" target="_blank" rel="noopener">https://www.jianshu.com/p/c2aefcf6b2b7</a></p>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>branch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java中的多态</title>
+    <url>/2020/03/08/Java%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%80%81/</url>
+    <content><![CDATA[<h3 id="Java中的多态"><a href="#Java中的多态" class="headerlink" title="Java中的多态"></a>Java中的多态</h3><a id="more"></a>
+<p>多态一般分为两种：重写式多态和重载式多态。重写和重载这两个知识点前面的文章已经详细将结果了，这里就不多说了。</p>
+<ul>
+<li><p>重载式多态，也叫编译时多态。也就是说这种多态再编译时已经确定好了。重载大家都知道，方法名相同而参数列表不同的一组方法就是重载。在调用这种重载的方法时，通过传入不同的参数最后得到不同的结果。</p>
+<blockquote>
+<p>但是这里是有歧义的，有的人觉得不应该把重载也算作多态。因为很多人对多态的理解是：程序中定义的引用变量所指向的具体类型和通过该引用变量发出的方法调用在编程时并不确定，而是在程序运行期间才确定，这种情况叫做多态。 这个定义中描述的就是我们的第二种多态—重写式多态。并且，重载式多态并不是面向对象编程特有的，而多态却是面向对象三大特性之一（如果我说的不对，记得告诉我。。）。</p>
+<p>我觉得大家也没有必要在定义上去深究这些，我的理解是：同一个行为具有多个不同表现形式或形态的能力就是多态，所以我认为重载也是一种多态，如果你不同意这种观点，我也接受。</p>
+</blockquote>
+</li>
+<li><p>重写式多态，也叫运行时多态。这种多态通过动态绑定（dynamic binding）技术来实现，是指在执行期间判断所引用对象的实际类型，根据其实际的类型调用其相应的方法。也就是说，只有程序运行起来，你才知道调用的是哪个子类的方法。<br>这种多态通过函数的重写以及向上转型来实现，我们上面代码中的例子就是一个完整的重写式多态。我们接下来讲的所有多态都是重写式多态，因为它才是面向对象编程中真正的多态。</p>
+</li>
+</ul>
+<h3 id="向上转型"><a href="#向上转型" class="headerlink" title="向上转型"></a>向上转型</h3><p>子类引用的对象转换为父类类型称为向上转型。通俗地说就是是将子类对象转为父类对象。此处父类对象可以是接口。</p>
+<p>看一个大家都知道的例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Animal &#123;</span><br><span class="line">    public void eat()&#123;</span><br><span class="line">        System.out.println(&quot;animal eatting...&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Cat extends Animal&#123;</span><br><span class="line"></span><br><span class="line">    public void eat()&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;我吃鱼&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line"></span><br><span class="line">    public void eat()&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;我吃骨头&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void run()&#123;</span><br><span class="line">        System.out.println(&quot;我会跑&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Animal animal = new Cat(); //向上转型</span><br><span class="line">        animal.eat();</span><br><span class="line"></span><br><span class="line">        animal = new Dog();</span><br><span class="line">        animal.eat();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//结果:</span><br><span class="line">//我吃鱼</span><br><span class="line">//我吃骨头</span><br></pre></td></tr></table></figure>
+
+<p>这就是向上转型，Animal animal = new Cat(); 将子类对象 Cat 转化为父类对象 Animal。这个时候 animal 这个引用调用的方法是子类方法。</p>
+<h4 id="转型过程中需要注意的问题"><a href="#转型过程中需要注意的问题" class="headerlink" title="转型过程中需要注意的问题"></a>转型过程中需要注意的问题</h4><ul>
+<li>向上转型时，子类单独定义的方法会丢失。比如上面 Dog 类中定义的 run 方法，当 animal 引用指向 Dog 类实例时是访问不到 run 方法的，<code>animal.run()</code>会报错。</li>
+<li>子类引用不能指向父类对象。<code>Cat c = (Cat)new Animal()</code>这样是不行的。</li>
+</ul>
+<h4 id="向上转型的好处"><a href="#向上转型的好处" class="headerlink" title="向上转型的好处"></a>向上转型的好处</h4><ul>
+<li>减少重复代码，使代码变得简洁。</li>
+<li>提高系统扩展性。</li>
+</ul>
+<h3 id="向下转型"><a href="#向下转型" class="headerlink" title="向下转型"></a>向下转型</h3><p>与向上转型相对应的就是向下转型了。向下转型是把父类对象转为子类对象。(请注意！这里是有坑的。)</p>
+<h4 id="案例驱动"><a href="#案例驱动" class="headerlink" title="案例驱动"></a>案例驱动</h4><p>先看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//还是上面的animal和cat dog</span><br><span class="line">Animal a = new Cat();</span><br><span class="line">Cat c = ((Cat) a);</span><br><span class="line">c.eat();</span><br><span class="line">//输出  我吃鱼</span><br><span class="line">Dog d = ((Dog) a);</span><br><span class="line">d.eat();</span><br><span class="line">// 报错 ： java.lang.ClassCastException：com.chengfan.animal.Cat cannot be cast to com.chengfan.animal.Dog</span><br><span class="line">Animal a1 = new Animal();</span><br><span class="line">Cat c1 = ((Cat) a1);</span><br><span class="line">c1.eat();</span><br><span class="line">// 报错 ： java.lang.ClassCastException：com.chengfan.animal.Animal cannot be cast to com.chengfan.animal.Cat</span><br></pre></td></tr></table></figure>
+
+<p>为什么第一段代码不报错呢？相比你也知道了，因为 a 本身就是 Cat 对象，所以它理所当然的可以向下转型为 Cat，也理所当然的不能转为 Dog，你见过一条狗突然就变成一只猫这种操蛋现象？</p>
+<p>而 a1 为 Animal 对象，它也不能被向下转型为任何子类对象。比如你去考古，发现了一个新生物，知道它是一种动物，但是你不能直接说，啊，它是猫，或者说它是狗。</p>
+<h4 id="向下转型注意事项"><a href="#向下转型注意事项" class="headerlink" title="向下转型注意事项"></a>向下转型注意事项</h4><ul>
+<li>向下转型的前提是父类对象指向的是子类对象（也就是说，在向下转型之前，它得先向上转型）</li>
+<li>向下转型只能转型为本类对象（猫是不能变成狗的）。</li>
+</ul>
+<p>看一个经典案例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public String show(D obj) &#123;</span><br><span class="line">        return (&quot;A and D&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;A and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A&#123;</span><br><span class="line">    public String show(B obj)&#123;</span><br><span class="line">        return (&quot;B and B&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj)&#123;</span><br><span class="line">        return (&quot;B and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class C extends B&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class D extends B&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Demo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        A a1 = new A();</span><br><span class="line">        A a2 = new B();</span><br><span class="line">        B b = new B();</span><br><span class="line">        C c = new C();</span><br><span class="line">        D d = new D();</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;1--&quot; + a1.show(b));</span><br><span class="line">        System.out.println(&quot;2--&quot; + a1.show(c));</span><br><span class="line">        System.out.println(&quot;3--&quot; + a1.show(d));</span><br><span class="line">        System.out.println(&quot;4--&quot; + a2.show(b));</span><br><span class="line">        System.out.println(&quot;5--&quot; + a2.show(c));</span><br><span class="line">        System.out.println(&quot;6--&quot; + a2.show(d));</span><br><span class="line">        System.out.println(&quot;7--&quot; + b.show(b));</span><br><span class="line">        System.out.println(&quot;8--&quot; + b.show(c));</span><br><span class="line">        System.out.println(&quot;9--&quot; + b.show(d));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//结果：</span><br><span class="line">//1--A and A</span><br><span class="line">//2--A and A</span><br><span class="line">//3--A and D</span><br><span class="line">//4--B and A</span><br><span class="line">//5--B and A</span><br><span class="line">//6--A and D</span><br><span class="line">//7--B and B</span><br><span class="line">//8--B and B</span><br><span class="line">//9--A and D</span><br><span class="line"></span><br><span class="line">//能看懂这个结果么？先自分析一下。</span><br></pre></td></tr></table></figure>
+
+<p>前三个，强行分析，还能看得懂。但是第四个，大概你就傻了吧。为什么不是 b and b 呢？</p>
+<p>这里就要学点新东西了。</p>
+<blockquote>
+<p>当父类对象引用变量引用子类对象时，被引用对象的类型决定了调用谁的成员方法，引用变量类型决定可调用的方法。如果子类中没有覆盖该方法，那么会去父类中寻找。</p>
+</blockquote>
+<p>可能读起来比较拗口，我们先来看一个简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class X &#123;</span><br><span class="line">    public void show(Y y)&#123;</span><br><span class="line">        System.out.println(&quot;x and y&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void show()&#123;</span><br><span class="line">        System.out.println(&quot;only x&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Y extends X &#123;</span><br><span class="line">    public void show(Y y)&#123;</span><br><span class="line">        System.out.println(&quot;y and y&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public void show(int i)&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class main&#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        X x = new Y();</span><br><span class="line">        x.show(new Y());</span><br><span class="line">        x.show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//结果</span><br><span class="line">//y and y</span><br><span class="line">//only x</span><br></pre></td></tr></table></figure>
+
+<p>Y 继承了 X，覆盖了 X 中的 show（Y y) 方法，但是没有覆盖 show（）方法。</p>
+<p>这个时候，引用类型为 X 的 x 指向的对象为 Y，这个时候，调用的方法由 Y 决定，会先从 Y 中寻找。执行<code>x.show(new Y());</code>，该方法在 Y 中定义了，所以执行的是 Y 里面的方法；</p>
+<p>但是执行<code>x.show();</code>的时候，有的人会说，Y 中没有这个方法啊？它好像是去父类中找该方法了，因为调用了 X 中的方法。</p>
+<p>事实上，Y 类中是有 show（）方法的，这个方法继承自 X，只不过没有覆盖该方法，所以没有在 Y 中明确写出来而已，看起来像是调用了 X 中的方法，实际上调用的还是 Y 中的。</p>
+<blockquote>
+<p>这个时候再看上面那句难理解的话就不难理解了吧。X 是引用变量类型，它决定哪些方法可以调用；show（）和 show(Y y) 可以调用，而 show(int i) 不可以调用。Y 是被引用对象的类型，它决定了调用谁的方法：调用 y 的方法。</p>
+</blockquote>
+<p>上面的是一个简单的知识，它还不足以让我们理解那个复杂的例子。我们再来看这样一个知识：</p>
+<blockquote>
+<p><strong>继承链中对象方法的调用的优先级：this.show(O)、super.show(O)、this.show((super)O)、super.show((super)O)。</strong></p>
+</blockquote>
+<p>如果你能理解这个调用关系，那么多态你就掌握了。我们回到那个复杂的例子：</p>
+<p>abcd 的关系是这样的：C/D —&gt; B —&gt; A</p>
+<p>我们先来分析 4 ： <code>a2.show(b)</code></p>
+<blockquote>
+<ul>
+<li>首先，a2 是类型为 A 的引用类型，它指向类型为 B 的对象。A 确定可调用的方法：show(D obj) 和 show(A obj)。</li>
+<li><code>a2.show(b)</code> ==&gt; <code>this.show(b)</code>，这里 this 指的是 B。</li>
+<li>然后. 在 B 类中找 show（B obj），找到了，可惜没用，因为 show（B obj）方法不在可调用范围内，<code>this.show(O)</code>失败，进入下一级别：<code>super.show(O)</code>，super 指的是 A。</li>
+<li>在 A 中寻找 show（B obj)，失败，因为没用定义这个方法。进入第三级别：<code>this.show((super)O)</code>，this 指的是 B。</li>
+<li>在 B 中找 show（（A）O）, 找到了：show(A obj)，选择调用该方法。</li>
+<li>输出：B and A</li>
+</ul>
+</blockquote>
+<p>如果你能看懂这个过程，并且能分析出其他的情况，那你就真的掌握了。</p>
+<p>我们再来看一下 9：<code>b.show(d)</code></p>
+<blockquote>
+<ul>
+<li>首先，b 为类型为 B 的引用对象，指向类型为 B 的对象。没有涉及向上转型，只会调用本类中的方法。</li>
+<li>在 B 中寻找 show(D obj)，方法。现在你不会说没找到了吧？找到了，直接调用该方法。</li>
+<li>输出 A and D。</li>
+</ul>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本篇文章的内容大体上就是这些了。我们来总结一下。</p>
+<ol>
+<li>多态，简而言之就是同一个行为具有多个不同表现形式或形态的能力。</li>
+<li>多态的分类：运行时多态和编译时多态。</li>
+<li>运行时多态的前提：继承（实现），重写，向上转型</li>
+<li>向上转型与向下转型。</li>
+<li>继承链中对象方法的调用的优先级：this.show(O)、super.show(O)、this.show((super)O)、super.show((super)O)。</li>
+</ol>
+<p>原文地址 <a href="https://www.cnblogs.com/kexianting/p/8689031.html" target="_blank" rel="noopener">https://www.cnblogs.com/kexianting/p/8689031.html</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>multi</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于 java 多态性之父类引用指向子类对象</title>
+    <url>/2020/03/07/%E5%85%B3%E4%BA%8Ejava%E5%A4%9A%E6%80%81%E6%80%A7%E4%B9%8B%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="关于-java-多态性之父类引用指向子类对象"><a href="#关于-java-多态性之父类引用指向子类对象" class="headerlink" title="关于 java 多态性之父类引用指向子类对象"></a>关于 java 多态性之父类引用指向子类对象</h3><a id="more"></a>
+<p>在使用多态前，要确保两个类之间是继承关系</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Animal&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之后创建对象：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Animal animal1 = new Animal();</span><br><span class="line">Animal animal2 = new Dog();</span><br></pre></td></tr></table></figure>
+
+<p>这时，Animal animal2 = new Dog(); 就是父类引用指向子类对象</p>
+<p>即：<strong>声明的是父类，实际指向的是子类的一个对象</strong></p>
+<p>在学习 java 时，书上有讲到一个章节——对象的上转对象，其中有一个概念：</p>
+<p>A 类是 B 类的父类，当用子类创建一个对象，并把这个对象的引用放到父类的对象时，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A a;</span><br><span class="line">a = new B();    //A a = new B();</span><br><span class="line">//或者</span><br><span class="line">A a;</span><br><span class="line">B b=new B();</span><br><span class="line">a=b;</span><br></pre></td></tr></table></figure>
+
+<p>这时，称对象 a 是对象 b 的<strong>上转对象</strong>（就像说 “中国人是人”）</p>
+<p>可以理解成，父类引用指向子类对象 = 上转对象  （不确定，我是暂时这么理解）</p>
+<p>那么，让父类引用指向子类对象有什么用的：</p>
+<p>要知道，<strong><em>父类对象不可以访问，子类方法</em></strong>。</p>
+<p>而上转型对象，既可以访问父类方法（通过 super. 来调用），也可以访问子类继承或隐藏的成员变量，或者调用子类继承的方法（父类方法）或者子类重写的实例方法。</p>
+<p><img src="/2020/03/07/%E5%85%B3%E4%BA%8Ejava%E5%A4%9A%E6%80%81%E6%80%A7%E4%B9%8B%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/1.png" alt></p>
+<p>进而，一个父类类型的引用指向一个子类的对象既可以使用子类强大的功能，又可以抽取父类的共性。</p>
+<p>一个参考网上的定义：要做到父类引用调用子类的属性或者方法，就还要有<strong>动态连接</strong>。那什么是动态链接呢？<strong>当父类中的一个方法只有在父类中定义而在子类中没有被重写的情况下，才可以被父类类型的引用调用； 对于父类中定义的方法，如果子类中重写了该方法，那么父类类型的引用将会调用子类中的这个方法，这就是动态连接。</strong></p>
+<p>JAVA 里没有多继承，一个类只能有一个父类。而继承的表现就是多态。一个父类可以有多个子类，而在子类里可以重写父类的方法，这样每个子类里重写的代码不一样，自然表现形式就不一样。这样用父类的变量去引用不同的子类，在调用这个相同的方法的时候得到的结果和表现形式就不一样了，这就是多态，相同的消息（也就是调用相同的方法）会有不同的结果。举例说明：<br>下面看一个多态性的例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//父类</span><br><span class="line">public class Animal&#123;</span><br><span class="line">    //动物会叫</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：狗</span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line">   //狗的叫声</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">   System.out.println(&quot;汪汪汪！&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：猫</span><br><span class="line">public class Cat extends Animal&#123;</span><br><span class="line">   //猫的叫声</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">   System.out.println(&quot;喵喵喵！&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：狼</span><br><span class="line">public class Wolf extends Animal&#123;</span><br><span class="line">    //虎的叫声</span><br><span class="line">    public void shout()&#123;</span><br><span class="line">    System.out.println(&quot;嗷呜嗷呜！&quot;);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//测试类</span><br><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String arg[])&#123;</span><br><span class="line">       Animal animal;</span><br><span class="line">       animal = new Dog();</span><br><span class="line">       animal.shout();</span><br><span class="line">       animal = new Cat();</span><br><span class="line">       animal.shout();</span><br><span class="line">       animal = new Wolf();</span><br><span class="line">       animal.shout();</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 参考博客：<a href="https://www.cnblogs.com/shilin/p/4784862.html" target="_blank" rel="noopener">https://www.cnblogs.com/shilin/p/4784862.html</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>multi</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多态性，父类引用指向子类对象</title>
+    <url>/2020/03/07/%E5%A4%9A%E6%80%81%E6%80%A7%EF%BC%8C%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="多态性，父类引用指向子类对象"><a href="#多态性，父类引用指向子类对象" class="headerlink" title="多态性，父类引用指向子类对象"></a>多态性，父类引用指向子类对象</h3><a id="more"></a>
+<p>父类引用指向子类对象指的是：</p>
+<p>例如父类 Animal，子类 Cat,Dog。其中 Animal 可以是类也可以是接口，Cat 和 Dog 是继承或实现 Animal 的子类。</p>
+<p>Animal animal = new Cat();<br>即声明的是父类，实际指向的是子类的一个对象。</p>
+<p><strong>那我们从内存角度来理解试试.</strong><br>假设现在有一个父类 Father, 它里面的变量需要占用 1M 内存.<br>有一个它的子类 Son, 它里面的变量需要占用 0.5M 内存.<br>现在通过代码来看看内存的分配情况:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Father f = new Father();//系统将分配1M内存.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Son s = new Son();//系统将分配1.5M内存!</span><br></pre></td></tr></table></figure>
+
+<p>因为子类中有一个隐藏的引用 super 会指向父类实例, 所以在实例化子类之前会先实例化一个父类, 也就是说会先执行父类的构造函数. 由于 s 中包含了父类的实例, 所以 s 可以调用父类的方法.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Son s1 = s; //s1指向那1.5M的内存.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Father f1 = (Father)s;//这时f1会指向那1.5M内存中的1M内存</span><br></pre></td></tr></table></figure>
+
+<p>f1 只是指向了 s 中实例的父类实例对象, 所以 f1 只能调用父类的方法 (存储在 1M 内存中), 而不能调用子类的方法 (存储在 0.5M 内存中).</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Son s2 = (Son)f;//这句代码运行时会报ClassCastException.</span><br></pre></td></tr></table></figure>
+
+<p>因为 f 中只有 1M 内存, 而子类的引用都必须要有 1.5M 的内存, 所以无法转换.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Son s3 = (Son)f1;//这句可以通过运行,这时s3指向那1.5M的内存.</span><br></pre></td></tr></table></figure>
+
+<p>由于 f1 是由 s 转换过来的, 所以它是有 1.5M 的内存的, 只是它指向的只有 1M 内存.<br><img src="/2020/03/07/%E5%A4%9A%E6%80%81%E6%80%A7%EF%BC%8C%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/1.jpg" alt></p>
+<p>如果能够理解对象在内存的分布，那我们接下来就介绍 java 的多态性</p>
+<p>方法的重写、重载和动态链接构成了 java 的多态性。Java 之所以引入多态的概念，原因之一是它在类的继承问题上和 C++ 不同，后者允许多继承，这确实给其带来的非常强大的功能，但是复杂的继承关系也给 C++ 开发者带来了更大的麻烦，为了规避风险，Java 只允许单继承，派生类与基类间有 IS-A 的关系（即 “猫”is a “动物”）。这样做虽然保证了继承关系的简单明了，但是势必在功能上有很大的限制，所以，Java 引入了多态性的概念以弥补这点的不足。</p>
+<p>理解多态性，首先要理解的就是 “向上转型”</p>
+<p>Animal c = new Cat()；<br>它表示我定义了一个 Animal 类型的引用，指向新建的 Cat 类型的对象。由于 Cat 是继承自它的父类 Animal，所以 Animal 类型的引用是可以指向 Cat 类型的对象的。这就是 “向上转型”。</p>
+<p>注意：java 中 “向上转型” 是自动的。但是 “向下转型” 却不是自动的。需要我们用强制类型转化。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Animal c = new Cat();</span><br><span class="line">Cat c1 = （Cat）c；    //不允许“向下转型”，需用强制类型转化。</span><br></pre></td></tr></table></figure>
+
+<p>那么这样做有什么意义呢？因为子类是对父类的改进和扩充。定义一个父类类型的引用指向一个子类的对象既可以使用子类强大的功能，又可以抽取父类的共性。 但是父类类型的引用可以调用父类中定义的所有属性和方法，而对于子类中定义而父类中没有的方法，父类引用是无法调用的；</p>
+<p>要做到父类引用调用子类的属性或者方法，就还要有<strong>动态连接</strong>。那什么是动态链接呢？<strong>当父类中的一个方法只有在父类中定义而在子类中没有被重写的情况下，才可以被父类类型的引用调用； 对于父类中定义的方法，如果子类中重写了该方法，那么父类类型的引用将会调用子类中的这个方法，这就是动态连接。</strong></p>
+<p>JAVA 里没有多继承，一个类只能有一个父类。而继承的表现就是多态。一个父类可以有多个子类，而在子类里可以重写父类的方法，这样每个子类里重写的代码不一样，自然表现形式就不一样。这样用父类的变量去引用不同的子类，在调用这个相同的方法的时候得到的结果和表现形式就不一样了，这就是多态，相同的消息（也就是调用相同的方法）会有不同的结果。举例说明：<br>下面看一个多态性的例子</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//父类</span><br><span class="line">public class Father&#123;</span><br><span class="line">    //父类有一个打孩子方法</span><br><span class="line">    public void hitChild()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//子类1</span><br><span class="line">public class Son1 extends Father&#123;</span><br><span class="line">    //重写父类打孩子方法</span><br><span class="line">    public void hitChild()&#123;</span><br><span class="line">      System.out.println(&quot;为什么打我？我做错什么了！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//子类2</span><br><span class="line">public class Son2 extends Father&#123;</span><br><span class="line">    //重写父类打孩子方法</span><br><span class="line">    public void hitChild()&#123;</span><br><span class="line">      System.out.println(&quot;我知道错了，别打了！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//子类3</span><br><span class="line">public class Son3 extends Father&#123;</span><br><span class="line">    //重写父类打孩子方法</span><br><span class="line">    public void hitChild()&#123;</span><br><span class="line">      System.out.println(&quot;我跑，你打不着！&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//测试类</span><br><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String args[])&#123;</span><br><span class="line">      Father father;</span><br><span class="line">      father = new Son1();</span><br><span class="line">      father.hitChild();</span><br><span class="line">      father = new Son2();</span><br><span class="line">      father.hitChild();</span><br><span class="line">      father = new Son3();</span><br><span class="line">      father.hitChild();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面程序调用同一个方法，去出现不同的结果。这就是多态。<br>对于多态性的实现有必要重视方法重载（overloading）和方法重写（override）区别</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Father&#123;</span><br><span class="line">    public void func1()&#123;</span><br><span class="line">       System.out.println(&quot;AAA&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Child extends Father&#123;</span><br><span class="line">    //func1(int i)是对func1()方法的一个重载，主要不是重写！</span><br><span class="line">    //由于在父类中没有定义这个方法，所以它不能被父类类型的引用调用</span><br><span class="line">    //所以在下面的main方法中child.func1(68)是不对的</span><br><span class="line">    public void func1(int i)&#123;</span><br><span class="line">        System.out.println(&quot;BBB&quot;);</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class PolymorphismTest &#123;</span><br><span class="line">    public static void main(String[] args) &#123; </span><br><span class="line">        Father child = new Child();</span><br><span class="line">        child.func1(68);//错误</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的程序是个很典型的多态的例子。子类 Child 继承了父类 Father，并重载了父类的 func1() 方法。重载后的 func1(int i) 和 func1() 不再是同一个方法，由于父类中没有 func1(int i)，那么，父类类型的引用 child 就不能调用 func1(int i) 方法。</p>
+<p><strong>最后，对于多态做出几点总结</strong></p>
+<p><strong>1、使用父类类型的引用指向子类的对象；</strong><br><strong>2、该引用只能调用父类中定义的方法和变量；</strong><br><strong>3、如果子类中重写了父类中的一个方法，那么在调用这个方法的时候，将会调用子类中的这个方法；（动态连接、动态调用）</strong><br><strong>4、变量不能被重写（覆盖），”重写 “的概念只针对方法，如果在子类中” 重写“了父类中的变量，那么在编译时会报错。</strong></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>multi</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker学习整理</title>
     <url>/2020/02/15/docker%E5%AD%A6%E4%B9%A0%E6%95%B4%E7%90%86/</url>
     <content><![CDATA[<h3 id="Docker-学习整理"><a href="#Docker-学习整理" class="headerlink" title="Docker 学习整理"></a>Docker 学习整理</h3><hr><p><em><strong>一）docker 简介</strong></em></p><p><strong>一：是什么</strong></p><p>1：为什么会有 docker 出现？</p><pre><code>一款产品从开发到上线，从操作系统，到运行环境，再到应用配置。作为开发 + 运维之间的协作我们需要关心很多东西，这也是很多互联网公司都不得不面对的问题，特别是各种版本的迭代之后，不同版本环境的兼容，对运维人员都是考验  </code></pre><a id="more"></a>

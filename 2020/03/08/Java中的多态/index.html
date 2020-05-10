@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+<meta name="baidu-site-verification" content="lCV6DgG5F6" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Java中的多态">
+<meta name="keywords" content="multi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中的多态">
+<meta property="og:url" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;03&#x2F;08&#x2F;Java%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%80%81&#x2F;index.html">
+<meta property="og:site_name" content="Lmos&#39;S  BLOG">
+<meta property="og:description" content="Java中的多态">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-05-10T13:17:22.483Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://lmos-w.github.io/2020/03/08/Java%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%80%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Java中的多态 | Lmos'S  BLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lmos'S  BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="Searching..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lmos-w.github.io/2020/03/08/Java%E4%B8%AD%E7%9A%84%E5%A4%9A%E6%80%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lmos">
+      <meta itemprop="description" content="记录爬坑史">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lmos'S  BLOG">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          Java中的多态
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-08 21:01:24" itemprop="dateCreated datePublished" datetime="2020-03-08T21:01:24+08:00">2020-03-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-10 21:17:22" itemprop="dateModified" datetime="2020-05-10T21:17:22+08:00">2020-05-10</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Java中的多态"><a href="#Java中的多态" class="headerlink" title="Java中的多态"></a>Java中的多态</h3><a id="more"></a>
+<p>多态一般分为两种：重写式多态和重载式多态。重写和重载这两个知识点前面的文章已经详细将结果了，这里就不多说了。</p>
+<ul>
+<li><p>重载式多态，也叫编译时多态。也就是说这种多态再编译时已经确定好了。重载大家都知道，方法名相同而参数列表不同的一组方法就是重载。在调用这种重载的方法时，通过传入不同的参数最后得到不同的结果。</p>
+<blockquote>
+<p>但是这里是有歧义的，有的人觉得不应该把重载也算作多态。因为很多人对多态的理解是：程序中定义的引用变量所指向的具体类型和通过该引用变量发出的方法调用在编程时并不确定，而是在程序运行期间才确定，这种情况叫做多态。 这个定义中描述的就是我们的第二种多态—重写式多态。并且，重载式多态并不是面向对象编程特有的，而多态却是面向对象三大特性之一（如果我说的不对，记得告诉我。。）。</p>
+<p>我觉得大家也没有必要在定义上去深究这些，我的理解是：同一个行为具有多个不同表现形式或形态的能力就是多态，所以我认为重载也是一种多态，如果你不同意这种观点，我也接受。</p>
+</blockquote>
+</li>
+<li><p>重写式多态，也叫运行时多态。这种多态通过动态绑定（dynamic binding）技术来实现，是指在执行期间判断所引用对象的实际类型，根据其实际的类型调用其相应的方法。也就是说，只有程序运行起来，你才知道调用的是哪个子类的方法。<br>这种多态通过函数的重写以及向上转型来实现，我们上面代码中的例子就是一个完整的重写式多态。我们接下来讲的所有多态都是重写式多态，因为它才是面向对象编程中真正的多态。</p>
+</li>
+</ul>
+<h3 id="向上转型"><a href="#向上转型" class="headerlink" title="向上转型"></a>向上转型</h3><p>子类引用的对象转换为父类类型称为向上转型。通俗地说就是是将子类对象转为父类对象。此处父类对象可以是接口。</p>
+<p>看一个大家都知道的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">public class Animal &#123;</span><br><span class="line">    public void eat()&#123;</span><br><span class="line">        System.out.println(&quot;animal eatting...&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Cat extends Animal&#123;</span><br><span class="line"></span><br><span class="line">    public void eat()&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;我吃鱼&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line"></span><br><span class="line">    public void eat()&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;我吃骨头&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void run()&#123;</span><br><span class="line">        System.out.println(&quot;我会跑&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Main &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Animal animal = new Cat(); //向上转型</span><br><span class="line">        animal.eat();</span><br><span class="line"></span><br><span class="line">        animal = new Dog();</span><br><span class="line">        animal.eat();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//结果:</span><br><span class="line">//我吃鱼</span><br><span class="line">//我吃骨头</span><br></pre></td></tr></table></figure>
+
+<p>这就是向上转型，Animal animal = new Cat(); 将子类对象 Cat 转化为父类对象 Animal。这个时候 animal 这个引用调用的方法是子类方法。</p>
+<h4 id="转型过程中需要注意的问题"><a href="#转型过程中需要注意的问题" class="headerlink" title="转型过程中需要注意的问题"></a>转型过程中需要注意的问题</h4><ul>
+<li>向上转型时，子类单独定义的方法会丢失。比如上面 Dog 类中定义的 run 方法，当 animal 引用指向 Dog 类实例时是访问不到 run 方法的，<code>animal.run()</code>会报错。</li>
+<li>子类引用不能指向父类对象。<code>Cat c = (Cat)new Animal()</code>这样是不行的。</li>
+</ul>
+<h4 id="向上转型的好处"><a href="#向上转型的好处" class="headerlink" title="向上转型的好处"></a>向上转型的好处</h4><ul>
+<li>减少重复代码，使代码变得简洁。</li>
+<li>提高系统扩展性。</li>
+</ul>
+<h3 id="向下转型"><a href="#向下转型" class="headerlink" title="向下转型"></a>向下转型</h3><p>与向上转型相对应的就是向下转型了。向下转型是把父类对象转为子类对象。(请注意！这里是有坑的。)</p>
+<h4 id="案例驱动"><a href="#案例驱动" class="headerlink" title="案例驱动"></a>案例驱动</h4><p>先看一个例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">//还是上面的animal和cat dog</span><br><span class="line">Animal a = new Cat();</span><br><span class="line">Cat c = ((Cat) a);</span><br><span class="line">c.eat();</span><br><span class="line">//输出  我吃鱼</span><br><span class="line">Dog d = ((Dog) a);</span><br><span class="line">d.eat();</span><br><span class="line">// 报错 ： java.lang.ClassCastException：com.chengfan.animal.Cat cannot be cast to com.chengfan.animal.Dog</span><br><span class="line">Animal a1 = new Animal();</span><br><span class="line">Cat c1 = ((Cat) a1);</span><br><span class="line">c1.eat();</span><br><span class="line">// 报错 ： java.lang.ClassCastException：com.chengfan.animal.Animal cannot be cast to com.chengfan.animal.Cat</span><br></pre></td></tr></table></figure>
+
+<p>为什么第一段代码不报错呢？相比你也知道了，因为 a 本身就是 Cat 对象，所以它理所当然的可以向下转型为 Cat，也理所当然的不能转为 Dog，你见过一条狗突然就变成一只猫这种操蛋现象？</p>
+<p>而 a1 为 Animal 对象，它也不能被向下转型为任何子类对象。比如你去考古，发现了一个新生物，知道它是一种动物，但是你不能直接说，啊，它是猫，或者说它是狗。</p>
+<h4 id="向下转型注意事项"><a href="#向下转型注意事项" class="headerlink" title="向下转型注意事项"></a>向下转型注意事项</h4><ul>
+<li>向下转型的前提是父类对象指向的是子类对象（也就是说，在向下转型之前，它得先向上转型）</li>
+<li>向下转型只能转型为本类对象（猫是不能变成狗的）。</li>
+</ul>
+<p>看一个经典案例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line">class A &#123;</span><br><span class="line">    public String show(D obj) &#123;</span><br><span class="line">        return (&quot;A and D&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj) &#123;</span><br><span class="line">        return (&quot;A and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class B extends A&#123;</span><br><span class="line">    public String show(B obj)&#123;</span><br><span class="line">        return (&quot;B and B&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String show(A obj)&#123;</span><br><span class="line">        return (&quot;B and A&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class C extends B&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class D extends B&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Demo &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        A a1 = new A();</span><br><span class="line">        A a2 = new B();</span><br><span class="line">        B b = new B();</span><br><span class="line">        C c = new C();</span><br><span class="line">        D d = new D();</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;1--&quot; + a1.show(b));</span><br><span class="line">        System.out.println(&quot;2--&quot; + a1.show(c));</span><br><span class="line">        System.out.println(&quot;3--&quot; + a1.show(d));</span><br><span class="line">        System.out.println(&quot;4--&quot; + a2.show(b));</span><br><span class="line">        System.out.println(&quot;5--&quot; + a2.show(c));</span><br><span class="line">        System.out.println(&quot;6--&quot; + a2.show(d));</span><br><span class="line">        System.out.println(&quot;7--&quot; + b.show(b));</span><br><span class="line">        System.out.println(&quot;8--&quot; + b.show(c));</span><br><span class="line">        System.out.println(&quot;9--&quot; + b.show(d));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//结果：</span><br><span class="line">//1--A and A</span><br><span class="line">//2--A and A</span><br><span class="line">//3--A and D</span><br><span class="line">//4--B and A</span><br><span class="line">//5--B and A</span><br><span class="line">//6--A and D</span><br><span class="line">//7--B and B</span><br><span class="line">//8--B and B</span><br><span class="line">//9--A and D</span><br><span class="line"></span><br><span class="line">//能看懂这个结果么？先自分析一下。</span><br></pre></td></tr></table></figure>
+
+<p>前三个，强行分析，还能看得懂。但是第四个，大概你就傻了吧。为什么不是 b and b 呢？</p>
+<p>这里就要学点新东西了。</p>
+<blockquote>
+<p>当父类对象引用变量引用子类对象时，被引用对象的类型决定了调用谁的成员方法，引用变量类型决定可调用的方法。如果子类中没有覆盖该方法，那么会去父类中寻找。</p>
+</blockquote>
+<p>可能读起来比较拗口，我们先来看一个简单的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">class X &#123;</span><br><span class="line">    public void show(Y y)&#123;</span><br><span class="line">        System.out.println(&quot;x and y&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void show()&#123;</span><br><span class="line">        System.out.println(&quot;only x&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class Y extends X &#123;</span><br><span class="line">    public void show(Y y)&#123;</span><br><span class="line">        System.out.println(&quot;y and y&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    public void show(int i)&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class main&#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        X x = new Y();</span><br><span class="line">        x.show(new Y());</span><br><span class="line">        x.show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//结果</span><br><span class="line">//y and y</span><br><span class="line">//only x</span><br></pre></td></tr></table></figure>
+
+<p>Y 继承了 X，覆盖了 X 中的 show（Y y) 方法，但是没有覆盖 show（）方法。</p>
+<p>这个时候，引用类型为 X 的 x 指向的对象为 Y，这个时候，调用的方法由 Y 决定，会先从 Y 中寻找。执行<code>x.show(new Y());</code>，该方法在 Y 中定义了，所以执行的是 Y 里面的方法；</p>
+<p>但是执行<code>x.show();</code>的时候，有的人会说，Y 中没有这个方法啊？它好像是去父类中找该方法了，因为调用了 X 中的方法。</p>
+<p>事实上，Y 类中是有 show（）方法的，这个方法继承自 X，只不过没有覆盖该方法，所以没有在 Y 中明确写出来而已，看起来像是调用了 X 中的方法，实际上调用的还是 Y 中的。</p>
+<blockquote>
+<p>这个时候再看上面那句难理解的话就不难理解了吧。X 是引用变量类型，它决定哪些方法可以调用；show（）和 show(Y y) 可以调用，而 show(int i) 不可以调用。Y 是被引用对象的类型，它决定了调用谁的方法：调用 y 的方法。</p>
+</blockquote>
+<p>上面的是一个简单的知识，它还不足以让我们理解那个复杂的例子。我们再来看这样一个知识：</p>
+<blockquote>
+<p><strong>继承链中对象方法的调用的优先级：this.show(O)、super.show(O)、this.show((super)O)、super.show((super)O)。</strong></p>
+</blockquote>
+<p>如果你能理解这个调用关系，那么多态你就掌握了。我们回到那个复杂的例子：</p>
+<p>abcd 的关系是这样的：C/D —&gt; B —&gt; A</p>
+<p>我们先来分析 4 ： <code>a2.show(b)</code></p>
+<blockquote>
+<ul>
+<li>首先，a2 是类型为 A 的引用类型，它指向类型为 B 的对象。A 确定可调用的方法：show(D obj) 和 show(A obj)。</li>
+<li><code>a2.show(b)</code> ==&gt; <code>this.show(b)</code>，这里 this 指的是 B。</li>
+<li>然后. 在 B 类中找 show（B obj），找到了，可惜没用，因为 show（B obj）方法不在可调用范围内，<code>this.show(O)</code>失败，进入下一级别：<code>super.show(O)</code>，super 指的是 A。</li>
+<li>在 A 中寻找 show（B obj)，失败，因为没用定义这个方法。进入第三级别：<code>this.show((super)O)</code>，this 指的是 B。</li>
+<li>在 B 中找 show（（A）O）, 找到了：show(A obj)，选择调用该方法。</li>
+<li>输出：B and A</li>
+</ul>
+</blockquote>
+<p>如果你能看懂这个过程，并且能分析出其他的情况，那你就真的掌握了。</p>
+<p>我们再来看一下 9：<code>b.show(d)</code></p>
+<blockquote>
+<ul>
+<li>首先，b 为类型为 B 的引用对象，指向类型为 B 的对象。没有涉及向上转型，只会调用本类中的方法。</li>
+<li>在 B 中寻找 show(D obj)，方法。现在你不会说没找到了吧？找到了，直接调用该方法。</li>
+<li>输出 A and D。</li>
+</ul>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本篇文章的内容大体上就是这些了。我们来总结一下。</p>
+<ol>
+<li>多态，简而言之就是同一个行为具有多个不同表现形式或形态的能力。</li>
+<li>多态的分类：运行时多态和编译时多态。</li>
+<li>运行时多态的前提：继承（实现），重写，向上转型</li>
+<li>向上转型与向下转型。</li>
+<li>继承链中对象方法的调用的优先级：this.show(O)、super.show(O)、this.show((super)O)、super.show((super)O)。</li>
+</ol>
+<p>原文地址 <a href="https://www.cnblogs.com/kexianting/p/8689031.html" target="_blank" rel="noopener">https://www.cnblogs.com/kexianting/p/8689031.html</a></p>
+
+    </div>
+
+    
+    
+    
+    <div>
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+    
+    </div>
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/multi/" rel="tag"># multi</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/03/07/%E5%85%B3%E4%BA%8Ejava%E5%A4%9A%E6%80%81%E6%80%A7%E4%B9%8B%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/" rel="next" title="关于 java 多态性之父类引用指向子类对象">
+                  <i class="fa fa-chevron-left"></i> 关于 java 多态性之父类引用指向子类对象
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2020/03/09/git%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E5%90%84%E4%B8%AA%E5%88%86%E6%94%AF%E7%9A%84%E4%BD%9C%E7%94%A8%E7%AE%80%E5%8D%95%E5%88%86%E6%9E%90/" rel="prev" title="git开发过程中各个分支的作用简单分析">
+                  git开发过程中各个分支的作用简单分析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java中的多态"><span class="nav-text">Java中的多态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向上转型"><span class="nav-text">向上转型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#转型过程中需要注意的问题"><span class="nav-text">转型过程中需要注意的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向上转型的好处"><span class="nav-text">向上转型的好处</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向下转型"><span class="nav-text">向下转型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#案例驱动"><span class="nav-text">案例驱动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#向下转型注意事项"><span class="nav-text">向下转型注意事项</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Lmos"
+      src="/images/avatar.jpg">
+	</a>
+  <p class="site-author-name" itemprop="name">Lmos</p>
+  <div class="site-description" itemprop="description">记录爬坑史</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lmos-w" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lmos-w" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/wang-chao-yi-75/activities" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;wang-chao-yi-75&#x2F;activities" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>知乎</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lmos</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.5.0
+  </div>-->
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</html>

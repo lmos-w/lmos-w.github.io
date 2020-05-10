@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+<meta name="baidu-site-verification" content="lCV6DgG5F6" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"mac"},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":true},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: 'Copy',
+      copy_success: 'Copied',
+      copy_failure: 'Copy failed'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="日常中我们经常跟集合打交道，但是如何选择对应的数据结构常常搞不清楚，今天我们就简单看一下 HashSet、TreeSet 和 LinkedHashSet 的使用区别.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HashSet、TreeSet和LinkedHashSet的使用区别">
+<meta property="og:url" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;05&#x2F;10&#x2F;HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB&#x2F;index.html">
+<meta property="og:site_name" content="Lmos&#39;S  BLOG">
+<meta property="og:description" content="日常中我们经常跟集合打交道，但是如何选择对应的数据结构常常搞不清楚，今天我们就简单看一下 HashSet、TreeSet 和 LinkedHashSet 的使用区别.">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;05&#x2F;10&#x2F;HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB&#x2F;1.jpg">
+<meta property="og:image" content="http:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;1683525-e54701eb0c6e20ba.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;upload.jianshu.io&#x2F;users&#x2F;upload_avatars&#x2F;1683525&#x2F;5626a0a9-52f5-43f5-87b1-a178669f5d01.jpg?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;1&#x2F;w&#x2F;100&#x2F;h&#x2F;100&#x2F;format&#x2F;webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;upload.jianshu.io&#x2F;user_badge&#x2F;11f8cfa8-ec9f-4f82-be92-d6a39f61b5c1">
+<meta property="og:image" content="https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;3985563-b750b57756ebd0de.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;1&#x2F;w&#x2F;300&#x2F;h&#x2F;240&#x2F;format&#x2F;webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;7051927-e9e2da7374f0b873.jpg?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;1&#x2F;w&#x2F;300&#x2F;h&#x2F;240&#x2F;format&#x2F;webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;upload.jianshu.io&#x2F;users&#x2F;upload_avatars&#x2F;5892452&#x2F;66f2e09b-7f13-4272-af6a-8f7d0132c03c.jpg?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;1&#x2F;w&#x2F;48&#x2F;h&#x2F;48&#x2F;format&#x2F;webp">
+<meta property="og:image" content="https:&#x2F;&#x2F;upload-images.jianshu.io&#x2F;upload_images&#x2F;1932449-a7943a9ec0f20f0b.png?imageMogr2&#x2F;auto-orient&#x2F;strip%7CimageView2&#x2F;1&#x2F;w&#x2F;300&#x2F;h&#x2F;240&#x2F;format&#x2F;webp">
+<meta property="og:updated_time" content="2020-05-10T13:38:52.523Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;lmos-w.github.io&#x2F;2020&#x2F;05&#x2F;10&#x2F;HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB&#x2F;1.jpg">
+
+<link rel="canonical" href="https://lmos-w.github.io/2020/05/10/HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>HashSet、TreeSet和LinkedHashSet的使用区别 | Lmos'S  BLOG</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lmos'S  BLOG</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="none"
+           placeholder="Searching..." spellcheck="false"
+           type="text" id="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result"></div>
+
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="en">
+    <link itemprop="mainEntityOfPage" href="https://lmos-w.github.io/2020/05/10/HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Lmos">
+      <meta itemprop="description" content="记录爬坑史">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lmos'S  BLOG">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          HashSet、TreeSet和LinkedHashSet的使用区别
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-05-10 21:06:30 / Modified: 21:38:52" itemprop="dateCreated datePublished" datetime="2020-05-10T21:06:30+08:00">2020-05-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>日常中我们经常跟集合打交道，但是如何选择对应的数据结构常常搞不清楚，今天我们就简单看一下 HashSet、TreeSet 和 LinkedHashSet 的使用区别.</p>
+<a id="more"></a>
+<h3 id="HashSet、TreeSet和LinkedHashSet的使用区别"><a href="#HashSet、TreeSet和LinkedHashSet的使用区别" class="headerlink" title="HashSet、TreeSet和LinkedHashSet的使用区别"></a>HashSet、TreeSet和LinkedHashSet的使用区别</h3><p>我们都知道，集合是不包含重复元素的，这是我们选择使用集合的一个重要的原因. 集合有三个我们常用到的实现类：HashSet, TreeSet and LinkedHashSet. 如何根据场景去选择使用哪一种集合是让人头疼的问题. 简而言之, 如何你需要的是一个快速的集合，建议你使用 HashSet，如果你需要的是一个排序集合，请选择 TreeSet，如果你需要一套能够存储插入顺序的集合, 请使用 LinkedHashSet。<br><strong>1. Set 接口</strong><br>Set 接口继承 Collection 接口. 在集合中不允许出现重复的元素，你可以简单的添加，重复的元素会自动的被移除。</p>
+<p><img src="/2020/05/10/HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB/1.jpg" alt></p>
+<p><strong>2. HashSet vs. TreeSet vs. LinkedHashSet</strong><br>HashSet 使用哈希表实现的，元素是无序的。添加、删除操作时间复杂度都是 O(1)。TreeSet 内部结构是一个树结构 (红黑树)，元素是有序的，添加、删除操作时间复杂度为 O(log(n))，并且提供了 first(), last(), headSet(), tailSet() 等方法来处理有序集合。<br>LinkedHashSet 是介于 HashSet 和 TreeSet 之间，内部是一个双向链表结构，所以它的插入是有序的，时间复杂度是 O(1)。<br><strong>3. TreeSet 示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">TreeSet&lt;Integer&gt; tree = new TreeSet&lt;Integer&gt;();</span><br><span class="line">tree.add(12);</span><br><span class="line">tree.add(63);</span><br><span class="line">tree.add(34);</span><br><span class="line">tree.add(45);</span><br><span class="line"></span><br><span class="line">Iterator&lt;Integer&gt; iterator = tree.iterator();</span><br><span class="line">System.out.print(&quot;Tree set data: &quot;);</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出是有序的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Tree set data: 12 34 45 63</span><br></pre></td></tr></table></figure>
+
+<p>现在让我们定义一个 Dog 类, 如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Dog &#123;</span><br><span class="line">    int size;</span><br><span class="line"></span><br><span class="line">    public Dog(int s) &#123;</span><br><span class="line">        size = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return size + &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>往 TreeSet 中添加几只 dogs：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.TreeSet;</span><br><span class="line"></span><br><span class="line">public class TestTreeSet &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TreeSet&lt;Dog&gt; dset = new TreeSet&lt;Dog&gt;();</span><br><span class="line">        dset.add(new Dog(2));</span><br><span class="line">        dset.add(new Dog(1));</span><br><span class="line">        dset.add(new Dog(3));</span><br><span class="line"></span><br><span class="line">        Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line"></span><br><span class="line">        while (iterator.hasNext()) &#123;</span><br><span class="line">            System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>编译通过，但是运行时出错了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ClassCastException: collection.Dog cannot be cast to java.lang.Comparable</span><br><span class="line">    at java.util.TreeMap.put(Unknown Source)</span><br><span class="line">    at java.util.TreeSet.add(Unknown Source)</span><br><span class="line">    at collection.TestTreeSet.main(TestTreeSet.java:22)</span><br></pre></td></tr></table></figure>
+
+<p>这是因为 TreeSet 是有序的，而 Dog 类不是有序的，我们需要将 Dog 类实现 Comparable 接口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">class Dog implements Comparable&lt;Dog&gt;&#123;</span><br><span class="line">    int size;</span><br><span class="line"></span><br><span class="line">    public Dog(int s) &#123;</span><br><span class="line">        size = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return size + &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Dog o) &#123;</span><br><span class="line">            return size - o.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<blockquote>
+<p>所以我们在使用 TreeSet 时候，里面装的元素一定是有序的，否则就不应该选择 TreeSet。</p>
+</blockquote>
+<p><strong>4. HashSet 示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2 3</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<p><strong>5. LinkedHashSet 示例</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HashSet&lt;Dog&gt; dset = new HashSet&lt;Dog&gt;();</span><br><span class="line">dset.add(new Dog(2));</span><br><span class="line">dset.add(new Dog(1));</span><br><span class="line">dset.add(new Dog(3));</span><br><span class="line">dset.add(new Dog(5));</span><br><span class="line">dset.add(new Dog(4));</span><br><span class="line">Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">   System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按插入的顺序进行输出：</p>
+<p><strong>6. 性能测试</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5 3 2 1 4</span><br></pre></td></tr></table></figure>
+
+<p>从下面的输出结果可以看出，HashSet 是最快的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">LinkedHashSet&lt;Dog&gt; dset = new LinkedHashSet&lt;Dog&gt;();</span><br><span class="line">dset.add(new Dog(2));</span><br><span class="line">dset.add(new Dog(1));</span><br><span class="line">dset.add(new Dog(3));</span><br><span class="line">dset.add(new Dog(5));</span><br><span class="line">dset.add(new Dog(4));</span><br><span class="line">Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>虽然测试不够准确, 但能反映得出，TreeSet 要慢得多, 因为它是有序的。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1683525-e54701eb0c6e20ba.png" alt></p>
+<p>hashset-treeset-linkedhashset</p>
+<p>“小礼物走一走，来简书关注我”</p>
+<p>还没有人赞赏，支持一下</p>
+<p><a href="https://www.jianshu.com/u/aea57293503d" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/users/upload_avatars/1683525/5626a0a9-52f5-43f5-87b1-a178669f5d01.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/100/h/100/format/webp" alt></a></p>
+<p><a href="https://www.jianshu.com/u/aea57293503d" target="_blank" rel="noopener" title="WHOKNOWME">WHOKNOWME</a><a href="http://www.jianshu.com/p/d1d89ed69098" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/user_badge/11f8cfa8-ec9f-4f82-be92-d6a39f61b5c1" alt></a> 简书保洁员 Jekyll：<a href="https://iknow4.github.io" target="_blank" rel="noopener">https://iknow4.github.io</a></p>
+<p>总资产 5,210 (约 461.99 元) 共写了 1.6W 字获得 148 个赞共 108 个粉丝</p>
+<h3 id="被以下专题收入，发现更多相似内容"><a href="#被以下专题收入，发现更多相似内容" class="headerlink" title="被以下专题收入，发现更多相似内容"></a>被以下专题收入，发现更多相似内容</h3><h3 id="推荐阅读更多精彩内容"><a href="#推荐阅读更多精彩内容" class="headerlink" title="推荐阅读更多精彩内容"></a>推荐阅读<a href="https://www.jianshu.com/" target="_blank" rel="noopener">更多精彩内容</a></h3><ul>
+<li><p>百战程序员_ Java1573 题 QQ 群：561832648489034603 掌握 80% 年薪 20 万掌握 50% 年薪…</p>
+</li>
+<li><p>上一篇文章介绍了 Set 集合的通用知识。Set 集合中包含了三个比较重要的实现类: HashSet、TreeSet 和 En…</p>
+<p><a href="https://www.jianshu.com/p/9081017a2d67" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/3985563-b750b57756ebd0de.png?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
+</li>
+<li><p>Java 集合框架 Java 平台提供了一个全新的集合框架。“集合框架” 主要由一组用来操作对象的接口组成。不同接口描述…</p>
+<p><a href="https://www.jianshu.com/p/bf9802ef5ff1" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/7051927-e9e2da7374f0b873.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
+</li>
+<li><p>3.3 集合 一方面， 面向对象语言对事物的体现都是以对象的形式，为了方便对多个对象的操作，就要对对象进行存储。另…</p>
+<p><a href="https://www.jianshu.com/u/d0b8c2f6f4ba" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/users/upload_avatars/5892452/66f2e09b-7f13-4272-af6a-8f7d0132c03c.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/48/h/48/format/webp" alt>闫子扬</a>阅读 1</p>
+</li>
+<li><p>package java.util 包中的 Collection 相关接口和类如下图： 仅讨论 Java.util 包中的常…</p>
+<p><a href="https://www.jianshu.com/p/7cf84a39415f" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/1932449-a7943a9ec0f20f0b.png?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+    <div>
+    
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束<i class="fa fa-paw"></i>感谢您的阅读-------------</div>
+    
+</div>
+    
+    </div>
+
+      <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/" rel="next" title="为何重写equals方法就得重写hashCode方法[转]">
+                  <i class="fa fa-chevron-left"></i> 为何重写equals方法就得重写hashCode方法[转]
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2020/05/10/simpread-(3%20%E6%9D%A1%E6%B6%88%E6%81%AF)Java%20%E4%B8%AD%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%20byte%20%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8F%96%E5%80%BC%E8%8C%83%E5%9B%B4%E4%B8%BA%20-%20128_127__Java_%E6%8E%A2%E8%B7%AF%E7%9A%84%E6%B7%AE%20--Ontheway%20%E7%9A%84%E5%8D%9A%E5%AE%A2%20-%20CSDN%20%E5%8D%9A%E5%AE%A2/" rel="prev" title="simpread-(3 条消息)Java 中，为什么 byte 类型的取值范围为 - 128_127__Java_探路的淮 --Ontheway 的博客 - CSDN 博客">
+                  simpread-(3 条消息)Java 中，为什么 byte 类型的取值范围为 - 128_127__Java_探路的淮 --Ontheway 的博客 - CSDN 博客 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#HashSet、TreeSet和LinkedHashSet的使用区别"><span class="nav-text">HashSet、TreeSet和LinkedHashSet的使用区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#被以下专题收入，发现更多相似内容"><span class="nav-text">被以下专题收入，发现更多相似内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#推荐阅读更多精彩内容"><span class="nav-text">推荐阅读更多精彩内容</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <a href="/">
+    <img class="site-author-image" itemprop="image" alt="Lmos"
+      src="/images/avatar.jpg">
+	</a>
+  <p class="site-author-name" itemprop="name">Lmos</p>
+  <div class="site-description" itemprop="description">记录爬坑史</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lmos-w" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lmos-w" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/wang-chao-yi-75/activities" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;wang-chao-yi-75&#x2F;activities" rel="noopener" target="_blank"><i class="fa fa-fw fa-heartbeat"></i>知乎</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lmos</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.5.0
+  </div>-->
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  <script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/wanko.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":true},"log":false,"tagMode":false});</script></body>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+</html>
