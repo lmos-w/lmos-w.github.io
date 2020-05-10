@@ -1,125 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>simpread-(3 条消息)Java 中，为什么 byte 类型的取值范围为 - 128_127__Java_探路的淮 --Ontheway 的博客 - CSDN 博客</title>
-    <url>/2020/05/10/simpread-(3%20%E6%9D%A1%E6%B6%88%E6%81%AF)Java%20%E4%B8%AD%EF%BC%8C%E4%B8%BA%E4%BB%80%E4%B9%88%20byte%20%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8F%96%E5%80%BC%E8%8C%83%E5%9B%B4%E4%B8%BA%20-%20128_127__Java_%E6%8E%A2%E8%B7%AF%E7%9A%84%E6%B7%AE%20--Ontheway%20%E7%9A%84%E5%8D%9A%E5%AE%A2%20-%20CSDN%20%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<blockquote>
-<p>本文由 <a href="http://ksria.com/simpread/" target="_blank" rel="noopener">简悦 SimpRead</a> 转码， 原文地址 <a href="https://blog.csdn.net/qq_23418393/article/details/57421688" target="_blank" rel="noopener">https://blog.csdn.net/qq_23418393/article/details/57421688</a></p>
-</blockquote><p><strong>在学习 Java 基础语法的时候，初学者的我们可能都会有这么一个疑问为什么 byte 类型的取值范围为什么是 [-128,127] 而不是[-127,127]。01111111 表示最大的数值：127，因为第一位是符号位，所以 11111111 应该是最小的数值：-127，不是这样才对？</strong></p><a id="more"></a>
-
-<hr>
-<h4 id="在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码"><a href="#在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码" class="headerlink" title="在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码"></a><strong>在解释这个问题之前我们需要了解几个概念：机器数、真值、原码、反码、补码</strong></h4><p><strong>机器数：</strong></p>
-<p>一个数在计算机中的二进制表示形式, 叫做这个数的机器数。机器数是带符号的，在计算机用一个数的最高位存放符号, 正数为 0, 负数为 1。</p>
-<p>比如：十进制中的数 +3 ，计算机字长为 8 位，转换成二进制就是 00000011。如果是 -3 ，就是 10000011 。那么，这里的 00000011 和 10000011 就是机器数。</p>
-<p><strong>真值：</strong><br>因为第一位是符号位，所以机器数的形式值就不等于真正的数值。例如上面的有符号数 10000011，其最高位 1 代表负，其真正数值是 -3 而不是形式值 131（10000011 转换成十进制等于 131）。所以，为区别起见，将带符号位的机器数对应的真正数值称为机器数的真值。</p>
-<p>例：0000 0001 的真值 = +000 0001 = +1，1000 0001 的真值 = –000 0001 = –1</p>
-<p><strong>原码：</strong><br>原码就是符号位加上真值的绝对值, 即用第一位表示符号, 其余位表示值. 比如如果是 8 位二进制:</p>
-<p>[+1] 原 = 0000 0001<br>[-1] 原 = 1000 0001<br>第一位是符号位. 因为第一位是符号位, 所以 8 位二进制数的取值范围就是:[1111 1111 , 0111 1111]<br>即 [-127 , 127]。原码是人脑最容易理解和计算的表示方式.</p>
-<p><strong>反码：</strong><br>反码的表示方法是: 正数的反码是其本身，负数的反码是在其原码的基础上, 符号位不变，其余各个位取反。</p>
-<p>[+1] = [00000001] 原 = [00000001] 反<br>[-1] = [10000001] 原 = [11111110] 反</p>
-<p>可见如果一个反码表示的是负数, 人脑无法直观的看出来它的数值. 通常要将其转换成原码再计算.</p>
-<p><strong>补码：</strong><br>补码的表示方法是:</p>
-<p>正数的补码就是其本身</p>
-<p>负数的补码是在其原码的基础上, 符号位不变, 其余各位取反, 最后 + 1. (即在反码的基础上 + 1)</p>
-<p>[+1] = [00000001] 原 = [00000001] 反 = [00000001] 补<br>[-1] = [10000001] 原 = [11111110] 反 = [11111111] 补</p>
-<p>对于负数, 补码表示方式也是人脑无法直观看出其数值的. 通常也需要转换成原码在计算其数值.</p>
-<p><strong>正数：</strong><br>正数的反码和补码都与原码相同<br><strong>负数：</strong><br>负数的反码、补码与原码不同，负数的反码：原码中除去符号位，其他的数值位取反，0 变 1，1 变 0。负数的补码：反码 + 1</p>
-<p>例如：</p>
-<p><img src="https://img-blog.csdn.net/20170226173751711?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjM0MTgzOTM=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt></p>
-<p><strong>解释：为什么 byte 类型的取值范围为 - 128~127？</strong></p>
-<p>现在我们知道了计算机可以有三种编码方式表示一个数. 对于正数因为三种编码方式的结果都相同:</p>
-<p>　　[+1] = [00000001] 原 = [00000001] 反 = [00000001] 补</p>
-<p>　　所以不需要过多解释. 但是对于负数:</p>
-<p>　　[-1] = [10000001] 原 = [11111110] 反 = [11111111] 补</p>
-<p>　　可见原码, 反码和补码是完全不同的. 既然原码才是被人脑直接识别并用于计算表示方式, 为何还会有反码和补码呢?</p>
-<p>　　首先, 因为人脑可以知道第一位是符号位, 在计算的时候我们会根据符号位, 选择对真值区域的加减. (真值的概念在本文最开头). 但是对于计算机, 加减乘数已经是最基础的运算, 要设计的尽量简单. 计算机辨别” 符号位” 显然会让计算机的基础电路设计变得十分复杂! 于是人们想出了将符号位也参与运算的方法. 我们知道, 根据运算法则减去一个正数等于加上一个负数, 即: 1-1 = 1 + (-1) = 0 , 所以机器可以只有加法而没有减法, 这样计算机运算的设计就更简单了.</p>
-<p>　　于是人们开始探索 将符号位参与运算, 并且只保留加法的方法. 首先来看原码:</p>
-<p>　　计算十进制的表达式: 1-1=0</p>
-<p>　　1 - 1 = 1 + (-1) = [00000001] 原 + [10000001] 原 = [10000010] 原 = -2</p>
-<p>　　如果用原码表示, 让符号位也参与计算, 显然对于减法来说, 结果是不正确的. 这也就是为何计算机内部不使用原码表示一个数.</p>
-<p>　　为了解决原码做减法的问题, 出现了反码:</p>
-<p>　　计算十进制的表达式: 1-1=0</p>
-<p>　　1 - 1 = 1 + (-1) = [0000 0001] 原 + [1000 0001] 原 = [0000 0001] 反 + [1111 1110] 反 = [1111 1111] 反 = [1000 0000] 原 = -0</p>
-<p>　　发现用反码计算减法, 结果的真值部分是正确的. 而唯一的问题其实就出现在”0”这个特殊的数值上. 虽然人们理解上 + 0 和 - 0 是一样的, 但是 0 带符号是没有任何意义的. 而且会有 [0000 0000] 原和 [1000 0000] 原两个编码表示 0.</p>
-<p>　　于是补码的出现, 解决了 0 的符号以及两个编码的问题:</p>
-<p>　　1-1 = 1 + (-1) = [0000 0001] 原 + [1000 0001] 原 =[0000 0001] 反 + [1111 1110] 反 = [0000 0001] 补 + [1111 1111] 补 = [0000 0000] 补 =[0000 0000] 原</p>
-<p>这样 0 用 [0000 0000] 表示, 而以前出现问题的 - 0 则不存在了. 而且可以用 [1000 0000] 表示 - 128:</p>
-<p>　　(-1) + (-127) = [1000 0001] 原 + [1111 1111] 原 = [1111 1111] 补 + [1000 0001] 补 = [1000 0000] 补</p>
-<p>　　-1-127 的结果应该是 - 128, 在用补码运算的结果中, [1000 0000]补 就是 - 128. 但是注意因为实际上是使用以前的 - 0 的补码来表示 - 128, 所以 - 128 并没有原码和反码表示.(对 - 128 的补码表示 [1000 0000] 补算出来的原码是 [0000 0000] 原, 这是不正确的)，使用补码, 不仅仅修复了 0 的符号以及存在两个编码的问题, 而且还能够多表示一个最低数. 这就是为什么 8 位二进制, 使用原码或反码表示的范围为[-127, +127], 而使用补码表示的范围为[-128, 127]。</p>
-<p>因为机器使用补码, 所以对于编程中常用到的 32 位 int 类型, 可以表示范围是: [-231, 231-1] 因为第一位表示的是符号位. 而使用补码表示时又可以多保存一个最小值。</p>
-<p>参考博客：<br><a href="http://www.cnblogs.com/zhengfengyun/p/5090601.html" target="_blank" rel="noopener">GOFighting</a><br><a href="http://blog.csdn.net/maosijunzi/article/details/8677600" target="_blank" rel="noopener">byte 类型数据范围分析</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>HashSet、TreeSet和LinkedHashSet的使用区别</title>
-    <url>/2020/05/10/HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<p>日常中我们经常跟集合打交道，但是如何选择对应的数据结构常常搞不清楚，今天我们就简单看一下 HashSet、TreeSet 和 LinkedHashSet 的使用区别.</p>
-<a id="more"></a>
-<h3 id="HashSet、TreeSet和LinkedHashSet的使用区别"><a href="#HashSet、TreeSet和LinkedHashSet的使用区别" class="headerlink" title="HashSet、TreeSet和LinkedHashSet的使用区别"></a>HashSet、TreeSet和LinkedHashSet的使用区别</h3><p>我们都知道，集合是不包含重复元素的，这是我们选择使用集合的一个重要的原因. 集合有三个我们常用到的实现类：HashSet, TreeSet and LinkedHashSet. 如何根据场景去选择使用哪一种集合是让人头疼的问题. 简而言之, 如何你需要的是一个快速的集合，建议你使用 HashSet，如果你需要的是一个排序集合，请选择 TreeSet，如果你需要一套能够存储插入顺序的集合, 请使用 LinkedHashSet。<br><strong>1. Set 接口</strong><br>Set 接口继承 Collection 接口. 在集合中不允许出现重复的元素，你可以简单的添加，重复的元素会自动的被移除。</p>
-<p><img src="/2020/05/10/HashSet%E3%80%81TreeSet%E5%92%8CLinkedHashSet%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8C%BA%E5%88%AB/1.jpg" alt></p>
-<p><strong>2. HashSet vs. TreeSet vs. LinkedHashSet</strong><br>HashSet 使用哈希表实现的，元素是无序的。添加、删除操作时间复杂度都是 O(1)。TreeSet 内部结构是一个树结构 (红黑树)，元素是有序的，添加、删除操作时间复杂度为 O(log(n))，并且提供了 first(), last(), headSet(), tailSet() 等方法来处理有序集合。<br>LinkedHashSet 是介于 HashSet 和 TreeSet 之间，内部是一个双向链表结构，所以它的插入是有序的，时间复杂度是 O(1)。<br><strong>3. TreeSet 示例</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">TreeSet&lt;Integer&gt; tree = new TreeSet&lt;Integer&gt;();</span><br><span class="line">tree.add(12);</span><br><span class="line">tree.add(63);</span><br><span class="line">tree.add(34);</span><br><span class="line">tree.add(45);</span><br><span class="line"></span><br><span class="line">Iterator&lt;Integer&gt; iterator = tree.iterator();</span><br><span class="line">System.out.print(&quot;Tree set data: &quot;);</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出是有序的：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Tree set data: 12 34 45 63</span><br></pre></td></tr></table></figure>
-
-<p>现在让我们定义一个 Dog 类, 如下:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Dog &#123;</span><br><span class="line">    int size;</span><br><span class="line"></span><br><span class="line">    public Dog(int s) &#123;</span><br><span class="line">        size = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return size + &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>往 TreeSet 中添加几只 dogs：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.util.Iterator;</span><br><span class="line">import java.util.TreeSet;</span><br><span class="line"></span><br><span class="line">public class TestTreeSet &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        TreeSet&lt;Dog&gt; dset = new TreeSet&lt;Dog&gt;();</span><br><span class="line">        dset.add(new Dog(2));</span><br><span class="line">        dset.add(new Dog(1));</span><br><span class="line">        dset.add(new Dog(3));</span><br><span class="line"></span><br><span class="line">        Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line"></span><br><span class="line">        while (iterator.hasNext()) &#123;</span><br><span class="line">            System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>编译通过，但是运行时出错了</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Exception in thread &quot;main&quot; java.lang.ClassCastException: collection.Dog cannot be cast to java.lang.Comparable</span><br><span class="line">    at java.util.TreeMap.put(Unknown Source)</span><br><span class="line">    at java.util.TreeSet.add(Unknown Source)</span><br><span class="line">    at collection.TestTreeSet.main(TestTreeSet.java:22)</span><br></pre></td></tr></table></figure>
-
-<p>这是因为 TreeSet 是有序的，而 Dog 类不是有序的，我们需要将 Dog 类实现 Comparable 接口。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class Dog implements Comparable&lt;Dog&gt;&#123;</span><br><span class="line">    int size;</span><br><span class="line"></span><br><span class="line">    public Dog(int s) &#123;</span><br><span class="line">        size = s;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return size + &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public int compareTo(Dog o) &#123;</span><br><span class="line">            return size - o.size;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出：</p>
-<blockquote>
-<p>所以我们在使用 TreeSet 时候，里面装的元素一定是有序的，否则就不应该选择 TreeSet。</p>
-</blockquote>
-<p><strong>4. HashSet 示例</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1 2 3</span><br></pre></td></tr></table></figure>
-
-<p>输出：</p>
-<p><strong>5. LinkedHashSet 示例</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HashSet&lt;Dog&gt; dset = new HashSet&lt;Dog&gt;();</span><br><span class="line">dset.add(new Dog(2));</span><br><span class="line">dset.add(new Dog(1));</span><br><span class="line">dset.add(new Dog(3));</span><br><span class="line">dset.add(new Dog(5));</span><br><span class="line">dset.add(new Dog(4));</span><br><span class="line">Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">   System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>按插入的顺序进行输出：</p>
-<p><strong>6. 性能测试</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">5 3 2 1 4</span><br></pre></td></tr></table></figure>
-
-<p>从下面的输出结果可以看出，HashSet 是最快的。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LinkedHashSet&lt;Dog&gt; dset = new LinkedHashSet&lt;Dog&gt;();</span><br><span class="line">dset.add(new Dog(2));</span><br><span class="line">dset.add(new Dog(1));</span><br><span class="line">dset.add(new Dog(3));</span><br><span class="line">dset.add(new Dog(5));</span><br><span class="line">dset.add(new Dog(4));</span><br><span class="line">Iterator&lt;Dog&gt; iterator = dset.iterator();</span><br><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>虽然测试不够准确, 但能反映得出，TreeSet 要慢得多, 因为它是有序的。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/1683525-e54701eb0c6e20ba.png" alt></p>
-<p>hashset-treeset-linkedhashset</p>
-<p>“小礼物走一走，来简书关注我”</p>
-<p>还没有人赞赏，支持一下</p>
-<p><a href="https://www.jianshu.com/u/aea57293503d" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/users/upload_avatars/1683525/5626a0a9-52f5-43f5-87b1-a178669f5d01.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/100/h/100/format/webp" alt></a></p>
-<p><a href="https://www.jianshu.com/u/aea57293503d" target="_blank" rel="noopener" title="WHOKNOWME">WHOKNOWME</a><a href="http://www.jianshu.com/p/d1d89ed69098" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/user_badge/11f8cfa8-ec9f-4f82-be92-d6a39f61b5c1" alt></a> 简书保洁员 Jekyll：<a href="https://iknow4.github.io" target="_blank" rel="noopener">https://iknow4.github.io</a></p>
-<p>总资产 5,210 (约 461.99 元) 共写了 1.6W 字获得 148 个赞共 108 个粉丝</p>
-<h3 id="被以下专题收入，发现更多相似内容"><a href="#被以下专题收入，发现更多相似内容" class="headerlink" title="被以下专题收入，发现更多相似内容"></a>被以下专题收入，发现更多相似内容</h3><h3 id="推荐阅读更多精彩内容"><a href="#推荐阅读更多精彩内容" class="headerlink" title="推荐阅读更多精彩内容"></a>推荐阅读<a href="https://www.jianshu.com/" target="_blank" rel="noopener">更多精彩内容</a></h3><ul>
-<li><p>百战程序员_ Java1573 题 QQ 群：561832648489034603 掌握 80% 年薪 20 万掌握 50% 年薪…</p>
-</li>
-<li><p>上一篇文章介绍了 Set 集合的通用知识。Set 集合中包含了三个比较重要的实现类: HashSet、TreeSet 和 En…</p>
-<p><a href="https://www.jianshu.com/p/9081017a2d67" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/3985563-b750b57756ebd0de.png?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
-</li>
-<li><p>Java 集合框架 Java 平台提供了一个全新的集合框架。“集合框架” 主要由一组用来操作对象的接口组成。不同接口描述…</p>
-<p><a href="https://www.jianshu.com/p/bf9802ef5ff1" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/7051927-e9e2da7374f0b873.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
-</li>
-<li><p>3.3 集合 一方面， 面向对象语言对事物的体现都是以对象的形式，为了方便对多个对象的操作，就要对对象进行存储。另…</p>
-<p><a href="https://www.jianshu.com/u/d0b8c2f6f4ba" target="_blank" rel="noopener"><img src="https://upload.jianshu.io/users/upload_avatars/5892452/66f2e09b-7f13-4272-af6a-8f7d0132c03c.jpg?imageMogr2/auto-orient/strip%7CimageView2/1/w/48/h/48/format/webp" alt>闫子扬</a>阅读 1</p>
-</li>
-<li><p>package java.util 包中的 Collection 相关接口和类如下图： 仅讨论 Java.util 包中的常…</p>
-<p><a href="https://www.jianshu.com/p/7cf84a39415f" target="_blank" rel="noopener"><img src="https://upload-images.jianshu.io/upload_images/1932449-a7943a9ec0f20f0b.png?imageMogr2/auto-orient/strip%7CimageView2/1/w/300/h/240/format/webp" alt></a></p>
-</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>为何重写equals方法就得重写hashCode方法[转]</title>
     <url>/2020/03/23/%E4%B8%BA%E4%BD%95%E9%87%8D%E5%86%99equals%E6%96%B9%E6%B3%95%E5%B0%B1%E5%BE%97%E9%87%8D%E5%86%99hashCode%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<h3 id="为何重写equals方法就得重写hashCode方法"><a href="#为何重写equals方法就得重写hashCode方法" class="headerlink" title="为何重写equals方法就得重写hashCode方法"></a>为何重写equals方法就得重写hashCode方法</h3><a id="more"></a>
@@ -564,41 +445,6 @@
       </tags>
   </entry>
   <entry>
-    <title>关于 java 多态性之父类引用指向子类对象</title>
-    <url>/2020/03/07/%E5%85%B3%E4%BA%8Ejava%E5%A4%9A%E6%80%81%E6%80%A7%E4%B9%8B%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/</url>
-    <content><![CDATA[<h3 id="关于-java-多态性之父类引用指向子类对象"><a href="#关于-java-多态性之父类引用指向子类对象" class="headerlink" title="关于 java 多态性之父类引用指向子类对象"></a>关于 java 多态性之父类引用指向子类对象</h3><a id="more"></a>
-<p>在使用多态前，要确保两个类之间是继承关系</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Animal&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>之后创建对象：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Animal animal1 = new Animal();</span><br><span class="line">Animal animal2 = new Dog();</span><br></pre></td></tr></table></figure>
-
-<p>这时，Animal animal2 = new Dog(); 就是父类引用指向子类对象</p>
-<p>即：<strong>声明的是父类，实际指向的是子类的一个对象</strong></p>
-<p>在学习 java 时，书上有讲到一个章节——对象的上转对象，其中有一个概念：</p>
-<p>A 类是 B 类的父类，当用子类创建一个对象，并把这个对象的引用放到父类的对象时，</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A a;</span><br><span class="line">a = new B();    //A a = new B();</span><br><span class="line">//或者</span><br><span class="line">A a;</span><br><span class="line">B b=new B();</span><br><span class="line">a=b;</span><br></pre></td></tr></table></figure>
-
-<p>这时，称对象 a 是对象 b 的<strong>上转对象</strong>（就像说 “中国人是人”）</p>
-<p>可以理解成，父类引用指向子类对象 = 上转对象  （不确定，我是暂时这么理解）</p>
-<p>那么，让父类引用指向子类对象有什么用的：</p>
-<p>要知道，<strong><em>父类对象不可以访问，子类方法</em></strong>。</p>
-<p>而上转型对象，既可以访问父类方法（通过 super. 来调用），也可以访问子类继承或隐藏的成员变量，或者调用子类继承的方法（父类方法）或者子类重写的实例方法。</p>
-<p><img src="/2020/03/07/%E5%85%B3%E4%BA%8Ejava%E5%A4%9A%E6%80%81%E6%80%A7%E4%B9%8B%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/1.png" alt></p>
-<p>进而，一个父类类型的引用指向一个子类的对象既可以使用子类强大的功能，又可以抽取父类的共性。</p>
-<p>一个参考网上的定义：要做到父类引用调用子类的属性或者方法，就还要有<strong>动态连接</strong>。那什么是动态链接呢？<strong>当父类中的一个方法只有在父类中定义而在子类中没有被重写的情况下，才可以被父类类型的引用调用； 对于父类中定义的方法，如果子类中重写了该方法，那么父类类型的引用将会调用子类中的这个方法，这就是动态连接。</strong></p>
-<p>JAVA 里没有多继承，一个类只能有一个父类。而继承的表现就是多态。一个父类可以有多个子类，而在子类里可以重写父类的方法，这样每个子类里重写的代码不一样，自然表现形式就不一样。这样用父类的变量去引用不同的子类，在调用这个相同的方法的时候得到的结果和表现形式就不一样了，这就是多态，相同的消息（也就是调用相同的方法）会有不同的结果。举例说明：<br>下面看一个多态性的例子：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//父类</span><br><span class="line">public class Animal&#123;</span><br><span class="line">    //动物会叫</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：狗</span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line">   //狗的叫声</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">   System.out.println(&quot;汪汪汪！&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：猫</span><br><span class="line">public class Cat extends Animal&#123;</span><br><span class="line">   //猫的叫声</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">   System.out.println(&quot;喵喵喵！&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：狼</span><br><span class="line">public class Wolf extends Animal&#123;</span><br><span class="line">    //虎的叫声</span><br><span class="line">    public void shout()&#123;</span><br><span class="line">    System.out.println(&quot;嗷呜嗷呜！&quot;);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//测试类</span><br><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String arg[])&#123;</span><br><span class="line">       Animal animal;</span><br><span class="line">       animal = new Dog();</span><br><span class="line">       animal.shout();</span><br><span class="line">       animal = new Cat();</span><br><span class="line">       animal.shout();</span><br><span class="line">       animal = new Wolf();</span><br><span class="line">       animal.shout();</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p> 参考博客：<a href="https://www.cnblogs.com/shilin/p/4784862.html" target="_blank" rel="noopener">https://www.cnblogs.com/shilin/p/4784862.html</a></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>multi</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>多态性，父类引用指向子类对象</title>
     <url>/2020/03/07/%E5%A4%9A%E6%80%81%E6%80%A7%EF%BC%8C%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/</url>
     <content><![CDATA[<h3 id="多态性，父类引用指向子类对象"><a href="#多态性，父类引用指向子类对象" class="headerlink" title="多态性，父类引用指向子类对象"></a>多态性，父类引用指向子类对象</h3><a id="more"></a>
@@ -640,6 +486,41 @@
 <p>上面的程序是个很典型的多态的例子。子类 Child 继承了父类 Father，并重载了父类的 func1() 方法。重载后的 func1(int i) 和 func1() 不再是同一个方法，由于父类中没有 func1(int i)，那么，父类类型的引用 child 就不能调用 func1(int i) 方法。</p>
 <p><strong>最后，对于多态做出几点总结</strong></p>
 <p><strong>1、使用父类类型的引用指向子类的对象；</strong><br><strong>2、该引用只能调用父类中定义的方法和变量；</strong><br><strong>3、如果子类中重写了父类中的一个方法，那么在调用这个方法的时候，将会调用子类中的这个方法；（动态连接、动态调用）</strong><br><strong>4、变量不能被重写（覆盖），”重写 “的概念只针对方法，如果在子类中” 重写“了父类中的变量，那么在编译时会报错。</strong></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>multi</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>关于 java 多态性之父类引用指向子类对象</title>
+    <url>/2020/03/07/%E5%85%B3%E4%BA%8Ejava%E5%A4%9A%E6%80%81%E6%80%A7%E4%B9%8B%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/</url>
+    <content><![CDATA[<h3 id="关于-java-多态性之父类引用指向子类对象"><a href="#关于-java-多态性之父类引用指向子类对象" class="headerlink" title="关于 java 多态性之父类引用指向子类对象"></a>关于 java 多态性之父类引用指向子类对象</h3><a id="more"></a>
+<p>在使用多态前，要确保两个类之间是继承关系</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Animal&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>之后创建对象：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Animal animal1 = new Animal();</span><br><span class="line">Animal animal2 = new Dog();</span><br></pre></td></tr></table></figure>
+
+<p>这时，Animal animal2 = new Dog(); 就是父类引用指向子类对象</p>
+<p>即：<strong>声明的是父类，实际指向的是子类的一个对象</strong></p>
+<p>在学习 java 时，书上有讲到一个章节——对象的上转对象，其中有一个概念：</p>
+<p>A 类是 B 类的父类，当用子类创建一个对象，并把这个对象的引用放到父类的对象时，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">A a;</span><br><span class="line">a = new B();    //A a = new B();</span><br><span class="line">//或者</span><br><span class="line">A a;</span><br><span class="line">B b=new B();</span><br><span class="line">a=b;</span><br></pre></td></tr></table></figure>
+
+<p>这时，称对象 a 是对象 b 的<strong>上转对象</strong>（就像说 “中国人是人”）</p>
+<p>可以理解成，父类引用指向子类对象 = 上转对象  （不确定，我是暂时这么理解）</p>
+<p>那么，让父类引用指向子类对象有什么用的：</p>
+<p>要知道，<strong><em>父类对象不可以访问，子类方法</em></strong>。</p>
+<p>而上转型对象，既可以访问父类方法（通过 super. 来调用），也可以访问子类继承或隐藏的成员变量，或者调用子类继承的方法（父类方法）或者子类重写的实例方法。</p>
+<p><img src="/2020/03/07/%E5%85%B3%E4%BA%8Ejava%E5%A4%9A%E6%80%81%E6%80%A7%E4%B9%8B%E7%88%B6%E7%B1%BB%E5%BC%95%E7%94%A8%E6%8C%87%E5%90%91%E5%AD%90%E7%B1%BB%E5%AF%B9%E8%B1%A1/1.png" alt></p>
+<p>进而，一个父类类型的引用指向一个子类的对象既可以使用子类强大的功能，又可以抽取父类的共性。</p>
+<p>一个参考网上的定义：要做到父类引用调用子类的属性或者方法，就还要有<strong>动态连接</strong>。那什么是动态链接呢？<strong>当父类中的一个方法只有在父类中定义而在子类中没有被重写的情况下，才可以被父类类型的引用调用； 对于父类中定义的方法，如果子类中重写了该方法，那么父类类型的引用将会调用子类中的这个方法，这就是动态连接。</strong></p>
+<p>JAVA 里没有多继承，一个类只能有一个父类。而继承的表现就是多态。一个父类可以有多个子类，而在子类里可以重写父类的方法，这样每个子类里重写的代码不一样，自然表现形式就不一样。这样用父类的变量去引用不同的子类，在调用这个相同的方法的时候得到的结果和表现形式就不一样了，这就是多态，相同的消息（也就是调用相同的方法）会有不同的结果。举例说明：<br>下面看一个多态性的例子：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">//父类</span><br><span class="line">public class Animal&#123;</span><br><span class="line">    //动物会叫</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：狗</span><br><span class="line">public class Dog extends Animal&#123;</span><br><span class="line">   //狗的叫声</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">   System.out.println(&quot;汪汪汪！&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：猫</span><br><span class="line">public class Cat extends Animal&#123;</span><br><span class="line">   //猫的叫声</span><br><span class="line">   public void shout()&#123;</span><br><span class="line">   System.out.println(&quot;喵喵喵！&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//子类：狼</span><br><span class="line">public class Wolf extends Animal&#123;</span><br><span class="line">    //虎的叫声</span><br><span class="line">    public void shout()&#123;</span><br><span class="line">    System.out.println(&quot;嗷呜嗷呜！&quot;);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//测试类</span><br><span class="line">public class Test&#123;</span><br><span class="line">    public static void main(String arg[])&#123;</span><br><span class="line">       Animal animal;</span><br><span class="line">       animal = new Dog();</span><br><span class="line">       animal.shout();</span><br><span class="line">       animal = new Cat();</span><br><span class="line">       animal.shout();</span><br><span class="line">       animal = new Wolf();</span><br><span class="line">       animal.shout();</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> 参考博客：<a href="https://www.cnblogs.com/shilin/p/4784862.html" target="_blank" rel="noopener">https://www.cnblogs.com/shilin/p/4784862.html</a></p>
 ]]></content>
       <categories>
         <category>Java</category>
@@ -989,7 +870,7 @@
 <p><img src="https://img-blog.csdnimg.cn/20190214165432255.png" alt></p>
 <p>myCentOS 内容 DockerFile</p>
 <p><img src="https://img-blog.csdnimg.cn/20190214165514558.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3llZG9uZ2ZlbmdfMTMxNA==,size_16,color_FFFFFF,t_70" alt></p>
-<p>FROM centos<br>MAINTAINER zzyy<a href="mailto:&#x7a;&#122;&#121;&#121;&#49;&#54;&#55;&#x40;&#x31;&#50;&#x36;&#46;&#x63;&#x6f;&#109;">&#x7a;&#122;&#121;&#121;&#49;&#54;&#55;&#x40;&#x31;&#50;&#x36;&#46;&#x63;&#x6f;&#109;</a>  </p>
+<p>FROM centos<br>MAINTAINER zzyy<a href="mailto:&#122;&#122;&#x79;&#x79;&#49;&#x36;&#x37;&#64;&#49;&#x32;&#x36;&#x2e;&#99;&#x6f;&#x6d;">&#122;&#122;&#x79;&#x79;&#49;&#x36;&#x37;&#64;&#49;&#x32;&#x36;&#x2e;&#99;&#x6f;&#x6d;</a>  </p>
 <p>ENV MYPATH /usr/local<br>WORKDIR $MYPATH  </p>
 <p>RUN yum -y install vim<br>RUN yum -y install net-tools  </p>
 <p>EXPOSE 80  </p>
@@ -1278,50 +1159,8 @@
         <category>Java</category>
       </categories>
       <tags>
-        <tag>cache</tag>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java中继承和实现接口的区别</title>
-    <url>/2020/01/07/Java%E4%B8%AD%E7%BB%A7%E6%89%BF%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<p>Java中继承和实现接口的区别！</p>
-<a id="more"></a>
-<p>&emsp;&emsp;当使用继承的时候，主要是为了不必重新开发，并且在不必了解实现细节的情况下拥有了父类<br>我所需要的特征。</p>
-<p>&emsp;&emsp;但是很多时候，一个子类并不需要父类的所有特征，它可能只是需要其中的某些特征，<br>但是由于通过继承，父类所有的特征都有了，需要的和不需要的特征同时具备了。<br>而那些子类实际上不需要用到的，有时候甚至是极力避免使用的特征也可以随便使用，<br>这就是继承的<strong>副作用</strong>。<br>特别是允许多重继承的java语言中，很容易引起不容易发现的错误。<br>所以在java的语言中，会创造出各种规定来限制子类使用父类中的某些方法。</p>
-<p>&emsp;&emsp;就拿你举的例子来说，如果狗的主人只是希望狗能爬比较低的树，但是不希望它继承尾巴可以倒挂<br>在树上，像猴子那样可以飞檐走壁，以免主人管不住它。那么狗的主人肯定不会要一只猴子继承的狗。</p>
-<p>&emsp;&emsp;设计模式更多的强调面向接口。猴子有两个接口，一个是爬树，一个是尾巴倒挂。我现在只需要我<br>的狗爬树，但是不要它尾巴倒挂，那么我只要我的狗实现爬树的接口就行了。同时不会带来像继承<br>猴子来带来的尾巴倒挂的副作用。这就是接口的好处。</p>
-<p>&emsp;&emsp;Java技术发展也有好多年了，一个很明显的趋势就是继承的使用越来越少，而接口的使用越来越广<br>泛了。其实只要稍微比较一下JDK里面那些最早就有的类库和最近才加进去的类库，就可以很明显的<br>感觉到java技术领域的编程风格的变迁，由大量的继承到几乎无处不用的面向接口编程。</p>
-<p>&emsp;&emsp;接口不是替代继承。比如说我现在就是要我的动物去爬树，我根本就不需要知道到底是狗去爬树还是<br>猴子。我提取出“能爬树”的动物去爬。这个能爬树的动物既可以是猴子，也可以是狗。这样不是<br>很灵活吗？</p>
-<ul>
-<li><p>狗(爬树，咬人)</p>
-</li>
-<li><p>猴子(爬树，尾巴倒挂)</p>
-</li>
-</ul>
-<p>&emsp;&emsp;如果我既要爬树也要咬人，那么我当然可以选狗，也可以创建一个接口(爬树咬人)，然后让狗实<br>现(爬树咬人)接口。</p>
-<hr>
-<h5 id="实际概念区别："><a href="#实际概念区别：" class="headerlink" title="实际概念区别："></a>实际概念区别：</h5><ul>
-<li><p>区别1:<br>不同的修饰符修饰(interface),(extends)</p>
-</li>
-<li><p>区别2:<br>在面向对象编程中可以有多继承!但是只支持接口的多继承,不支持’继承’的多继承哦<br>而继承在java中具有单根性,子类只能继承一个父类</p>
-</li>
-<li><p>区别3:<br>在接口中只能定义全局常量,和抽象方法<br>而在继承中可以定义属性方法,变量,常量等…</p>
-</li>
-<li><p>区别4:<br>某个接口被类实现时,在类中一定要实现接口中的抽象方法<br>而继承想调用那个方法就调用那个方法,毫无压力</p>
-</li>
-</ul>
-<p><strong>接口是</strong>：对功能的描述</p>
-<p><strong>继承是</strong>：什么是一种什么</p>
-<p><strong>始终记着</strong>：你可以有多个干爹（接口），但只能有一个亲爹（ 继承）<br>————————————————</p>
-<p>[原文链接：] <a href="https://blog.csdn.net/u012123938/article/details/46353251" target="_blank" rel="noopener">https://blog.csdn.net/u012123938/article/details/46353251</a></p>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>interface</tag>
-        <tag>extends</tag>
+        <tag>cache</tag>
       </tags>
   </entry>
   <entry>
@@ -1410,6 +1249,94 @@
       </categories>
       <tags>
         <tag>variables</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java中继承和实现接口的区别</title>
+    <url>/2020/01/07/Java%E4%B8%AD%E7%BB%A7%E6%89%BF%E5%92%8C%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>Java中继承和实现接口的区别！</p>
+<a id="more"></a>
+<p>&emsp;&emsp;当使用继承的时候，主要是为了不必重新开发，并且在不必了解实现细节的情况下拥有了父类<br>我所需要的特征。</p>
+<p>&emsp;&emsp;但是很多时候，一个子类并不需要父类的所有特征，它可能只是需要其中的某些特征，<br>但是由于通过继承，父类所有的特征都有了，需要的和不需要的特征同时具备了。<br>而那些子类实际上不需要用到的，有时候甚至是极力避免使用的特征也可以随便使用，<br>这就是继承的<strong>副作用</strong>。<br>特别是允许多重继承的java语言中，很容易引起不容易发现的错误。<br>所以在java的语言中，会创造出各种规定来限制子类使用父类中的某些方法。</p>
+<p>&emsp;&emsp;就拿你举的例子来说，如果狗的主人只是希望狗能爬比较低的树，但是不希望它继承尾巴可以倒挂<br>在树上，像猴子那样可以飞檐走壁，以免主人管不住它。那么狗的主人肯定不会要一只猴子继承的狗。</p>
+<p>&emsp;&emsp;设计模式更多的强调面向接口。猴子有两个接口，一个是爬树，一个是尾巴倒挂。我现在只需要我<br>的狗爬树，但是不要它尾巴倒挂，那么我只要我的狗实现爬树的接口就行了。同时不会带来像继承<br>猴子来带来的尾巴倒挂的副作用。这就是接口的好处。</p>
+<p>&emsp;&emsp;Java技术发展也有好多年了，一个很明显的趋势就是继承的使用越来越少，而接口的使用越来越广<br>泛了。其实只要稍微比较一下JDK里面那些最早就有的类库和最近才加进去的类库，就可以很明显的<br>感觉到java技术领域的编程风格的变迁，由大量的继承到几乎无处不用的面向接口编程。</p>
+<p>&emsp;&emsp;接口不是替代继承。比如说我现在就是要我的动物去爬树，我根本就不需要知道到底是狗去爬树还是<br>猴子。我提取出“能爬树”的动物去爬。这个能爬树的动物既可以是猴子，也可以是狗。这样不是<br>很灵活吗？</p>
+<ul>
+<li><p>狗(爬树，咬人)</p>
+</li>
+<li><p>猴子(爬树，尾巴倒挂)</p>
+</li>
+</ul>
+<p>&emsp;&emsp;如果我既要爬树也要咬人，那么我当然可以选狗，也可以创建一个接口(爬树咬人)，然后让狗实<br>现(爬树咬人)接口。</p>
+<hr>
+<h5 id="实际概念区别："><a href="#实际概念区别：" class="headerlink" title="实际概念区别："></a>实际概念区别：</h5><ul>
+<li><p>区别1:<br>不同的修饰符修饰(interface),(extends)</p>
+</li>
+<li><p>区别2:<br>在面向对象编程中可以有多继承!但是只支持接口的多继承,不支持’继承’的多继承哦<br>而继承在java中具有单根性,子类只能继承一个父类</p>
+</li>
+<li><p>区别3:<br>在接口中只能定义全局常量,和抽象方法<br>而在继承中可以定义属性方法,变量,常量等…</p>
+</li>
+<li><p>区别4:<br>某个接口被类实现时,在类中一定要实现接口中的抽象方法<br>而继承想调用那个方法就调用那个方法,毫无压力</p>
+</li>
+</ul>
+<p><strong>接口是</strong>：对功能的描述</p>
+<p><strong>继承是</strong>：什么是一种什么</p>
+<p><strong>始终记着</strong>：你可以有多个干爹（接口），但只能有一个亲爹（ 继承）<br>————————————————</p>
+<p>[原文链接：] <a href="https://blog.csdn.net/u012123938/article/details/46353251" target="_blank" rel="noopener">https://blog.csdn.net/u012123938/article/details/46353251</a></p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>interface</tag>
+        <tag>extends</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是多态、为什么用多态、有什么好处</title>
+    <url>/2020/01/07/%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%80%81_%20%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%A4%9A%E6%80%81_%20%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84_/</url>
+    <content><![CDATA[<p>多态的学习</p>
+<a id="more"></a>
+<p>多态可以分为变量的多态, 方法的多态, 类的多态. 我这里强调的是类的多态, 这是我们在以后的工作中经常回用到的</p>
+<p>首先, 有这样一个系统: 有个学生工作从达内毕业了, 作的还不错. 买了辆捷达汽车. 这个系统应该如何设计呢?<br>按照 OO 的思想, 我们会抽象出来一个类, 表示捷达汽车, 其中有个 run() 方法<br>public class JD{<br>public void run(){<br>       System.out.println(“JD 在以 120 迈的速度在 run”);<br>}<br>}<br>我们还会抽象出一个类, 来代表人. 其中有个 drive() 方法, 需要一个汽车类型作为参数, 我们先传入一个 JD 类型的参数</p>
+<p>// 这是我们的核心业务类<br>public class Person{<br>public void drive(JD jd){<br>       jd.run();<br>}</p>
+<p>public static void main(String args[]){<br>   Person p =new Person();<br>   JD jd = new JD();<br>   p.drive(jd);<br>}<br>}</p>
+<p>如果你写出这样的代码的话, 恭喜你! 你中大奖了!——————— 你会被项目精力砍死的!!!!!!!</p>
+<p>项目经理为什么会砍你呢?<br>因为你写的代码偶合性太强了!</p>
+<p>如果我们的需求变了, 这个学生后来更有钱了, 买了一两 Benz. 那么我们以前的系统怎么办啊. 不要指望你作的系统永远不会变化<br>我们的系统只能修改! 这就是项目经理砍你的原因<br>我们的系统会增加一个 Benz 类, 也有个 run() 方法</p>
+<p>public class Benz{<br>public void run(){<br>       System.out.println(“Benz 在以 200 迈的速度在 run”);<br>}<br>}</p>
+<p>我们的核心业务类也要修改</p>
+<p>public class Person{</p>
+<pre><code>/*  </code></pre><p>public void drive(JD jd){<br>       jd.run();<br>}<br>*/</p>
+<p>public void drive(Benz b){<br>       b.run();<br>}</p>
+<p>public static void main(String args[]){<br>   Person p =new Person();<br>   Benz b = new Benz();<br>   p.drive(b);<br>}<br>}</p>
+<p>以后的情况, 我们可以把车抽象出来:<br>public abstract class Driver{<br>   /* 属性 */<br>   public void run();// 让子类来运行<br>}</p>
+<p>public Benz extends Driver{<br>   public void run(){<br>System.out.println(“Benz 在以 200 迈的速度在 run”);<br>   }<br>}<br>public JD extends Driver{<br>   public void run(){<br>System.out.println(“JD is running…”);<br>   }<br>}</p>
+<p>public class Person{<br>private Driver driver;<br>public Person(){</p>
+<p>}<br>public Person(Driver driver){<br>   this.driver = driver;<br>}<br>public void drive(){<br>       driver.run();<br>}<br>public void setDriver(Driver driver){// 运用参数多态, 以后不管买什么车都可以<br>   this.driver = driver;<br>}</p>
+<p>public static void main(String args[]){<br>   Person p =new Person();<br>   JD jd = new JD();// 刚开始没钱就买辆 JD 吧<br>   p.setDriver(jd);<br>   p.driver();<br>   Benz benz = new Benz{();// 有钱换车了<br>   p.setDriver(benz);<br>   p.driver();<br>}<br>}</p>
+<p>什么是多态?<br>简单的说: 就是用基类的引用指向之类的对象</p>
+<p>提问: 多态可以用在什么地方呢?<br>回答: 可以用在方法的参数中和方法的返回类型中</p>
+<p>其中方法的参数楼上的兄弟已经给出了代码. 我这里给出在方法的返回类型中如何使用多态</p>
+<p>上面的例子中, 不管是 JD 还是 Benz 都是我们自己直接 new 出来的. 我们可以设计一个工厂类, 专门生成汽车</p>
+<p>/**  </p>
+<ul>
+<li>我们将多态使用在方法的返回类型中  </li>
+<li>Car 可以是抽象类, 也可以是接口, JD 和 Benz 分别继承该类或实现该借口  </li>
+<li>/<br>public class CarFactory{<br>public Car factory(String carName){<br>  if(carName.equals(“JD”)){  <pre><code>return new JD();  </code></pre>  }else if(carName.equals(“Benz”)){  <pre><code>return new Benz();  </code></pre>  }else{  <pre><code>System.out.println(&quot;对比起, 不伺候&quot;);  
+return null;  </code></pre>  }<br>}<br>}</li>
+</ul>
+<p>这实际上就是设计模式中的简单工厂模式!</p>
+<p>另外, 我我们在 JDK 中可以大量的看到多态的应用, 比如在 Object 类中的 equals(Object obj) 方法中, 参数是个 Object</p>
+<p>类型的参数. 因为 Object 是 Java 中所有类的基类., 但是才传入参数的时候, 可以传入任何一个类的对象<br>这就是多态的应用!</p>
+<p>使用多态可以解决项目中紧偶合的问题, 提高程序的课扩展性. 是 OCP 原则的一个具体的实现</p>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>多态</tag>
       </tags>
   </entry>
   <entry>
@@ -1509,52 +1436,6 @@
       </categories>
       <tags>
         <tag>内存</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什么是多态、为什么用多态、有什么好处</title>
-    <url>/2020/01/07/%E4%BB%80%E4%B9%88%E6%98%AF%E5%A4%9A%E6%80%81_%20%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8%E5%A4%9A%E6%80%81_%20%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84_/</url>
-    <content><![CDATA[<p>多态的学习</p>
-<a id="more"></a>
-<p>多态可以分为变量的多态, 方法的多态, 类的多态. 我这里强调的是类的多态, 这是我们在以后的工作中经常回用到的</p>
-<p>首先, 有这样一个系统: 有个学生工作从达内毕业了, 作的还不错. 买了辆捷达汽车. 这个系统应该如何设计呢?<br>按照 OO 的思想, 我们会抽象出来一个类, 表示捷达汽车, 其中有个 run() 方法<br>public class JD{<br>public void run(){<br>       System.out.println(“JD 在以 120 迈的速度在 run”);<br>}<br>}<br>我们还会抽象出一个类, 来代表人. 其中有个 drive() 方法, 需要一个汽车类型作为参数, 我们先传入一个 JD 类型的参数</p>
-<p>// 这是我们的核心业务类<br>public class Person{<br>public void drive(JD jd){<br>       jd.run();<br>}</p>
-<p>public static void main(String args[]){<br>   Person p =new Person();<br>   JD jd = new JD();<br>   p.drive(jd);<br>}<br>}</p>
-<p>如果你写出这样的代码的话, 恭喜你! 你中大奖了!——————— 你会被项目精力砍死的!!!!!!!</p>
-<p>项目经理为什么会砍你呢?<br>因为你写的代码偶合性太强了!</p>
-<p>如果我们的需求变了, 这个学生后来更有钱了, 买了一两 Benz. 那么我们以前的系统怎么办啊. 不要指望你作的系统永远不会变化<br>我们的系统只能修改! 这就是项目经理砍你的原因<br>我们的系统会增加一个 Benz 类, 也有个 run() 方法</p>
-<p>public class Benz{<br>public void run(){<br>       System.out.println(“Benz 在以 200 迈的速度在 run”);<br>}<br>}</p>
-<p>我们的核心业务类也要修改</p>
-<p>public class Person{</p>
-<pre><code>/*  </code></pre><p>public void drive(JD jd){<br>       jd.run();<br>}<br>*/</p>
-<p>public void drive(Benz b){<br>       b.run();<br>}</p>
-<p>public static void main(String args[]){<br>   Person p =new Person();<br>   Benz b = new Benz();<br>   p.drive(b);<br>}<br>}</p>
-<p>以后的情况, 我们可以把车抽象出来:<br>public abstract class Driver{<br>   /* 属性 */<br>   public void run();// 让子类来运行<br>}</p>
-<p>public Benz extends Driver{<br>   public void run(){<br>System.out.println(“Benz 在以 200 迈的速度在 run”);<br>   }<br>}<br>public JD extends Driver{<br>   public void run(){<br>System.out.println(“JD is running…”);<br>   }<br>}</p>
-<p>public class Person{<br>private Driver driver;<br>public Person(){</p>
-<p>}<br>public Person(Driver driver){<br>   this.driver = driver;<br>}<br>public void drive(){<br>       driver.run();<br>}<br>public void setDriver(Driver driver){// 运用参数多态, 以后不管买什么车都可以<br>   this.driver = driver;<br>}</p>
-<p>public static void main(String args[]){<br>   Person p =new Person();<br>   JD jd = new JD();// 刚开始没钱就买辆 JD 吧<br>   p.setDriver(jd);<br>   p.driver();<br>   Benz benz = new Benz{();// 有钱换车了<br>   p.setDriver(benz);<br>   p.driver();<br>}<br>}</p>
-<p>什么是多态?<br>简单的说: 就是用基类的引用指向之类的对象</p>
-<p>提问: 多态可以用在什么地方呢?<br>回答: 可以用在方法的参数中和方法的返回类型中</p>
-<p>其中方法的参数楼上的兄弟已经给出了代码. 我这里给出在方法的返回类型中如何使用多态</p>
-<p>上面的例子中, 不管是 JD 还是 Benz 都是我们自己直接 new 出来的. 我们可以设计一个工厂类, 专门生成汽车</p>
-<p>/**  </p>
-<ul>
-<li>我们将多态使用在方法的返回类型中  </li>
-<li>Car 可以是抽象类, 也可以是接口, JD 和 Benz 分别继承该类或实现该借口  </li>
-<li>/<br>public class CarFactory{<br>public Car factory(String carName){<br>  if(carName.equals(“JD”)){  <pre><code>return new JD();  </code></pre>  }else if(carName.equals(“Benz”)){  <pre><code>return new Benz();  </code></pre>  }else{  <pre><code>System.out.println(&quot;对比起, 不伺候&quot;);  
-return null;  </code></pre>  }<br>}<br>}</li>
-</ul>
-<p>这实际上就是设计模式中的简单工厂模式!</p>
-<p>另外, 我我们在 JDK 中可以大量的看到多态的应用, 比如在 Object 类中的 equals(Object obj) 方法中, 参数是个 Object</p>
-<p>类型的参数. 因为 Object 是 Java 中所有类的基类., 但是才传入参数的时候, 可以传入任何一个类的对象<br>这就是多态的应用!</p>
-<p>使用多态可以解决项目中紧偶合的问题, 提高程序的课扩展性. 是 OCP 原则的一个具体的实现</p>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>多态</tag>
       </tags>
   </entry>
   <entry>
